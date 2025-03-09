@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mariadb:
-    image: mariadb:latest
+    image: mariadb:10.4.32
     container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -32,7 +32,7 @@ services:
       - app-network
 
   vuejs:
-    image: node:latest
+    image: node:22.14.0
     container_name: vuejs
     working_dir: /app
     volumes:
@@ -44,7 +44,7 @@ services:
       - app-network
 
   symfony-api:
-    image: php:8.2-apache
+    image: php:8.3-apache
     container_name: job-api
     working_dir: /var/www/html
     volumes:

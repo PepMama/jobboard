@@ -21,3 +21,10 @@ MSQL_ROOT = root;
 ```bash
 class="div-container";
 ```
+
+## Gestion de git
+
+- Nommer un commit : mettez vos initiales au début suivi d'un "-"
+```bash
+git commit -m "PM - Initialisation du projet"
+```
