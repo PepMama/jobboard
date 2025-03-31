@@ -300,3 +300,135 @@ VALUES
     (3, 3, NOW(), TRUE, TRUE);
 
 
+--------------------------------------------------
+-- Requetes Etudiants
+--------------------------------------------------
+SELECT *
+FROM competencies;
+
+SELECT *
+FROM students;
+
+SELECT *
+FROM languages;
+
+SELECT *
+FROM educations;
+
+SELECT *
+FROM experiences;
+
+SELECT *
+FROM search_preferences;
+
+SELECT *
+FROM job_offers;
+
+-- Récupérer les Likes d'un étudiant pour gérer l'historique
+SELECT c.name AS nom_entreprise, CONCAT(s.name, ' ', s.firstname)  AS nom_etudiant
+FROM students AS s
+JOIN likes_student AS ls
+    ON ls.student_id = s.id_student
+JOIN companies AS c 
+    ON c.id_company = ls.company_id
+WHERE s.id_student = 1;
+
+-- Récupérer les Matches d'un étudiant pour gérer l'historique
+SELECT m.matched_at, CONCAT(s.name, ' ', s.firstname) AS etudiant
+FROM matches AS m
+JOIN students AS s 
+    ON s.id_student = m.student_id
+WHERE m.is_valid = TRUE;
+
+-- Récupérer les écoles (educations) de l'étudiant
+SELECT s.name AS nom_etudiant, CONCAT(e.degree, ', ', e.school_name) AS formation
+FROM students AS s
+JOIN educations AS e
+    ON e.student_id = s.id_student
+WHERE s.id_student = 1;
+
+
+-- Récupérer les compétences d'un étudiant
+SELECT s.firstname AS étudiant, c.name AS compétences
+FROM  competencies AS c
+JOIN student_competencies AS sc
+    ON sc.competency_id = c.id_competency
+JOIN students AS s
+    ON s.id_student = sc.student_id
+WHERE s.id_student = 1;
+
+-- Récupérer les expériences d'un étudiant
+SELECT e.description, s.name, s.firstname
+FROM students AS s
+JOIN experiences AS e
+    ON e.student_id = s.id_student
+WHERE s.id_student = 1;
+
+-- Récupérer les Préférences de recherche d'un étudiant
+SELECT s.name, s.firstname, sp.field, sp.contract_type, sp.preferred_city, sp.remote
+FROM students AS s
+JOIN search_preferences AS sp 
+    ON sp.student_id = s.id_student
+WHERE s.id_student = 1;
+
+-- Récupérer les langues parlées de recherche d'un étudiant
+SELECT l.name, CONCAT(s.name, ' ', s.firstname) AS nom_etudiant
+FROM languages AS l
+JOIN student_languages AS sl
+    ON sl.language_id = l.id_language
+JOIN students AS s
+    ON s.id_student = sl.student_id
+WHERE s.id_student = 3;
+
+-- Récupérer les étudiants likés par une entreprise mais non encore matchés
+SELECT CONCAT(s.name, ' ', s.firstname) AS etudiant, c.name AS entreprise
+FROM likes_company AS lc
+JOIN students AS s 
+    ON s.id_student = lc.student_id
+JOIN companies AS c 
+    ON c.id_company = lc.company_id
+LEFT JOIN matches AS m 
+    ON m.student_id = lc.student_id AND m.company_id = lc.company_id
+WHERE m.id_matches IS NULL;
+
+
+--------------------------------------------------
+-- Requetes Entreprises
+--------------------------------------------------
+-- Récupérer les Likes d'une entreprise pour gérer l'historique
+SELECT c.name, CONCAT(s.name, ' ', s.firstname)
+FROM companies AS c
+JOIN likes_company AS lc
+    ON lc.company_id = c.id_company
+JOIN students AS s
+    ON s.id_student = lc.student_id;
+
+-- Récupérer les Matches d'une entreprise pour gérer l'historique
+
+
+-- Récupérer les offres créées par une entreprise
+SELECT jb.title, jb.contract_type, c.name
+FROM job_offers AS jb
+JOIN companies AS c
+    ON c.id_company = jb.company_id;
+
+--  Récupère tous les cas où une entreprise a liké un étudiant ET que cet étudiant a liké cette entreprise
+SELECT 
+    s.id_student,
+    CONCAT(s.name, ' ', s.firstname) AS etudiant,
+    c.id_company,
+    c.name AS entreprise
+FROM likes_student AS ls
+JOIN likes_company AS lc 
+    ON ls.student_id = lc.student_id
+    AND ls.company_id = lc.company_id
+JOIN students AS s ON s.id_student = ls.student_id
+JOIN companies AS c ON c.id_company = ls.company_id;
+
+-- Afficher toutes les entreprises et le nombre d’étudiants qui les ont likées
+SELECT c.name AS entreprise, COUNT(ls.student_id) AS nb_likes
+FROM companies AS c
+LEFT JOIN likes_student AS ls 
+    ON ls.company_id = c.id_company
+GROUP BY c.id_company;
+
