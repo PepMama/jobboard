@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250414194058 extends AbstractMigration
+final class Version20250414221641 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -39,7 +39,7 @@ final class Version20250414194058 extends AbstractMigration
             CREATE TABLE Languages (id_language INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id_language)) DEFAULT CHARACTER SET utf8mb4
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE Likes_company (id_like_company INT AUTO_INCREMENT NOT NULL, liked_at DATETIME NOT NULL, student_id INT DEFAULT NULL, company_id INT DEFAULT NULL, INDEX IDX_4E782E48CB944F1A (student_id), INDEX IDX_4E782E48979B1AD6 (company_id), PRIMARY KEY(id_like_company)) DEFAULT CHARACTER SET utf8mb4
+            CREATE TABLE Likes_offer (id_like_offer INT AUTO_INCREMENT NOT NULL, liked_at DATETIME NOT NULL, student_id INT DEFAULT NULL, job_id INT DEFAULT NULL, INDEX IDX_13B6A46FCB944F1A (student_id), INDEX IDX_13B6A46FBE04EA9 (job_id), PRIMARY KEY(id_like_offer)) DEFAULT CHARACTER SET utf8mb4
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE Likes_student (id_likes_student INT AUTO_INCREMENT NOT NULL, liked_at DATETIME NOT NULL, student_id INT DEFAULT NULL, company_id INT DEFAULT NULL, INDEX IDX_B6E48834CB944F1A (student_id), INDEX IDX_B6E48834979B1AD6 (company_id), PRIMARY KEY(id_likes_student)) DEFAULT CHARACTER SET utf8mb4
@@ -75,10 +75,10 @@ final class Version20250414194058 extends AbstractMigration
             ALTER TABLE Job_offers ADD CONSTRAINT FK_C51F2A76979B1AD6 FOREIGN KEY (company_id) REFERENCES Companies (id_company) ON DELETE CASCADE
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE Likes_company ADD CONSTRAINT FK_4E782E48CB944F1A FOREIGN KEY (student_id) REFERENCES Students (id_student) ON DELETE CASCADE
+            ALTER TABLE Likes_offer ADD CONSTRAINT FK_13B6A46FCB944F1A FOREIGN KEY (student_id) REFERENCES Students (id_student) ON DELETE CASCADE
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE Likes_company ADD CONSTRAINT FK_4E782E48979B1AD6 FOREIGN KEY (company_id) REFERENCES Companies (id_company) ON DELETE CASCADE
+            ALTER TABLE Likes_offer ADD CONSTRAINT FK_13B6A46FBE04EA9 FOREIGN KEY (job_id) REFERENCES Job_offers (id_job) ON DELETE CASCADE
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE Likes_student ADD CONSTRAINT FK_B6E48834CB944F1A FOREIGN KEY (student_id) REFERENCES Students (id_student) ON DELETE CASCADE
@@ -128,10 +128,10 @@ final class Version20250414194058 extends AbstractMigration
             ALTER TABLE Job_offers DROP FOREIGN KEY FK_C51F2A76979B1AD6
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE Likes_company DROP FOREIGN KEY FK_4E782E48CB944F1A
+            ALTER TABLE Likes_offer DROP FOREIGN KEY FK_13B6A46FCB944F1A
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE Likes_company DROP FOREIGN KEY FK_4E782E48979B1AD6
+            ALTER TABLE Likes_offer DROP FOREIGN KEY FK_13B6A46FBE04EA9
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE Likes_student DROP FOREIGN KEY FK_B6E48834CB944F1A
@@ -182,7 +182,7 @@ final class Version20250414194058 extends AbstractMigration
             DROP TABLE Languages
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE Likes_company
+            DROP TABLE Likes_offer
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE Likes_student
