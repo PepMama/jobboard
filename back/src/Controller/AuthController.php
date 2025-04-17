@@ -54,4 +54,41 @@ class AuthController extends AbstractController
             ],500);
         }
     }
+
+    #[Route('/login', name: 'app_login', methods: ['POST'])]
+    public function login(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        try {
+            // Récupération des informations de la requte
+            $data = json_decode($request->getContent(), true);
+            $email = $data['email'];
+            $password = $data['password'];
+
+            // On compare dans la bdd
+            $user = $em->getRepository(Users::class)->findOneBy(['email' => $email]);
+
+            if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
+                return new JsonResponse(['error' => 'Invalid credentials'], 401);
+            }
+
+            // Génération du token JWT
+            $jwtKey = $this->getParameter('jwt_key');
+            $payload = [
+                'user_id' => $user->getId(),
+                'role' => $user->getRole(),
+                'exp' => time() + 3600,
+            ];
+
+            $token = JWT::encode($payload, $jwtKey, 'HS256');
+
+            return new JsonResponse([
+                'token' => $token,
+                'role' => $user->getRole(),
+                'redirect' => '/dashboard/' . $user->getRole(),
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
