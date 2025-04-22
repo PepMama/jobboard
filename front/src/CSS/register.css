@@ -1,12 +1,32 @@
-/* Style général */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: hsl(0, 1%, 63%);
+  background-color: hsl(0, 0%, 98%);
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: #f6fcf6;
 }
+.formGlobal{
+  display: flex;
+  flex-direction: row;
 
+}
+.logo {
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  margin-top: -20%;
+  margin-left: 40%;
+}
+.signupImg{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.radio{
+  margin-bottom: 5%;
+  margin-left: 28%;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -18,22 +38,14 @@ body {
 .form-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: #ffffff79;
-  border-radius: 25px;
-  margin-left: 20rem;
+  background-color: #e2eee4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 4000%;
   max-width: 500px;
   padding: 2rem;
   position: relative;
 }
 
-/* .bg-register {
-  background-image: url('@/assets/signUp.png');
-  background-size: cover;
-  background-position: center;
-} */
 .form-container::before {
   content: '';
   position: absolute;
@@ -46,16 +58,11 @@ body {
   z-index: -1;
 }
 
-h1 {
-  color: #2c3e50;
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
 h2 {
-  color: #8e44ad;
+  color: rgb(39, 38, 38);
   font-size: 1.25rem;
-  margin-bottom: 1.5rem
+  margin-bottom: 1.5rem;
+  margin-left: 10rem;
 }
 
 form {
@@ -66,13 +73,12 @@ form {
 
 input {
   padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 20px;
+  margin: 1px 0;
+  border: 1px #ABD1B5;
+  background-color: #ABD1B5;
+  border-radius: 5px;
   font-size: 1rem;
-}
-input::placeholder {
-  font-size: 0.75rem; 
+  width: 100%;
 }
 
 button {

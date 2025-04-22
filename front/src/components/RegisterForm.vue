@@ -1,44 +1,45 @@
 <template>
+  <!-- <div class="formGlobal"> -->
+  <div class="signupImg" :style="`background-image: url(${signUpImg}); width:100% ; background-size: cover;`"></div>
+
   <div class="form-container">
+    <div class="logo " :style="`background-image: url(${logo}); background-size: cover;`"></div>
+
+    <!-- <div class="logo absolute left-1/2 transform -translate-x-1/2 -top-12"></div> -->
     <div class="min-h-screen flex">
     <!-- Partie image -->
-    <div
-      class="w-1/2 bg-cover bg-center hidden md:block"
-      :style="`background-image: url(${signUpImg})`"
-    >
-    </div>
 
     <!-- Partie formulaire -->
     <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
       <div class="p-8 rounded shadow-md w-full max-w-md">
         <h2>Créer un compte</h2>
         <form @submit.prevent="handleRegister">
+          <label for="user">nom d'utilisateur</label>
           <div class="mb-4">
             <input
               v-model="form.username"
               type="text"
               class="username"
-              placeholder="nom d'utilisateur"
               required
             />
           </div>
 
+          <label for="email">Adresse e-mail</label>
           <div class="mb-4">
             <input
               v-model="form.email"
               type="email"
               class="email"
-              placeholder="email"
               required
             />
           </div>
 
+          <label for="password">Mot de passe</label>
           <div class="mb-4">
             <input
               v-model="form.password"
               type="password"
               class="password"
-              placeholder="mot de passe"
               required
             />
           </div>
@@ -57,10 +58,12 @@
     </div>
   </div>
   </div>
+<!-- </div> -->
 </template>
 
 <script setup>
 import signUpImg from '../assets/signUp.png'
+import logo from '../assets/logo.PNG'
 import { reactive } from 'vue'
 import { ref } from 'vue'
 

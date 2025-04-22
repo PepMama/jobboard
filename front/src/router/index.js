@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import AuthForm from '../components/RegisterForm.vue'
 
 const router = createRouter({
@@ -7,8 +6,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'authentification',
+      component: AuthForm,
     },
     {
       path: '/about',
@@ -17,11 +16,6 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
-    },
-    {
-      path: '/auth', 
-      name: 'authentification',
-      component: AuthForm, 
     },
   ],
 })
