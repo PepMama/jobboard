@@ -2,14 +2,14 @@
 
 namespace App\Repository;
 
-use App\Entity\Student;
+use App\Entity\MatchEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class StudentRepository extends ServiceEntityRepository
+class MatchEntityRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Student::class);
+        parent::__construct($registry, MatchEntity::class);
     }
 }
