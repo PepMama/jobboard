@@ -26,6 +26,7 @@ class StudentService
         if(!$student){
             $student = new Student();
             $student->setUser($user);
+            $student->setCreatedAt(new \DateTime());
         }
 
         // Mise à jour des infos
