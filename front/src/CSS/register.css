@@ -27,6 +27,9 @@ body {
   margin-bottom: 5%;
   margin-left: 28%;
 }
+input[type="radio"] {
+  accent-color: #8e44ad; 
+}
 .container {
   display: flex;
   justify-content: center;
@@ -71,9 +74,10 @@ form {
   width: 100%;
 }
 
+
 input {
   padding: 10px;
-  margin: 1px 0;
+  margin: 1px 0 20px;
   border: 1px #ABD1B5;
   background-color: #ABD1B5;
   border-radius: 5px;

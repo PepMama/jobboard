@@ -1,15 +1,9 @@
 <template>
-  <!-- <div class="formGlobal"> -->
   <div class="signupImg" :style="`background-image: url(${signUpImg}); width:100% ; background-size: cover;`"></div>
 
   <div class="form-container">
     <div class="logo " :style="`background-image: url(${logo}); background-size: cover;`"></div>
-
-    <!-- <div class="logo absolute left-1/2 transform -translate-x-1/2 -top-12"></div> -->
     <div class="min-h-screen flex">
-    <!-- Partie image -->
-
-    <!-- Partie formulaire -->
     <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
       <div class="p-8 rounded shadow-md w-full max-w-md">
         <h2>Créer un compte</h2>
@@ -20,6 +14,7 @@
               v-model="form.username"
               type="text"
               class="username"
+              placeholder="Ex: Lorena Yawadio"
               required
             />
           </div>
@@ -30,6 +25,7 @@
               v-model="form.email"
               type="email"
               class="email"
+              placeholder="Ex: lorenayawadio@adresse.fr"
               required
             />
           </div>
@@ -58,7 +54,7 @@
     </div>
   </div>
   </div>
-<!-- </div> -->
+
 </template>
 
 <script setup>
