@@ -21,9 +21,16 @@ class AuthController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
+            // Vérifier si l'email existe déjà
+            $existingUser = $em->getRepository(Users::class)->findOneBy(['email' => $data['email']]);
+            if ($existingUser) {
+                return new JsonResponse([
+                    'error' => 'Cet utilisateur existe déjà.'
+                ], 409);
+            }
+
             // Ajouter l'user dans la base de données
             $user = new Users();
-            $user->setUsername($data['username']);
             $user->setEmail($data['email']);
             $user->setRole($data['role']);
             $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
@@ -42,7 +49,7 @@ class AuthController extends AbstractController
     
             $token = JWT::encode($payload, $jwtKey, 'HS256');
     
-            // Rediriger sur la bon tablea de bord (dashboard/student || dashboard/company)
+            // Rediriger sur le bon tableau de bord (dashboard/student || dashboard/company)
             return new JsonResponse([
                 'token' => $token,
                 'role' => $user->getRole(),

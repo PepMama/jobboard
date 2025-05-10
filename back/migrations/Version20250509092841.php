@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250414221641 extends AbstractMigration
+final class Version20250509092841 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -60,7 +60,7 @@ final class Version20250414221641 extends AbstractMigration
             CREATE TABLE Student_competencies (student_id INT NOT NULL, competency_id INT NOT NULL, INDEX IDX_F1A9ADC4CB944F1A (student_id), INDEX IDX_F1A9ADC4FB9F58C (competency_id), PRIMARY KEY(student_id, competency_id)) DEFAULT CHARACTER SET utf8mb4
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE Users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4
+            CREATE TABLE Users (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE Companies ADD CONSTRAINT FK_B52899A76ED395 FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE
