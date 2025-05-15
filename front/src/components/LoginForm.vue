@@ -65,7 +65,7 @@
 
 <script setup>
 import loginImg from '../assets/login.svg'
-import logo from '../assets/logo.PNG'
+import logo from '../assets/logo.png'
 import { reactive } from 'vue'
 
 const form = reactive({

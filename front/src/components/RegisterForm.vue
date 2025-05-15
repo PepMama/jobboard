@@ -88,7 +88,7 @@
 
 <script setup>
 import signUpImg from '../assets/registerWorkin.svg'
-import logo from '../assets/logo.PNG'
+import logo from '../assets/logo.png'
 import { reactive } from 'vue'
 import { ref } from 'vue'
 
