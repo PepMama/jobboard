@@ -117,7 +117,7 @@ class ExperienceService
             'jobTitle' => $experience->getJobTitle(),
             'description' => $experience->getDescription(),
             'startDate' => $experience->getStartDate()?->format('Y-m-d'),
-            'endDate' => $experience->getEndDate()?->format('Y-m-d'),
+            'endDate' => $experience->getEndDate()?->format('Y-m-d')
         ];
     }
 

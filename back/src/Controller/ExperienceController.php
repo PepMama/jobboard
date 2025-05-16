@@ -16,7 +16,7 @@ class ExperienceController extends AbstractController
 {
     public function modelJson(array $experiences): array
     {
-        return array_map([$this, 'formatExperienceJson'], $experiences);
+        return array_map([$this, 'formatDataJson'], $experiences);
     }
 
     #[Route('/student/manage-experience', name: 'app_manage_experience', methods: ['POST'])]
@@ -36,7 +36,7 @@ class ExperienceController extends AbstractController
             }
 
             return $this->json(
-                $experienceService->formatExperienceJson($experience),
+                $experienceService->formatDataJson($experience),
                 200
             );
         }catch (\Exception $e){
@@ -72,7 +72,6 @@ class ExperienceController extends AbstractController
     {
         try {
             $user = $tokenService->getUserFromRequest($request);
-
             if ($user->getRole() !== 'student') {
                 return new JsonResponse(['error' => 'Accès interdit'], 403);
             }
