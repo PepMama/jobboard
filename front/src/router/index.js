@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthForm from '../components/RegisterForm.vue'
 import LoginForm from '../components/LoginForm.vue'
+import CreateUser from '../components/CreateUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/logIn',
       name: 'logIn',
       component: LoginForm,
+    },
+    {
+      path: '/createUser',
+      name: 'createUser',
+      component: CreateUser,
     },
   ],
 })

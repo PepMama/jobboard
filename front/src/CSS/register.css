@@ -15,10 +15,12 @@ body {
   margin-left: 40%;
 }
 .signupImg {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px 0px 0px 10px;
+  flex: 1;
   background-color: rgb(234, 233, 233);
-  margin-left: -50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px 0 0 10px;
 }
 .radio {
   margin-bottom: 5%;
@@ -30,10 +32,11 @@ input[type='radio'] {
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   min-height: 100vh;
-  padding: 0 1rem;
+  width: 100%;
 }
+
 
 .form-container {
   display: flex;
