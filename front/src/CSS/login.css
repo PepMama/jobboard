@@ -82,3 +82,10 @@
   transform: scale(1.1);
   color: #8e44ad;
 }
+.forgot-password {
+    font-weight: 500;
+  }
+  .register{
+    font-weight: 500;
+  }
+  

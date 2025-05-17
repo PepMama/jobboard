@@ -54,8 +54,13 @@
                 </svg>
               </span>
             </div>
-
             <button type="submit" class="login-button">Se connecter</button>
+            <div class="mb-2 text-right">
+              <a href="/reset-password" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+            <div class="mb-2 text-right">
+              <a href="/" class="register">Vous n'êtes pas encore inscrit? Inscrivez-vous</a>
+            </div>
           </form>
         </div>
       </div>
