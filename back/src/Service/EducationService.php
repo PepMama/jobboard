@@ -10,27 +10,32 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EducationService
 {
-    public function __construct(
-        private EducationRepository $educationRepository,
-        private StudentRepository   $studentRepository,
-        private EntityManagerInterface $em
-    ) {}
+    private $educationRepository;
+    private $studentRepository;
+    private $em;
 
-    public function modelJson(Education $e): array
+    public function __construct(
+        EducationRepository $educationRepository,
+        StudentRepository $studentRepository,
+        EntityManagerInterface $em
+    ) {
+        $this->educationRepository = $educationRepository;
+        $this->studentRepository = $studentRepository;
+        $this->em = $em;
+    }
+
+    public function modelJson(Education $education): array
     {
         return [
-            'id'           => $e->getId(),
-            'schoolName'   => $e->getSchoolName(),
-            'degree'       => $e->getDegree(),
-            'fieldOfStudy' => $e->getFieldOfStudy(),
-            'startDate'    => $e->getStartDate()?->format('Y-m-d'),
-            'endDate'      => $e->getEndDate()?->format('Y-m-d'),
+            'id' => $education->getId(),
+            'schoolName' => $education->getSchoolName(),
+            'degree' => $education->getDegree(),
+            'fieldOfStudy' => $education->getFieldOfStudy(),
+            'startDate' => $education->getStartDate()?->format('Y-m-d'),
+            'endDate' => $education->getEndDate()?->format('Y-m-d'),
         ];
     }
 
-    /**
-     * @return Education|array  Retourne Education ou ['error'=>string]
-     */
     public function manageEducation(Users $user, array $data): Education|array
     {
         $student = $this->studentRepository->findOneBy(['user' => $user]);
@@ -62,4 +67,57 @@ class EducationService
 
         return $education;
     }
+
+    public function deleteEducation(Users $user, int $id): array
+    {
+        $student = $this->studentRepository->findOneBy(['user' => $user]);
+        if(!$student){
+            return ['error' => 'Étudiant introuvable'];
+        }
+
+        $education = $this->educationRepository->find($id);
+        if(!$education){
+            return ['error' => 'Education introuvable'];
+        }
+
+        if($education->getStudent() !== $student){
+            return ['error' => 'Accès refusé à cette éducation'];
+        }
+
+        $this->em->remove($education);
+        $this->em->flush();
+
+        return ['message' => 'Education supprimée avec succès'];
+    }
+
+    public function getEducation(Users $user, int $id): array
+    {
+        $student = $this->studentRepository->findOneBy(['user' => $user]);
+        if (!$student) {
+            return ['error' => 'Étudiant introuvable'];
+        }
+
+        $education = $this->educationRepository->find($id);
+        if (!$education) {
+            return ['error' => 'Éducation introuvable'];
+        }
+
+        if ($education->getStudent() !== $student) {
+            return ['error' => 'Accès interdit à cette éducation'];
+        }
+
+        return $this->modelJson($education);
+    }
+
+    public function getAllEducations(Users $user): array
+    {
+        $student = $this->studentRepository->findOneBy(['user' => $user]);
+        if (!$student) {
+            return ['error' => 'Étudiant introuvable'];
+        }
+
+        $educations = $this->educationRepository->findBy(['student' => $student]);
+        return array_map([$this, 'modelJson'], $educations);
+    }
+
 }

@@ -15,11 +15,26 @@ class ExperienceService
     private $studentRepository;
     private $em;
 
-    public function __construct(ExperienceRepository $experienceRepository, EntityManagerInterface $em, StudentRepository $studentRepository)
-    {
+    public function __construct(
+        ExperienceRepository $experienceRepository, 
+        EntityManagerInterface $em, 
+        StudentRepository $studentRepository
+    ) {
         $this->experienceRepository = $experienceRepository;
         $this->studentRepository = $studentRepository;
         $this->em = $em;
+    }
+
+    public function modelJson(Experience $experience): array
+    {
+        return [
+            'id' => $experience->getId(),
+            'companyName' => $experience->getCompanyName(),
+            'jobTitle' => $experience->getJobTitle(),
+            'description' => $experience->getDescription(),
+            'startDate' => $experience->getStartDate()?->format('Y-m-d'),
+            'endDate' => $experience->getEndDate()?->format('Y-m-d')
+        ];
     }
 
     public function manageExperience(Users $user, array $data): Experience|array
@@ -108,18 +123,4 @@ class ExperienceService
 
         return array_map([$this, 'modelJson'], $experiences);
     }
-
-    public function modelJson(Experience $experience): array
-    {
-        return [
-            'id' => $experience->getId(),
-            'companyName' => $experience->getCompanyName(),
-            'jobTitle' => $experience->getJobTitle(),
-            'description' => $experience->getDescription(),
-            'startDate' => $experience->getStartDate()?->format('Y-m-d'),
-            'endDate' => $experience->getEndDate()?->format('Y-m-d')
-        ];
-    }
-
-
 }

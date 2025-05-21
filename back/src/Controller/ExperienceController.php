@@ -14,11 +14,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ExperienceController extends AbstractController
 {
-    public function modelJson(array $experiences): array
-    {
-        return array_map([$this, 'formatDataJson'], $experiences);
-    }
-
     #[Route('/student/manage-experience', name: 'app_manage_experience', methods: ['POST'])]
     public function manageExperience(Request $request, ExperienceService $experienceService, TokenService $tokenService): JsonResponse
     {
@@ -35,8 +30,8 @@ class ExperienceController extends AbstractController
                 return new JsonResponse(['error' => $experience['error']], 400);
             }
 
-            return $this->json(
-                $experienceService->formatDataJson($experience),
+            return new JsonResponse(
+                $experienceService->modelJson($experience),
                 200
             );
         }catch (\Exception $e){
