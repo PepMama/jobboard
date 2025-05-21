@@ -2,24 +2,21 @@
 
 namespace App\Controller;
 
+use App\Service\SearchPreferencesService;
 use App\Service\TokenService;
-use App\Service\EducationService;
-use App\Entity\Student;
-use App\Entity\Users;
-use App\Entity\Education;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class EducationController extends AbstractController
+class SearchPreferencesController extends AbstractController
 {
-    #[Route('/student/manage-education', name: 'app_manage_education', methods: ['POST'])]
-    public function manageEducation(
+    #[Route('/student/manage-preferences', name: 'app_manage_preferences', methods: ['POST'])]
+    public function managePreferences(
         Request $request,
-        EducationService $educationService,
+        SearchPreferencesService $service,
         TokenService $tokenService
-    ): JsonResponse
+    ): JsonResponse 
     {
         try {
             $user = $tokenService->getUserFromRequest($request);
@@ -28,26 +25,23 @@ class EducationController extends AbstractController
             }
 
             $data = json_decode($request->getContent(), true);
-            $education = $educationService->manageEducation($user, $data);
+            $preferences = $service->managePreferences($user, $data);
 
-            if (is_array($education) && isset($education['error'])) {
-                return new JsonResponse(['error' => $education['error']], 400);
+            if (is_array($preferences) && isset($preferences['error'])) {
+                return new JsonResponse($preferences, 400);
             }
 
-            return new JsonResponse(
-                $educationService->modelJson($education),
-                200
-            );
+            return new JsonResponse($service->modelJson($preferences), 200);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
 
-    #[Route('/student/education/{id}', name: 'app_get_education', methods: ['GET'])]
-    public function getEducation(
+    #[Route('/student/preferences/{id}', name: 'app_get_preferences', methods: ['GET'])]
+    public function getPreferences(
         int $id,
         Request $request,
-        EducationService $educationService,
+        SearchPreferencesService $service,
         TokenService $tokenService
     ): JsonResponse 
     {
@@ -57,66 +51,57 @@ class EducationController extends AbstractController
                 return new JsonResponse(['error' => 'Accès interdit'], 403);
             }
 
-            $result = $educationService->getEducation($user, $id);
-
-            if (is_array($result) && isset($result['error'])) {
-                return new JsonResponse($result, 400);
-            }
-
-            return new JsonResponse($result, 200);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    #[Route('/student/educations', name: 'app_get_all_educations', methods: ['GET'])]
-    public function getAllEducations(
-        Request $request,
-        EducationService $educationService,
-        TokenService $tokenService
-    ): JsonResponse 
-    {
-        try {
-            $user = $tokenService->getUserFromRequest($request);
-            if ($user->getRole() !== 'student') {
-                return new JsonResponse(['error' => 'Accès interdit'], 403);
-            }
-
-            $result = $educationService->getAllEducations($user);
-
-            if (is_array($result) && isset($result['error'])) {
-                return new JsonResponse($result, 400);
-            }
-
-            return new JsonResponse($result, 200);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    #[Route('/student/delete-education/{id}', name: 'app_delete_education', methods: ['DELETE'])]
-    public function deleteEducation(
-        int $id,
-        Request $request,
-        EducationService $educationService,
-        TokenService $tokenService
-    ): JsonResponse 
-    {
-        try {
-            $user = $tokenService->getUserFromRequest($request);
-            if ($user->getRole() !== 'student') {
-                return new JsonResponse(['error' => 'Accès interdit'], 403);
-            }
-
-            $result = $educationService->deleteEducation($user, $id);
-
+            $result = $service->getPreferences($user, $id);
             $status = isset($result['error']) ? 400 : 200;
+
             return new JsonResponse($result, $status);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
 
+    #[Route('/student/preferences', name: 'app_get_all_preferences', methods: ['GET'])]
+    public function getAllPreferences(
+        Request $request,
+        SearchPreferencesService $service,
+        TokenService $tokenService
+    ): JsonResponse 
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès interdit'], 403);
+            }
 
+            $result = $service->getAllPreferences($user);
+            $status = isset($result['error']) ? 400 : 200;
 
+            return new JsonResponse($result, $status);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/delete-preferences/{id}', name: 'app_delete_preferences', methods: ['DELETE'])]
+    public function deletePreferences(
+        int $id,
+        Request $request,
+        SearchPreferencesService $service,
+        TokenService $tokenService
+    ): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès interdit'], 403);
+            }
+
+            $result = $service->deletePreferences($user, $id);
+            $status = isset($result['error']) ? 400 : 200;
+
+            return new JsonResponse($result, $status);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
 }
