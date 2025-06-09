@@ -1,38 +1,84 @@
 <template>
   <div class="homepage">
     <header class="header">
-      <h1 class="title">AltMatch</h1>
-      <div class="logo" :style="{ backgroundImage: `url(${logo})` }"></div>
+      <img :src="altmatch" alt="altmatch" class="altmatch" />
+      <img src="../assets/logo.PNG" alt="Logo" />
       <div class="button-group">
-        <button class="btn-outline">Connexion</button>
-        <button class="btn-filled">Inscription</button>
-      </div>
+      <router-link to="/login" class="btn-outline">Connexion</router-link>
+      <router-link to="/register" class="btn-filled">Inscription</router-link>
+    </div>
     </header>
+
+    <div class="accroche">
+      <div class="accroche-container">
+        <img :src="accueil" alt="Image d’accueil" class="accroche-img" />
+        <div class="accroche-texte">
+          <span class="color">Le site qui facilite</span><br>
+          <span class="color">votre recherche</span><br>
+          <span class="dancingscript">d'alternan(t)ce !</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Match section -->
     <section class="section-match">
-      <h2 class="section-title">Trouvez votre match</h2>
-
+      <h2 class="section-title">Plus de 40 000 offres d'alternances <br> Plus de 45 000 candidats</h2>
       <!-- Étudiants -->
-      <div class="students">
-        <h4 class="section-subtitle">Entreprises, trouvez votre alternants!</h4>
-        <div class="student-list">
-          <div class="student-card" v-for="(student, i) in students" :key="i">
-            <h5 class="student-name">{{ student.name }}</h5>
-            <p class="student-desc">{{ student.description }}</p>
-            <button class="profile-btn">Voir le profil</button>
+      <div class="etudiants">
+        <div class="cards-section">
+          <h4 class="section-subtitle">
+            <span class="normal-text">Entreprises, trouvez</span><br>
+            <span class="bold-text">votre alternant(e)!</span>
+          </h4>
+          <div class="student-list">
+            <div class="student-card">
+              <img :src="hugo" alt="hugo" class="joined-img" />
+              <h5 class="student-name">Hugo</h5>
+              <p class="student-desc">M2 Ingénierie du Web</p>
+              <button class="profile-btn">Voir le CV</button>
+            </div>
+            <div class="student-card">
+              <img :src="emma" alt="emma" class="joined-img" />
+              <h5 class="student-name">Emma</h5>
+              <p class="student-desc">M1 Design d'interieur</p>
+              <button class="profile-btn">Voir le CV</button>
+            </div>
+            <div class="student-card">
+              <img :src="lucas" alt="lucas" class="joined-img" />
+              <h5 class="student-name">Lucas</h5>
+              <p class="student-desc">M2 Finance</p>
+              <button class="profile-btn">Voir le CV</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Entreprises -->
-      <div class="companies">
-        <h4 class="section-subtitle">Etudiants, trouvez votre entreprise!</h4>
-        <div class="company-list">
-          <div class="company-card" v-for="(company, i) in companies" :key="i">
-            <h5 class="company-name">{{ company.name }}</h5>
-            <p class="company-desc">{{ company.description }}</p>
-            <button class="profile-btn">Voir l'offre</button>
+      <div class="entreprises">
+        <div class="cards-section">
+          <h4 class="section-subtitle">
+            <span class="normal-text">Etudiants, trouvez</span><br>
+            <span class="bold-text">votre entreprise!</span>
+          </h4>
+          <div class="company-list">
+            <div class="company-card">
+              <img :src="financecorp" alt="financecorp" class="joined-img" />
+              <h5 class="company-name bold-text">FinanceCorp</h5>
+              <p class="company-desc">22 offres d'alternances</p>
+              <button class="profile-btn">Voir les offres</button>
+            </div>
+            <div class="company-card">
+              <img :src="techsoft" alt="techsoft" class="joined-img" />
+              <h5 class="company-name bold-text">TechSoft</h5>
+              <p class="company-desc">15 offres d'alternances</p>
+              <button class="profile-btn">Voir les offres</button>
+            </div>
+            <div class="company-card">
+              <img :src="medgenius" alt="medgenius" class="joined-img" />
+              <h5 class="company-name bold-text">MedGenius</h5>
+              <p class="company-desc">34 offres d'alternances</p>
+              <button class="profile-btn">Voir les offres</button>
+            </div>
           </div>
         </div>
       </div>
@@ -40,48 +86,115 @@
 
     <!-- Entreprises section -->
     <section class="section-joined">
-      <h2 class="section-title">Les entreprises qui nous ont rejoint</h2>
+      <h2 class="section-title">Quelques entreprises qui nous ont rejoint</h2>
       <div class="joined-list">
-        <div class="joined-card" v-for="n in 6" :key="n">
-          <img :src="`/logo${n}.png`" alt="Entreprise Logo" class="joined-img">
-          <h5 class="joined-name">Entreprise {{ n }}</h5>
+        <div class="joined-card">
+          <img :src="nexoraLogo" alt="Entreprise Logo" class="joined-img" />
+        </div>
+        <div class="joined-card">
+          <img :src="greenpulseLogo" alt="Entreprise Logo" class="joined-img" />
+        </div>
+        <div class="joined-card">
+          <img :src="velisaLogo" alt="Entreprise Logo" class="joined-img" />
+        </div>
+        <div class="joined-card">
+          <img :src="altoviaLogo" alt="Entreprise Logo" class="joined-img" />
+        </div>
+        <div class="joined-card">
+          <img :src="lumenisLogo" alt="Entreprise Logo" class="joined-img" />
+        </div>
+        <div class="joined-card">
+          <img :src="terraNovaLogo" alt="Entreprise Logo" class="joined-img" />
         </div>
       </div>
     </section>
+
+   <section class="why-us">
+      <div class="why-us-container">
+        <!-- Partie gauche -->
+        <div class="why-us-left">
+          <h2 class="why-us-title">Pourquoi <img :src="altmatch" alt="altmatch" class="altmatchwhy" /> ?<img :src="arrow" alt="Pourquoi altMatch" class="arrow" /></h2>
+        </div>
+
+        <!-- Partie droite -->
+        <div class="why-us-right">
+            <p>
+              AltMatch est la plateforme 100% dédiée à l'alternance. 
+              Elle regroupe un grand nombre d’offres qualifiées et de candidats motivés dans tous les secteurs.
+              Grâce à un système intelligent de mise en avant basé sur les préférences des entreprises et des candidats, 
+              chaque profil et chaque offre a une vraie visibilité. 
+              Nous vous garantissons une expérience simplifiée, ciblée et efficace, pour que chaque match soit une réussite.
+            </p>
+        </div>
+      </div>
+    </section>
+
 
     <!-- Secteurs d'activités -->
     <section class="section-sectors">
-      <h2 class="section-title">Secteurs d'activités</h2>
+      <h2 class="section-title">Retrouvez les offres et candidats par secteurs d'activités</h2>
       <div class="sector-list">
-        <div class="sector-card" v-for="(sector, i) in sectors" :key="i">
-          <h5 class="sector-name">{{ sector }}</h5>
+        <div class="sector-card">
+          <img :src="informatique" alt="informatique icone" />
+          <h5 class="sector-name bold-text">Informatique</h5>
+        </div>
+        <div class="sector-card">
+          <img :src="finance" alt="finance icone" />
+          <h5 class="sector-name bold-text">Finance</h5></div>
+        <div class="sector-card">
+          <img :src="grossery" alt="grossery icone" />
+          <h5 class="sector-name bold-text">Commerce</h5>
+        </div>
+        <div class="sector-card">
+          <img :src="industrial" alt="industrial icone" />
+          <h5 class="sector-name bold-text">Industrie</h5></div>
+        <div class="sector-card">
+          <img :src="medical" alt="medical icone" />
+          <h5 class="sector-name bold-text">Médicale</h5>
+        </div>
+        <div class="sector-card">
+          <img :src="marketing" alt="marketing icone" />
+          <h5 class="sector-name bold-text">Marketing</h5>
         </div>
       </div>
     </section>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-links">
+          <router-link to="/mentions-legales">Mentions légales</router-link>
+          <router-link to="/statuts">Statuts</router-link>
+          <router-link to="/cookies">Cookies</router-link>
+        </div>
+        <div class="footer-copy">
+          © AltMatch {{ new Date().getFullYear() }} - Tous droits réservés
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
-<script>
-import logo from '../assets/logo.png';
-import profilPic from '../assets/profilfemme1.webp';
-
-export default {
-  data() {
-    return {
-      students: [
-        { name: 'Hugo', description: "4ème année Master Ingénierie Web, recherche alternance développeur web, localisation: Lille et alentours" },
-        { name: 'Emma', description: "M1 UX Design, disponible pour une alternance dans le design web, Paris et banlieue" },
-        { name: 'Lucas', description: "Master Data, analyste junior, Bordeaux" }
-      ],
-      companies: [
-        { name: 'WebCorp', description: "Web designer, M1/M2, 1 à 2 ans, Lille" },
-        { name: 'TechSoft', description: "Développeur front-end, 6 à 12 mois, Paris" },
-        { name: 'DataGenius', description: "Data analyst en alternance, Lyon, 1 an" }
-      ],
-      sectors: ['Informatique', 'Finance', 'Commerce', 'Industrie', 'Médicale', 'Marketing']
-    };
-  }
-};
+<script setup>
+import nexoraLogo from '../assets/nexora.png';
+import greenpulseLogo from '../assets/Greenpulse.png';
+import altoviaLogo from '../assets/altovia.png';
+import velisaLogo from '../assets/velisa.png';
+import lumenisLogo from '../assets/lumenis.png';
+import terraNovaLogo from '../assets/terraNova.png';
+import hugo from '../assets/hugo.png';
+import emma from '../assets/emma.png';
+import lucas from '../assets/lucas.png';
+import accueil from '../assets/accueil.jpg';
+import altmatch from '../assets/altmatch.png';
+import techsoft from '../assets/techsoft.jpg';
+import financecorp from '../assets/financecorp.jpg';
+import medgenius from '../assets/medgenius.jpg';
+import grossery from '../assets/grossery.png';
+import finance from '../assets/finance.png';
+import marketing from '../assets/marketing.png';
+import informatique from '../assets/informatique.png';
+import medical from '../assets/medical.png';
+import industrial from '../assets/industrial.png';
+import arrow from '../assets/arrow.png';
 </script>
 
 <style src="@/CSS/home.css"></style>
