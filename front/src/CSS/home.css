@@ -1,0 +1,423 @@
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:"wdth" 100;
+
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #e2eee4;
+}
+
+#app {
+  display: block ;
+  max-width: none ;
+  margin: 0 ;
+  padding: 0 ;
+  width: 100% ;
+  height: 100% ;
+}
+
+.header .button-group a {
+  text-decoration: none ;
+}
+
+.altmatch{
+  width: 7%;
+  height: 7%;
+}
+.accroche {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  padding: 4 1rem; 
+  background-color: white;
+  height: 100vh;
+}
+
+.accroche-container {
+  position: relative;
+  width: 100%;
+  max-width: 98vw;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.accroche-img {
+  width: 100%;
+  height: 850px; 
+  object-fit: cover;
+  display: block;
+  border-radius: 30px;
+}
+
+.accroche-texte {
+  position: absolute;
+  top: 17%;
+  right: 2rem; 
+  transform: translateY(-50%);
+  color: #732d91;
+  font-size: 3.5rem;
+  text-align: right;
+  padding: 1.5rem 1rem;
+}
+.dancingscript {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4.5rem; 
+  color: #732d91;  
+  font-weight: 700;
+}
+
+.color{
+  color: black;
+}
+.color2{
+  color:#255736;
+}
+
+
+.homepage {
+  width: 100%;
+  min-height: 100vh;
+} 
+img{
+  height: 100px;
+  width: 100px;
+  margin-left: -145;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+}
+
+.title {
+  color: #255736;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-left: 70%;
+}
+
+.btn-outline {
+  border: 1px solid #732d91;
+  background-color: transparent;
+  color: #732d91;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background-color: #732d91;
+  color: white;
+}
+
+.btn-filled {
+  background-color: #732d91;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-filled:hover {
+  opacity: 0.9;
+}
+
+/* Sections */
+.section-title {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+  color: #255736;
+}
+
+.section-subtitle {
+  font-size: 2rem; 
+  margin: 2rem 0 1rem 1rem;
+}
+
+.normal-text {
+  font-weight: 400;
+}
+
+.bold-text {
+  font-weight: 700;
+}  
+
+/* Match section */
+.section-match {
+  padding: 2rem 20rem; 
+  background-color: #e2eee4;
+  margin: 5% 0 5% 0;
+  text-align: center;
+}
+.cards-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  margin: 5% 0 5% 0;
+  width: 100%;
+  padding: 0 2rem;
+}
+
+
+/* Students */
+.student-list {
+  display: flex;
+  gap: 10rem; 
+  justify-content: center;
+}
+
+.student-card {
+  background-color: #e2eee4;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.student-name {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.student-desc {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.profile-btn {
+  background-color: #732d91;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.profile-btn:hover {
+  opacity: 0.9;
+}
+
+/* Companies */
+.company-list { 
+  display: flex;
+  gap: 10rem; 
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.company-card {
+  padding: 1rem;
+  border-radius: 10px;
+  width: 340px;
+  text-align: center;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.company-card img {
+  width: 100%;
+  height: 180px; 
+  object-fit: cover; /* permet de remplir sans déformer */
+  border-radius: 10px;
+}   
+
+/* Joined companies */
+.section-joined {
+  padding: 2rem;
+}
+
+.joined-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.joined-card {
+  background-color: rgb(255, 255, 255);
+  padding: 1rem;
+  border-radius: 10px;
+  width: 170px;
+  text-align: center;
+}
+
+.joined-img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.why-us {
+  background-color: #e2eee4;
+  padding: 4rem 2rem;
+}
+
+.why-us-container {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* pour responsive*/
+ }  
+
+.why-us-left {
+  flex: 1;
+  text-align: center;
+}
+
+.why-us-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #255736;
+}
+
+.why-us-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.altmatchwhy{
+width: 35%;
+height: 40%
+}
+.arrow{
+margin-left: 30%;
+margin-top: -15%;
+width: 40%;
+height: 20%
+}
+
+
+.section-sectors {
+  padding: 2rem;
+  background-color: white;
+}
+
+.sector-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.sector-card {
+  padding: 1rem;
+  border-radius: 10px;
+  width: 350px;
+  text-align: center;
+  box-shadow:  2px 2px 2px 2px rgb(212, 212, 212);
+}
+
+.sector-card:nth-child(1) {
+  background-color: #dcedf8; 
+}
+.sector-card:nth-child(2) {
+  background-color: #f9f4dd; 
+}
+.sector-card:nth-child(3) {
+  background-color: #f9d8e8; 
+}
+.sector-card:nth-child(4) {
+  background-color: #ebddf9; 
+}
+.sector-card:nth-child(5) {
+  background-color: #f8e6d5;
+}
+.sector-card:nth-child(6) {
+  background-color: #dff0e2; 
+}
+
+.sector-card img{
+  width : 10%;
+  height: 50%;
+}
+h4{
+  font-size: 100px;
+  text-align: center;
+}
+p{
+  font-size: 1.5rem;
+}  
+.footer {
+  background-color: #f2f2f2; /* gris clair */
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  margin-top: 4rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #732d91; 
+}
+
+.footer-copy {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+
+
+
+
+  

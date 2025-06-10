@@ -11,23 +11,13 @@
         <div>
           <h2>Créer un compte</h2>
           <form @submit.prevent="handleRegister">
-            <label for="user">Nom d'utilisateur</label>
-            <div class="mb-4">
-              <input
-                v-model="form.username"
-                type="text"
-                class="username"
-                placeholder="Ex: Lorena Yawadio"
-                required
-              />
-            </div>
-
             <label for="email">Adresse e-mail</label>
             <div class="mb-4">
               <input
                 v-model="form.email"
                 type="email"
                 class="email"
+                name="email"
                 placeholder="Ex: lorenayawadio@adresse.fr"
                 required
               />
@@ -39,6 +29,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 v-model="form.password"
                 class="password"
+                name="password"
                 required
               />
               <span class="toggle-password" @click="showPassword = !showPassword">
@@ -79,6 +70,9 @@
             </div>
 
             <button type="submit" class="inscritpion">S'inscrire</button>
+            <!-- <div class="mb-2 text-right">
+              <a href="/logIn" class="logIn">Vous avez déja un compte ? connectez-vous ?</a>
+            </div> -->
           </form>
         </div>
       </div>
@@ -102,7 +96,6 @@ const form = reactive({
 })
 const handleRegister = async () => {
   const payload = {
-    username: form.username,
     email: form.email,
     password: form.password,
     role: role.value,
@@ -128,7 +121,7 @@ const handleRegister = async () => {
     localStorage.setItem('role', data.role)
 
     // Redirection vers la page de connexion
-    window.location.href = '/login'
+    // window.location.href = '/login'
   } catch (error) {
     alert(error.message || "Erreur lors de l'inscription")
   }
