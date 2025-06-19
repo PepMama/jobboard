@@ -1,16 +1,29 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Trash2 } from 'lucide-vue-next'
+import type { Experience } from '@/types/student'
+import { defineProps } from 'vue'
 
-interface Experience {
-  id:number; companyName:string; jobTitle:string; description?:string; startDate?:string; endDate?:string
-}
 const props = defineProps<{ experiences: Experience[] }>()
 const emit  = defineEmits<{ (e:'changed'):void }>()
 
-const draft = ref<Omit<Experience,'id'>>({ companyName:'', jobTitle:'', description:'', startDate:'', endDate:'' })
+const draft = ref<Omit<Experience,'id'>>({
+  companyName:'',
+  jobTitle:'',
+  description:'',
+  startDate:'',
+  endDate:''
+})
+
 const fmt = (d?:string)=> d? d.slice(0,10) : '…'
-const reset = ()=> draft.value={ companyName:'', jobTitle:'', description:'', startDate:'', endDate:'' }
+
+const reset = ()=> draft.value={
+  companyName:'',
+  jobTitle:'',
+  description:'',
+  startDate:'',
+  endDate:''
+}
 
 async function save(){
   const token = localStorage.getItem('token')
@@ -56,7 +69,7 @@ async function del(id:number){
             style="width:32px;height:32px"
             @click="del(exp.id)"
           >
-            <Trash2 size="16"/>
+            <Trash2 />
           </button>
         </li>
       </ul>

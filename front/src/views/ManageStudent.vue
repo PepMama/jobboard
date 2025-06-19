@@ -5,6 +5,7 @@ import StudentHeader    from '@/components/Students/StudentHeader.vue'
 import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
 import BioCard          from '@/components/Students/BioCard.vue'
 import ExperienceCard   from '@/components/Students/ExperienceCard.vue'
+import EducationCard from '@/components/Students/EducationCard.vue'
 
 const avatar = ref('https://via.placeholder.com/80')
 
@@ -12,29 +13,40 @@ const formData = reactive({
   firstname:'', name:'', phone:'', age:'', address:'', city:'', postalCode:''
 })
 
-const bio         = ref('')
+const bio = ref('')
 const experiences = ref<any[]>([])
+const educations = ref<any[]>([])
 
 async function fetchStudentProfile(){
   const t = localStorage.getItem('token')
   if(!t) return
 
-  const prof = await fetch('http://localhost:8000/student/profile',{headers:{Authorization:`Bearer ${t}`}})
+  const prof = await fetch('http://localhost:8000/student/profile',{
+    headers:{Authorization:`Bearer ${t}`}
+  })
+
   if(prof.ok && prof.status!==204){
     const d = await prof.json()
     formData.firstname=d.firstname??''
-    formData.name     =d.name??''
-    formData.phone    =d.phone_number??''
-    formData.age      =d.age??''
-    formData.address  =d.address??''
-    formData.city     =d.city??''
-    formData.postalCode=d.postal_code??''
-    bio.value         =d.description??''
-    avatar.value      =d.photo??avatar.value
+    formData.name = d.name??''
+    formData.phone = d.phone_number??''
+    formData.age = d.age??''
+    formData.address =d.address??''
+    formData.city = d.city??''
+    formData.postalCode = d.postal_code??''
+    bio.value = d.description??''
+    avatar.value = d.photo??avatar.value
   }
 
-  const exp = await fetch('http://localhost:8000/student/experiences',{headers:{Authorization:`Bearer ${t}`}})
+  const exp = await fetch('http://localhost:8000/student/experiences',{
+    headers:{Authorization:`Bearer ${t}`}
+  })
   experiences.value = exp.ok ? await exp.json() : []
+
+  const eduRes = await fetch('http://localhost:8000/student/educations',{headers:{
+    Authorization:`Bearer ${t}`}
+  })
+  educations.value = eduRes.ok ? await eduRes.json() : []
 }
 
 async function submitForm(){
@@ -67,6 +79,7 @@ onMounted(fetchStudentProfile)
           </div>
           <div class="flex-fill mt-3" style="min-width:300px;max-width:30%">
             <BioCard :bio="bio" @update:bio="v=>bio=v"/>
+            <EducationCard :educations="educations" @changed="fetchStudentProfile"/>
             <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile"/>
           </div>
         </div>
