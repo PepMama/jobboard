@@ -3,8 +3,8 @@ import AuthForm from '../components/RegisterForm.vue'
 import ResetPasswordForm from '../components/ResetPasswordForm.vue'
 import Home from '../components/Home.vue'
 import LoginForm from '../components/LoginForm.vue'
-import CreateUser from '../components/CreateUser.vue'
-import CreateEntreprise from '../components/CreateEntreprise.vue'
+import ManageStudent from '../views/ManageStudent.vue'
+import ManageEntreprise from '../views/ManageEntreprise.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,14 +20,6 @@ const router = createRouter({
       component: AuthForm,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-    {
       path: '/logIn',
       name: 'logIn',
       component: LoginForm,
@@ -40,12 +32,12 @@ const router = createRouter({
     {
       path: '/dashboard/student',
       name: 'createStudent',
-      component: CreateUser,
+      component: ManageStudent,
     },
     {
       path: '/dashboard/company',
       name: 'createCompany',
-      component: CreateEntreprise
+      component: ManageEntreprise
     }
   ],
 })

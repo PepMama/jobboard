@@ -3,7 +3,7 @@
       class="signupImg"
       :style="`background-image: url(${signUpImg}); width:150%; background-size: contain; background-repeat: no-repeat; background-position: center;`"
     ></div>
-  
+
     <div class="form-container">
       <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
       <div class="min-h-screen flex">
@@ -21,7 +21,7 @@
                   required
                 />
               </div>
-  
+
               <label for="email">Adresse e-mail</label>
               <div class="mb-4">
                 <input
@@ -32,7 +32,7 @@
                   required
                 />
               </div>
-  
+
               <label for="password">Mot de passe</label>
               <div class="mb-4 password-wrapper">
                 <input
@@ -65,7 +65,7 @@
                   </svg>
                 </span>
               </div>
-  
+
               <label>Vous êtes :</label><br />
               <div class="radio">
                 <label
@@ -77,7 +77,7 @@
                   entreprise</label
                 >
               </div>
-  
+
               <button type="submit" class="inscritpion">S'inscrire</button>
             </form>
           </div>
@@ -85,16 +85,16 @@
       </div>
     </div>
   </template>
-  
+
   <script setup>
   import signUpImg from '../assets/registerWorkin.svg'
-  import logo from '../assets/logo.PNG'
+  import logo from '../assets/logo.png'
   import { reactive } from 'vue'
   import { ref } from 'vue'
-  
+
   const role = ref('student') // valeur par défaut
 //   const showPassword = ref(false)
-  
+
 //   const form = reactive({
 //     username: '',
 //     email: '',
@@ -107,7 +107,7 @@
 //       password: form.password,
 //       role: role.value,
 //     }
-  
+
 //     try {
 //       const response = await fetch('http://localhost:8000/register', {
 //         method: 'POST',
@@ -116,17 +116,17 @@
 //         },
 //         body: JSON.stringify(payload),
 //       })
-  
+
 //       if (!response.ok) {
 //         throw new Error("Erreur lors de l'inscription")
 //       }
-  
+
 //       const data = await response.json()
-  
+
 //       // Stockage du token
 //       localStorage.setItem('token', data.token)
 //       localStorage.setItem('role', data.role)
-  
+
 //       // Redirection vers la page de connexion
 //       window.location.href = '/login'
 //     } catch (error) {
@@ -134,8 +134,7 @@
 //     }
 //   }
   </script>
-  
+
   <style>
   @import '@/CSS/register.css';
   </style>
-  

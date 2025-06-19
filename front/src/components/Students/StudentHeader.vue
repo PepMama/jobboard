@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 defineProps<{
-  firstname: string
-  name: string
+  firstname?: string
+  name?: string
   avatar: string
 }>()
 </script>
