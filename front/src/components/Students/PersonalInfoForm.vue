@@ -32,8 +32,7 @@ const props = defineProps({
       age: '',
       address: '',
       city: '',
-      postalCode: '',
-      description: ''
+      postalCode: ''
     })
   }
 })
@@ -48,8 +47,7 @@ const personalFields = {
   age: 'Votre âge :',
   address: 'Adresse :',
   city: 'Ville :',
-  postalCode: 'Code postal :',
-  description:'Petite description :'
+  postalCode: 'Code postal :'
 }
 
 function onSubmit () {
