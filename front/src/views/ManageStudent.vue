@@ -32,26 +32,37 @@
                         <div class="card bg-white text-dark rounded-3 shadow-sm mt-3">
                             <div class="card-body">
                                 <h5>Informations personnelles</h5>
-                                <form @submit.prevent>
+                                <form @submit.prevent="submitForm">
                                     <div class="mb-3">
                                         <label class="form-label text-dark">Prénom :</label>
-                                        <input type="text" class="form-control" />
+                                        <input type="text" class="form-control" v-model="firstname"/>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-dark">Nom :</label>
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-dark">Email :</label>
-                                        <input type="email" class="form-control" />
+                                        <input type="text" class="form-control" v-model="name" />
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-dark">N° de téléphone :</label>
-                                        <input type="text" class="form-control" />
+                                        <input type="text" class="form-control" v-model="phone"/>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label text-dark">Poste recherché :</label>
-                                        <input type="text" class="form-control" />
+                                      <label class="form-label text-dark">Votre âge : </label>
+                                      <input type="text" class="form-control" v-model="age"/>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label text-dark">Adresse : </label>
+                                      <input type="text" class="form-control" v-model="address"/>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label text-dark">Ville : </label>
+                                      <input type="text" class="form-control" v-model="city"/>
+                                    </div>                                    <div class="mb-3">
+                                    <label class="form-label text-dark">Code postal : </label>
+                                    <input type="text" class="form-control" v-model="postal_code"/>
+                                  </div>
+                                    <div class="mb-3">
+                                      <label class="form-label text-dark">Petite description : </label>
+                                      <textarea type="text" class="form-control" v-model="description"/>
                                     </div>
                                     <button type="submit" class="btn btn-success">Mettre à jour</button>
                                 </form>
@@ -178,17 +189,24 @@
 <script>
 export default {
     data() {
-        return {
-            langues: ['français'],
-            experiences: [
-                'Développeur Frontend chez Altazion',
-                'Stage en développement web'
-            ],
-            nouvelleLangue: '',
-            nouvelleExperience: '',
-            bio: "Ma bio",
-            isEditBio: false,
-        };
+      return {
+        firstname: '',
+        name: '',
+        phone: '',
+        age: '',
+        address: '',
+        city: '',
+        postal_code: '',
+        bio: "Ma bio",
+        isEditBio: false,
+        langues: ['français'],
+        experiences: [
+          'Développeur Frontend chez Altazion',
+          'Stage en développement web'
+        ],
+        nouvelleLangue: '',
+        nouvelleExperience: ''
+      };
     },
     methods: {
         ajouterLangue() {
@@ -206,6 +224,48 @@ export default {
         toggleEditionBio() {
             this.isEditBio = !this.isEditBio;
         },
+      async submitForm() {
+        const token = localStorage.getItem('token');
+
+        const payload = {
+          firstname: this.firstname,
+          name: this.name,
+          phone_number: this.phone,
+          age: this.age,
+          address: this.address,
+          city: this.city,
+          postal_code: this.postal_code,
+          description: this.description,
+          photo: null,
+          linkedin: null,
+          github: null,
+          cv: null
+        };
+
+        console.log("Payload envoyé :", payload);
+
+        try {
+          const response = await fetch('http://localhost:8000/student/profile', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            console.error('Erreur:', data.error);
+          } else {
+            alert('Profil mis à jour avec succès !');
+          }
+
+        } catch (error) {
+          console.error('Erreur réseau:', error);
+        }
+      }
     },
 };
 </script>

@@ -18,6 +18,16 @@ class StudentService
         $this->em = $em;
     }
 
+    public function getStudentByUser(Users $user): ?Student
+    {
+        return $this->studentRepository->findOneBy(['user' => $user]);
+    }
+
+    public function getAllStudent(): array
+    {
+        return $this->studentRepository->findAll();
+    }
+
     public function completeProfileService(Users $user, array $data): Student
     {
         // On vérifie si l'étudiant existe déjà

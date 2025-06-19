@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthForm from '../components/RegisterForm.vue'
-import LoginForm from '../components/loginForm.vue'
 import ResetPasswordForm from '../components/ResetPasswordForm.vue'
 import Home from '../components/Home.vue'
 import LoginForm from '../components/LoginForm.vue'
@@ -39,13 +38,13 @@ const router = createRouter({
       component: ResetPasswordForm,
     },
     {
-      path: '/createUser',
-      name: 'createUser',
+      path: '/dashboard/student',
+      name: 'createStudent',
       component: CreateUser,
     },
     {
-      path: '/createEntreprise',
-      name: 'createEntreprise',
+      path: '/dashboard/company',
+      name: 'createCompany',
       component: CreateEntreprise
     }
   ],
