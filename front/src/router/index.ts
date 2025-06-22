@@ -4,7 +4,6 @@ import ResetPasswordForm from '../components/ResetPasswordForm.vue'
 import Home from '../components/Home.vue'
 import LoginForm from '../components/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
-import ManageEntreprise from '../views/ManageEntreprise.vue'
 import ManageCompany from '@/views/ManageCompany.vue'
 
 const router = createRouter({
