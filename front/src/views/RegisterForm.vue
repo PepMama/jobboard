@@ -102,7 +102,7 @@ const handleRegister = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:8000/register', {
+    const response = await fetch('https://localhost:8000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

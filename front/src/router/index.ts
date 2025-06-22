@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthForm from '../components/RegisterForm.vue'
-import ResetPasswordForm from '../components/ResetPasswordForm.vue'
-import Home from '../components/Home.vue'
-import LoginForm from '../components/LoginForm.vue'
+import AuthForm from '../views/RegisterForm.vue'
+import ResetPasswordForm from '../views/ResetPasswordForm.vue'
+import Home from '../views/Home.vue'
+import LoginForm from '../views/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
 import ManageEntreprise from '../views/ManageEntreprise.vue'
 

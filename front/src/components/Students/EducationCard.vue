@@ -67,7 +67,7 @@ async function del (id: number) {
           </button>
         </li>
       </ul>
-
+      
       <button
         class="btn btn-success mt-3 w-100"
         data-bs-toggle="modal"
