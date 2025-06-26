@@ -9,6 +9,10 @@
             <Briefcase class="me-2" :size="20" />
             Mes offres
           </a>
+          <a class="nav-link d-flex align-items-center text-dark" href="/company/create-offer">
+            <Plus class="me-2" :size="20" />
+            Créer offre
+          </a>
         </li>
       </ul>
     </div>
@@ -20,7 +24,7 @@
         :key="item.nom"
         class="nav-item mb-2 nav-hover"
       >
-        <a class="nav-link d-flex align-items-center text-dark" href="#">
+        <a class="nav-link d-flex align-items-center text-dark" :href="`/${item.url}`">
           <component :is="item.icone" class="me-2" :size="20" />
           {{ item.nom }}
         </a>
@@ -30,11 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { User, Heart, Briefcase } from 'lucide-vue-next'
+import { User, Heart, Briefcase, Plus } from 'lucide-vue-next'
 
 const menuItems = [
-  { nom: 'Profil', icone: User },
-  { nom: 'Mes likes', icone: Heart }
+  { nom: 'Profil', icone: User, url: 'dashboard/company' },
+  { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes' }
 ]
 </script>
 

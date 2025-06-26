@@ -105,6 +105,30 @@ class JobOfferService
         return $this->modelJson($offer);
     }
 
+    public function createOffer(Users $user, array $data): JobOffer|array
+    {
+        $company = $this->companyRepository->findOneBy(['user' => $user]);
+        if (!$company) {
+            return ['error' => 'Entreprise introuvable'];
+        }
+
+        $offer = new JobOffer();
+        $offer->setCompany($company);
+        $offer->setTitle($data['title'] ?? '');
+        $offer->setDescription($data['description'] ?? '');
+        $offer->setState($data['state'] ?? '');
+        $offer->setContractType($data['contractType'] ?? '');
+        $offer->setSalary(isset($data['salary']) ? (int)$data['salary'] : null);
+        $offer->setCity($data['city'] ?? null);
+        $offer->setRemote($data['remote'] ?? false);
+        $offer->setStartDate(new \DateTime($data['startDate']));
+
+        $this->em->persist($offer);
+        $this->em->flush();
+
+        return $offer;
+    }
+
     public function deleteOffer(Users $user, int $id): array
     {
         $company = $this->companyRepository->findOneBy(['user' => $user]);

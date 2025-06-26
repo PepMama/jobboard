@@ -5,6 +5,7 @@ import Home from '../components/Home.vue'
 import LoginForm from '../components/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
 import ManageCompany from '@/views/ManageCompany.vue'
+import CreateOffer from '@/components/Company/CreateOffer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/dashboard/company',
       name: 'createCompany',
       component: ManageCompany
+    },
+    {
+      path: '/company/create-offer',
+      name: 'createOffer',
+      component: CreateOffer
     }
   ],
 })
