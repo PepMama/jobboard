@@ -1,7 +1,7 @@
 <template>
   <div class="bg-light border-end p-3" style="min-width: 220px;">
     <div class="mb-3">
-      <h4 class="fw-bold mb-3">AltMatch</h4>
+      <img :src="logo" alt="Logo AltMatch" class="img-fluid" />
 
       <ul class="nav flex-column mb-3">
         <li class="nav-item nav-hover">
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import { User, Heart, Briefcase, Plus } from 'lucide-vue-next'
+import logo from '@/assets/altmatch.png'
 
 const menuItems = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
