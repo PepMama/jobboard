@@ -101,30 +101,5 @@ class JobOfferController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
-
-    #[Route('/company/create-offer', name: 'app_create_offer', methods: ['POST'])]
-    public function createOffer(
-        Request $request,
-        JobOfferService $service,
-        TokenService $tokenService
-    ): JsonResponse {
-        try {
-            $user = $tokenService->getUserFromRequest($request);
-            if ($user->getRole() !== 'company') {
-                return new JsonResponse(['error' => 'Accès réservé aux entreprises'], 403);
-            }
-
-            $data = json_decode($request->getContent(), true);
-            $offer = $service->createOffer($user, $data);
-
-            if (is_array($offer) && isset($offer['error'])) {
-                return new JsonResponse($offer, 400);
-            }
-
-            return new JsonResponse($service->modelJson($offer), 201);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
-        }
-    }
 }
 
