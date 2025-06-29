@@ -57,8 +57,9 @@ class AuthController extends AbstractController
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'error'=> $e->getMessage(),
-            ],500);
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+            ], 500);
         }
     }
 

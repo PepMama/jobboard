@@ -99,33 +99,32 @@ const handleRegister = async () => {
     email: form.email,
     password: form.password,
     role: role.value,
-  }
+  };
 
   try {
-    const response = await fetch('http://localhost:8000/register', {
+    const response = await fetch('https://localhost:8000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    })
+    });
+
+    const data = await response.json();
 
     if (!response.ok) {
-      throw new Error("Erreur lors de l'inscription")
+      throw new Error(data.error || "Erreur lors de l'inscription");
     }
 
-    const data = await response.json()
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('role', data.role);
 
-    // Stockage du token
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('role', data.role)
-
-    // Redirection vers la page de connexion
-    // window.location.href = '/login'
+    // window.location.href = '/login';
   } catch (error) {
-    alert(error.message || "Erreur lors de l'inscription")
+    alert(error.message);
   }
-}
+};
+
 </script>
 
 <style>

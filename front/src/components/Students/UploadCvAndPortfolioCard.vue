@@ -1,0 +1,104 @@
+<template>
+  <div class="card bg-white shadow-sm mt-3">
+    <div class="card-body">
+      <h5>Ajouter des fichiers</h5>
+      <label class="block font-bold">CV (PDF uniquement)</label>
+      <input type="file" accept="application/pdf" @change="handleCvUpload" />
+
+      <div v-if="cvUrl" class="mt-2">
+        <embed :src="cvUrl" type="application/pdf" width="100%" height="300px" />
+        <button class="mt-2 px-4 py-1 bg-red-500 text-white rounded" @click="deleteCv">Supprimer le CV</button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <label class="block font-bold">Lien GitHub</label>
+      <input
+        v-model="githubUrl"
+        type="text"
+        class="w-full border p-2 rounded"
+        placeholder="https://github.com/username"
+        @blur="updateGithub"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, watch } from 'vue'
+
+const props = defineProps({
+  cv: String,
+  github: String
+})
+
+const emit = defineEmits(['update:cv', 'update:github'])
+
+const cvUrl = ref(props.cv || null)
+const githubUrl = ref(props.github || '')
+
+watch(() => props.cv, val => (cvUrl.value = val))
+watch(() => props.github, val => (githubUrl.value = val))
+
+async function handleCvUpload(e) {
+  const file = e.target.files[0]
+  if (!file || file.type !== 'application/pdf') {
+    alert('Seuls les fichiers PDF sont autorisés')
+    return
+  }
+
+  const formData = new FormData()
+  formData.append('cv', file)
+
+  const res = await fetch('http://localhost:8000/student/upload-cv', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
+    body: formData
+  })
+
+  const data = await res.json()
+  if (res.ok) {
+    cvUrl.value = data.cv
+    emit('update:cv', data.cv)
+  } else {
+    alert(data.error)
+  }
+}
+
+async function deleteCv() {
+  const res = await fetch('http://localhost:8000/student/delete-cv', {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+
+  const data = await res.json()
+  if (res.ok) {
+    cvUrl.value = null
+    emit('update:cv', null)
+  } else {
+    alert(data.error)
+  }
+}
+
+async function updateGithub() {
+  const res = await fetch('http://localhost:8000/student/update-github', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ github: githubUrl.value })
+  })
+
+  const data = await res.json()
+  if (res.ok) {
+    emit('update:github', data.github)
+  } else {
+    alert(data.error)
+  }
+}
+</script>
