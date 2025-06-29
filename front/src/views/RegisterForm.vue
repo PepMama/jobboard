@@ -120,18 +120,28 @@ const handleRegister = async () => {
       throw new Error(data.error || "Erreur lors de l'inscription");
     }
 
+<<<<<<< HEAD
     const { token, role, redirect } = data;
 
     authStore.setAuth(token, role);
 
     router.push(redirect);
 
+=======
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('role', data.role);
+
+    // window.location.href = '/login';
+>>>>>>> cf87d17 (filtrage des offres pour un étudiant front et back)
   } catch (error) {
     alert(error.message);
   }
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf87d17 (filtrage des offres pour un étudiant front et back)
 </script>
 
 <style>
