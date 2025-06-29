@@ -6,6 +6,7 @@ import LoginForm from '../views/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
 import ManageCompany from '@/views/ManageCompany.vue'
 import CreateOffer from '@/components/Company/CreateOffer.vue'
+import OfferSwipe from '@/views/OfferSwipe.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
