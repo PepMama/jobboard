@@ -86,4 +86,78 @@ class StudentController extends AbstractController
 
         return new JsonResponse($data);
     }
+
+    #[Route('/student/upload-cv', name: 'app_upload_cv', methods: ['POST'])]
+    public function uploadCv(Request $request, TokenService $tokenService, StudentService $studentService): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            $student = $studentService->getStudentByUser($user);
+
+            $file = $request->files->get('cv');
+            if (!$file || $file->getClientOriginalExtension() !== 'pdf') {
+                return new JsonResponse(['error' => 'Seuls les fichiers PDF sont autorisés'], 400);
+            }
+
+
+            if ($student->getCv()) {
+                $oldPath = $this->getParameter('kernel.project_dir') . '/public' . $student->getCv();
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
+            }
+
+            $fileName = uniqid() . '.pdf';
+            $file->move($this->getParameter('kernel.project_dir') . '/public/uploads/cvs', $fileName);
+
+            $student->setCv('/uploads/cvs/' . $fileName);
+            $studentService->save($student);
+
+            return new JsonResponse(['cv' => $student->getCv()]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/delete-cv', name: 'app_delete_cv', methods: ['DELETE'])]
+    public function deleteCv(Request $request, TokenService $tokenService, StudentService $studentService): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            $student = $studentService->getStudentByUser($user);
+
+            if ($student->getCv()) {
+                $cvPath = $this->getParameter('kernel.project_dir') . '/public' . $student->getCv();
+                if (file_exists($cvPath)) {
+                    unlink($cvPath);
+                }
+                $student->setCv(null);
+                $studentService->save($student);
+            }
+
+            return new JsonResponse(['message' => 'CV supprimé']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/update-github', name: 'app_update_github', methods: ['PUT'])]
+    public function updateGithub(Request $request, TokenService $tokenService, StudentService $studentService): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            $student = $studentService->getStudentByUser($user);
+
+            $data = json_decode($request->getContent(), true);
+            $student->setGithub($data['github'] ?? null);
+            $studentService->save($student);
+
+            return new JsonResponse(['github' => $student->getGithub()]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+
 }

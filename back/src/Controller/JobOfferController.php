@@ -101,5 +101,21 @@ class JobOfferController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
+
+    #[Route('/student/offers', name: 'app_student_offers', methods: ['GET'])]
+    public function getOffersForStudents(
+        Request $request,
+        JobOfferService $service
+    ): JsonResponse {
+        try {
+            $keyword = $request->query->get('keyword'); 
+            $city = $request->query->get('city');
+            $offers = $service->getOffersForStudents($keyword, $city);
+            return new JsonResponse($offers, 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
 

@@ -122,4 +122,41 @@ class JobOfferService
 
         return ['message' => 'Offre supprimée avec succès'];
     }
+
+    public function getOffersForStudents(?string $keyword = null, ?string $city = null): array
+    {
+        $qb = $this->em
+            ->getRepository(JobOffer::class)
+            ->createQueryBuilder('o')
+            ->join('o.company', 'c')
+            ->addSelect('c')
+            ->where('o.state = :state')
+            ->setParameter('state', 'active');
+
+        if ($keyword) {
+            $qb->andWhere('LOWER(o.title) LIKE :keyword OR LOWER(o.description) LIKE :keyword')
+            ->setParameter('keyword', '%' . strtolower($keyword) . '%');
+        }
+
+        if ($city) {
+            $qb->andWhere('LOWER(o.city) LIKE :city')
+            ->setParameter('city', '%' . strtolower($city) . '%');
+        }
+
+        $offers = $qb->getQuery()->getResult();
+
+        return array_map(function (JobOffer $offer) {
+            $company = $offer->getCompany();
+            return [
+                'id' => $offer->getId(),
+                'title' => $offer->getTitle(),
+                'contractType' => $offer->getContractType(),
+                'city' => $offer->getCity(),
+                'company' => [
+                    'name' => $company->getName(),
+                    'logo' => $company->getLogo(),
+                ]
+            ];
+        }, $offers);
+    }
 }
