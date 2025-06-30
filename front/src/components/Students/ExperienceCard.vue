@@ -28,7 +28,7 @@ const reset = ()=> draft.value={
 async function save(){
   const token = localStorage.getItem('token')
   if(!token) return
-  const res = await fetch('http://localhost:8000/student/manage-experience',{
+  const res = await fetch('https://localhost:8000/student/manage-experience',{
     method:'POST',
     headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},
     body:JSON.stringify(draft.value)
@@ -42,7 +42,7 @@ async function save(){
 async function del(id:number){
   const t=localStorage.getItem('token')
   if(!t) return
-  const res=await fetch(`http://localhost:8000/student/delete-experience/${id}`,{
+  const res=await fetch(`https://localhost:8000/student/delete-experience/${id}`,{
     method:'DELETE',headers:{Authorization:`Bearer ${t}`}})
   if(res.ok) emit('changed')
 }

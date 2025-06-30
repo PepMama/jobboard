@@ -75,7 +75,7 @@ const formData = ref({
 
 async function createOffer(offer: typeof formData.value) {
     try {
-        const response = await fetch('http://localhost:8000/joboffer/company/manage-offe', {
+        const response = await fetch('https://localhost:8000/joboffer/company/manage-offe', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
