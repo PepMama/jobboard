@@ -1,9 +1,4 @@
 <template>
-  <div
-    class="signupImg"
-    :style="`background-image: url(${loginImg}); width:150%; background-size: contain; background-repeat: no-repeat; background-position: center;`"
-  ></div>
-
   <div class="login-form-container">
     <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
     <div class="min-h-screen flex">

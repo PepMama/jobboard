@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
-  state: (): { token: string | null; role: string | null } => ({
+  state: (): { 
+    token: string | null; 
+    role: string | null;
+    user: string | null;
+  } => ({
     token: null,
     role: null,
+    user:null
   }),
   actions: {
     setAuth(token: string, role: string) {
@@ -11,6 +16,11 @@ export const useAuthStore = defineStore('auth', {
       this.role = role;
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
+    },
+    reset() {
+      this.token = null
+      this.role = null
+      this.user = null
     },
     clearAuth() {
       this.token = null;

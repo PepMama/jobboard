@@ -30,12 +30,31 @@
         </a>
       </li>
     </ul>
+    <div class="logout-container mt-auto pt-4 align-content-center">
+      <button class="btn w-100 nav-hover" @click="handleLogout">
+        <LogOut />
+        Se déconnecter
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { User, Heart, Briefcase, Plus } from 'lucide-vue-next'
+import { User, Heart, Briefcase, Plus, LogOut } from 'lucide-vue-next'
 import logo from '@/assets/altmatch.png'
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = () => {
+  authStore.reset()
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  localStorage.removeItem('user')
+  router.push('/')
+}
 
 const menuItems = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
@@ -51,5 +70,15 @@ const menuItems = [
 .nav-hover:hover {
   background-color: #d4edda;
   transform: scale(1.03);
+}
+
+.bg-light {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.logout-container {
+  margin-top: auto;
 }
 </style>
