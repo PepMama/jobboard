@@ -85,9 +85,13 @@ import signUpImg from '../assets/registerWorkin.svg'
 import logo from '../assets/logo.png'
 import { reactive } from 'vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const role = ref('student') // valeur par défaut
 const showPassword = ref(false)
+const router = useRouter();
+const authStore = useAuthStore();
 
 const form = reactive({
   username: '',
@@ -102,7 +106,7 @@ const handleRegister = async () => {
   };
 
   try {
-    const response = await fetch('https://localhost:8000/register', {
+    const response = await fetch('http://localhost:8000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -116,14 +120,17 @@ const handleRegister = async () => {
       throw new Error(data.error || "Erreur lors de l'inscription");
     }
 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('role', data.role);
+    const { token, role, redirect } = data;
 
-    // window.location.href = '/login';
+    authStore.setAuth(token, role);
+
+    router.push(redirect);
+
   } catch (error) {
     alert(error.message);
   }
 };
+
 
 </script>
 

@@ -16,8 +16,27 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')
+
+// Déconnexion auto après 5 min d'inactivité
+let logoutTimer;
+const INACTIVITY_LIMIT = 3 * 60 * 1000;
+
+function resetTimer() {
+  clearTimeout(logoutTimer);
+  logoutTimer = setTimeout(() => {
+    localStorage.removeItem('token');
+    window.location.href = '/';
+  }, INACTIVITY_LIMIT);
+}
+
+['click', 'mousemove', 'keydown'].forEach(event => {
+  window.addEventListener(event, resetTimer);
+});
+
+resetTimer();
 
