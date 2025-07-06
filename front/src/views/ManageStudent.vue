@@ -109,3 +109,10 @@ function onBioUpdate(newBio: string) {
     </div>
   </div>
 </template>
+
+<style>
+.flex-grow-1 {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+</style>
