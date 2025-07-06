@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class StudentController extends AbstractController
 {
-    #[Route('/student/profile', name: 'app_complete_profile', methods: ['PUT'])]
+    #[Route('/student/manage-profile', name: 'app_complete_profile', methods: ['PUT'])]
     public function completeProfile(Request $request, StudentService $studentService, TokenService $tokenService): JsonResponse
     {
         try {
