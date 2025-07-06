@@ -9,6 +9,6 @@
 /vendor/
 .idea
 /.env
-/.env.dev
+.env.dev
 
 ###< symfony/framework-bundle ###
