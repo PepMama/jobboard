@@ -33,4 +33,35 @@ class CompanyController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], 401);
         }
     }
+
+    #[Route('/company/profile', name: 'app_get_company_profile', methods: ['GET'])]
+    public function getCompanyProfile(Request $request, CompanyService $companyService, TokenService $tokenService): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+
+            if ($user->getRole() !== 'company') {
+                return new JsonResponse(['error' => 'Accès réservé aux entreprises'], 403);
+            }
+
+            $company = $companyService->getCompanyByUser($user);
+
+            if (!$company) {
+                return new JsonResponse(null, 204);
+            }
+
+            return new JsonResponse([
+                'name' => $company->getName(),
+                'phone_number' => $company->getPhoneNumber(),
+                'city' => $company->getCity(),
+                'address' => $company->getAddress(),
+                'postal_code' => $company->getPostalCode(),
+                'linkedin' => $company->getLinkedin(),
+                'description' => $company->getDescription(),
+                'industry' => $company->getIndustry()
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 401);
+        }
+    }
 }

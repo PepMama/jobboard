@@ -74,12 +74,15 @@ const formData = ref({
 })
 
 async function createOffer(offer: typeof formData.value) {
+    const t = localStorage.getItem('token')
+    if (!t) return
+
     try {
-        const response = await fetch('https://localhost:8000/joboffer/company/manage-offe', {
-            method: 'POST',
+        const response = await fetch('https://127.0.0.1:8000/company/manage-offer', {
             headers: {
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${t}`
             },
+            method: 'POST',
             body: JSON.stringify(offer)
         })
         if (!response.ok) {
@@ -87,6 +90,7 @@ async function createOffer(offer: typeof formData.value) {
         }
         const data = await response.json()
         console.log('Offre créée :', data)
+        window.location.href = "/dashboard/company"
     } catch (error) {
         console.error('Erreur lors de la création de l\'offre :', error)
     }

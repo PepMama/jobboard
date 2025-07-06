@@ -20,11 +20,12 @@ const formData = reactive({
 const description = ref('')
 const industry = ref('')
 
-async function fetchStudentProfile() {
+async function fetchCompanyProfile() {
     const t = localStorage.getItem('token')
     if (!t) return
 
-    const prof = await fetch('https://localhost:8000/company/profile', {
+    try {
+    const prof = await fetch('https://127.0.0.1:8000/company/profile', {
         headers: { Authorization: `Bearer ${t}` }
     })
 
@@ -41,6 +42,9 @@ async function fetchStudentProfile() {
         description.value = d.description ?? ''
         avatar.value = d.photo ?? avatar.value
     }
+} catch (error) {
+    console.error('Erreur lors de la récupération du profil de l\'entreprise :', error)
+    }
 }
 
 async function submitForm() {
@@ -51,13 +55,13 @@ async function submitForm() {
         linkedin: formData.linkedin, logo: null, industry: industry.value, city: formData.city,
         address: formData.address, postalCode: formData.postalCode, description: description.value
     }
-    const res = await fetch('https://localhost:8000/company/profile', {
+    const res = await fetch('https://127.0.0.1:8000/company/profile', {
         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
         body: JSON.stringify(payload)
     })
     if (res.ok) alert('Profil mis à jour')
 }
-onMounted(fetchStudentProfile)
+onMounted(fetchCompanyProfile)
 </script>
 
 <template>
