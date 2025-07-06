@@ -24,7 +24,7 @@ app.mount('#app')
 
 // Déconnexion auto après 5 min d'inactivité
 let logoutTimer;
-const INACTIVITY_LIMIT = 3 * 60 * 1000;
+const INACTIVITY_LIMIT = 100 * 60 * 1000;
 
 function resetTimer() {
   clearTimeout(logoutTimer);

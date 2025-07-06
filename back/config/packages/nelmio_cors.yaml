@@ -1,13 +1,13 @@
 nelmio_cors:
   defaults:
     allow_credentials: true
-    allow_origin: ['http://localhost:5173'] # ton front en dev
+    allow_origin: ['http://localhost:5174']
     allow_headers: ['Content-Type', 'Authorization']
     allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     max_age: 3600
   paths:
-    '^/register': # ou '^/' pour toutes les routes
-      allow_origin: ['http://localhost:5173']
+    '^/':
+      allow_origin: ['http://localhost:5174']
       allow_headers: ['Content-Type', 'Authorization']
       allow_methods: ['GET', 'POST', 'OPTIONS']
       allow_credentials: true
