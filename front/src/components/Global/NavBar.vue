@@ -51,13 +51,13 @@ const studentMenu = [
 ]
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
-  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' },
-  { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' }
+  { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
+  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' }  
 ]
 
 // Récupère le rôle depuis le store ou le localStorage
 const role = authStore.role || localStorage.getItem('role')
-const menuItems = role === 'company' ? companyMenu : studentMenu
+const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 </script>
 
 <style scoped>
