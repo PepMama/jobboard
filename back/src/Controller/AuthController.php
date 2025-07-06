@@ -43,7 +43,7 @@ class AuthController extends AbstractController
             $jwtKey = $this->getParameter('jwt_key');
             $payload = [
                 'user_id' => $user->getId(),
-                'role' => $user->getRole(),
+                'role' => $user->getRoles()[1] ?? 'ROLE_USER',
                 'exp' => time() + 3600,
             ];
     
@@ -52,7 +52,7 @@ class AuthController extends AbstractController
             // Rediriger sur le bon tableau de bord (dashboard/student || dashboard/company)
             return new JsonResponse([
                 'token' => $token,
-                'role' => $user->getRole(),
+                'role' => $user->getRoles()[1] ?? 'ROLE_USER',
                 'redirect' => '/dashboard/' . $user->getRole(),
             ]);
         } catch (\Exception $e) {
@@ -83,7 +83,7 @@ class AuthController extends AbstractController
             $jwtKey = $this->getParameter('jwt_key');
             $payload = [
                 'user_id' => $user->getId(),
-                'role' => $user->getRole(),
+                'role' => $user->getRoles()[1] ?? 'ROLE_USER',
                 'exp' => time() + 3600,
             ];
 
@@ -91,7 +91,7 @@ class AuthController extends AbstractController
 
             return new JsonResponse([
                 'token' => $token,
-                'role' => $user->getRole(),
+                'role' => $user->getRoles()[1] ?? 'ROLE_USER',
                 'redirect' => '/dashboard/' . $user->getRole(),
             ]);
         } catch (\Exception $e) {

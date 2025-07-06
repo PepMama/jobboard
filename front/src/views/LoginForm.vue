@@ -1,9 +1,4 @@
 <template>
-  <div
-    class="signupImg"
-    :style="`background-image: url(${loginImg}); width:150%; background-size: contain; background-repeat: no-repeat; background-position: center;`"
-  ></div>
-
   <div class="login-form-container">
     <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
     <div class="min-h-screen flex">
@@ -72,6 +67,11 @@
 import loginImg from '../assets/login.svg'
 import logo from '../assets/logo.png'
 import { reactive } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const form = reactive({
   email: '',
@@ -85,7 +85,7 @@ const handleLogin = async () => {
   }
 
   try {
-    const response = await fetch('https://localhost:8000/login', {
+    const response = await fetch('http://localhost:8000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -94,21 +94,21 @@ const handleLogin = async () => {
     })
 
     if (!response.ok) {
-      throw new Error('Identifiants incorrects')
+      const data = await response.json()
+      throw new Error(data.error || 'Identifiants incorrects')
     }
 
     const data = await response.json()
     const { token, role, redirect } = data
 
-    localStorage.setItem('token', token)
-    localStorage.setItem('role', role)
-
-    window.location.href = redirect
+    authStore.setAuth(token, role)
+    router.push(redirect)
   } catch (error) {
     alert(error.message || 'Erreur lors de la connexion')
   }
 }
 </script>
+
 
 <style>
 @import '@/CSS/login.css';
