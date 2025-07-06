@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Service\JobOfferService;
 use App\Service\TokenService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Attribute\Route;
+use App\Service\StudentService;
+use App\Service\JobOfferService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class JobOfferController extends AbstractController
 {
@@ -105,17 +106,22 @@ class JobOfferController extends AbstractController
     #[Route('/student/offers', name: 'app_student_offers', methods: ['GET'])]
     public function getOffersForStudents(
         Request $request,
-        JobOfferService $service
+        JobOfferService $service,
+        TokenService $tokenService,
+        StudentService $studentService
     ): JsonResponse {
         try {
             $keyword = $request->query->get('keyword'); 
             $city = $request->query->get('city');
-            $offers = $service->getOffersForStudents($keyword, $city);
+
+            $user = $tokenService->getUserFromRequest($request);
+            $student = $studentService->getStudentByUser($user);
+
+            $offers = $service->getOffersForStudents($keyword, $city, $student->getId());
             return new JsonResponse($offers, 200);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
-
 }
 
