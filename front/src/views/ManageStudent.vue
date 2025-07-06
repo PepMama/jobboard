@@ -8,7 +8,7 @@ import ExperienceCard   from '@/components/Students/ExperienceCard.vue'
 import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
 
-const avatar = ref('https://via.placeholder.com/80')
+const avatar = ref('http://via.placeholder.com/80')
 
 const formData = reactive({
   firstname:'', name:'', phone:'', age:'', address:'', city:'', postalCode:'', cv: '',
@@ -24,7 +24,7 @@ async function fetchStudentProfile(){
   const t = localStorage.getItem('token')
   if(!t) return
 
-  const prof = await fetch('httpS://localhost:8000/student/profile',{
+  const prof = await fetch('http://localhost:8000/student/profile',{
     headers:{Authorization:`Bearer ${t}`}
   })
 
@@ -43,12 +43,12 @@ async function fetchStudentProfile(){
     avatar.value = d.photo??avatar.value
   }
 
-  const exp = await fetch('https://localhost:8000/student/experiences',{
+  const exp = await fetch('http://localhost:8000/student/experiences',{
     headers:{Authorization:`Bearer ${t}`}
   })
   experiences.value = exp.ok ? await exp.json() : []
 
-  const eduRes = await fetch('https://localhost:8000/student/educations',{headers:{
+  const eduRes = await fetch('http://localhost:8000/student/educations',{headers:{
     Authorization:`Bearer ${t}`}
   })
   educations.value = eduRes.ok ? await eduRes.json() : []
@@ -64,8 +64,9 @@ async function submitForm(){
     photo:null,linkedin:null,github: formData.github,
     cv: formData.cv
   }
-  const res = await fetch('https://localhost:8000/student/profile',{
-    method:'PUT',headers:{'Content-Type':'application/json',Authorization:`Bearer ${t}`},
+  const res = await fetch('http://localhost:8000/student/manage-profile', {
+    method:'PUT',
+    headers:{'Content-Type':'application/json',Authorization:`Bearer ${t}`},
     body:JSON.stringify(payload)
   })
   if(res.ok) alert('Profil mis à jour')
@@ -78,6 +79,11 @@ function updateCv(newCv: string) {
 
 function updateGithub(newGithub: string) {
   formData.github = newGithub
+}
+ 
+function onBioUpdate(newBio: string) {
+  bio.value = newBio
+  submitForm()
 }
 </script>
 
@@ -93,7 +99,7 @@ function updateGithub(newGithub: string) {
           </div>
           
           <div class="flex-fill mt-3" style="min-width:300px;max-width:30%">
-            <BioCard :bio="bio" @update:bio="v=>bio=v"/>
+            <BioCard :bio="bio" @update:bio="onBioUpdate"/>
             <EducationCard :educations="educations" @changed="fetchStudentProfile"/>
             <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile"/>
             <UploadCvAndPortfolio :cv="formData.cv" :github="formData.github" @update:cv="updateCv" @update:github="updateGithub"/>
