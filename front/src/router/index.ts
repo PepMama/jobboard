@@ -7,7 +7,6 @@ import ManageStudent from '../views/ManageStudent.vue'
 import ManageCompany from '@/views/ManageCompany.vue'
 import CreateOffer from '@/components/Company/CreateOffer.vue'
 import OfferSwipe from '@/views/OfferSwipe.vue'
-import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,48 +35,23 @@ const router = createRouter({
       path: '/dashboard/student',
       name: 'createStudent',
       component: ManageStudent,
-      meta: { requiresAuth: true, allowedRoles: ['student'] }
     },
     {
       path: '/dashboard/company',
       name: 'createCompany',
-      component: ManageCompany,
-      meta: { requiresAuth: true, allowedRoles: ['company'] }
+      component: ManageCompany
     },
     {
       path: '/company/create-offer',
       name: 'createOffer',
-      component: CreateOffer,
-      meta: { requiresAuth: true, allowedRoles: ['company'] }
+      component: CreateOffer
     },
     {
       path: '/dashboard/student/offers',
       name: 'showOffers',
-      component: OfferSwipe,
-      meta: { requiresAuth: true, allowedRoles: ['student'] }
+      component: OfferSwipe
     }
   ],
-})
-
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  authStore.loadFromStorage();
-
-  const isAuthenticated = !!authStore.token;
-  const userRole = (authStore.role ?? '').replace('ROLE_', '').toLowerCase();
-
-  const requiresAuth = to.meta.requiresAuth;
-  const allowedRoles = to.meta.allowedRoles as string[] | undefined;
-
-  if (requiresAuth && !isAuthenticated) {
-    return next({ name: 'home' });
-  }
-
-  if (requiresAuth && allowedRoles && (!userRole || !allowedRoles.includes(userRole))) {
-    return next({ name: 'home' });
-  }
-
-  next();
 })
 
 export default router

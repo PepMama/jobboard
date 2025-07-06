@@ -123,7 +123,7 @@ class JobOfferService
         return ['message' => 'Offre supprimée avec succès'];
     }
 
-    public function getOffersForStudents(?string $keyword = null, ?string $city = null): array
+    public function getOffersForStudents(?string $keyword = null, ?string $city = null, ?int $studentId = null): array
     {
         $qb = $this->em
             ->getRepository(JobOffer::class)
@@ -135,12 +135,23 @@ class JobOfferService
 
         if ($keyword) {
             $qb->andWhere('LOWER(o.title) LIKE :keyword OR LOWER(o.description) LIKE :keyword')
-            ->setParameter('keyword', '%' . strtolower($keyword) . '%');
+                ->setParameter('keyword', '%' . strtolower($keyword) . '%');
         }
 
         if ($city) {
             $qb->andWhere('LOWER(o.city) LIKE :city')
-            ->setParameter('city', '%' . strtolower($city) . '%');
+                ->setParameter('city', '%' . strtolower($city) . '%');
+        }
+
+        // Exclure les offres likées par l'étudiant
+        if ($studentId !== null) {
+            $subQb = $this->em->createQueryBuilder()
+                ->select('IDENTITY(lo.jobOffer)')
+                ->from('App\Entity\LikesOffer', 'lo')
+                ->where('lo.student = :studentId');
+
+            $qb->andWhere($qb->expr()->notIn('o.id', $subQb->getDQL()))
+                ->setParameter('studentId', $studentId);
         }
 
         $offers = $qb->getQuery()->getResult();
@@ -159,4 +170,5 @@ class JobOfferService
             ];
         }, $offers);
     }
+
 }
