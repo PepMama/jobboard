@@ -2,19 +2,6 @@
   <div class="bg-light border-end p-3" style="min-width: 220px;">
     <div class="mb-3">
       <img :src="logo" alt="Logo AltMatch" class="img-fluid" />
-
-      <ul class="nav flex-column mb-3">
-        <li class="nav-item nav-hover">
-          <a class="nav-link d-flex align-items-center text-dark" href="#">
-            <Briefcase class="me-2" :size="20" />
-            Mes offres
-          </a>
-          <a class="nav-link d-flex align-items-center text-dark" href="/company/create-offer">
-            <Plus class="me-2" :size="20" />
-            Créer offre
-          </a>
-        </li>
-      </ul>
     </div>
 
     <hr class="mx-2 mb-3" />
@@ -56,10 +43,21 @@ const handleLogout = () => {
   router.push('/')
 }
 
-const menuItems = [
-  { nom: 'Profil', icone: User, url: 'dashboard/company' },
-  { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes' }
+// Menus selon le rôle
+const studentMenu = [
+  { nom: 'Profil', icone: User, url: 'dashboard/student' },
+  { nom: 'Mes likes', icone: Heart, url: 'dashboard/student/likes' },
+  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' }
 ]
+const companyMenu = [
+  { nom: 'Profil', icone: User, url: 'dashboard/company' },
+  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' },
+  { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' }
+]
+
+// Récupère le rôle depuis le store ou le localStorage
+const role = authStore.role || localStorage.getItem('role')
+const menuItems = role === 'company' ? companyMenu : studentMenu
 </script>
 
 <style scoped>
