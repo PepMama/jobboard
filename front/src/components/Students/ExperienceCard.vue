@@ -49,14 +49,14 @@ async function del(id:number){
 </script>
 
 <template>
-  <div class="card bg-white text-dark rounded-3 shadow-sm mt-3">
+  <div class="card bg-white text-dark rounded-3 shadow-sm">
     <div class="card-body">
       <h5>Expériences</h5>
-      <ul class="list-group">
+      <ul class="list-group list-group-flush">
         <li
           v-for="exp in experiences"
           :key="exp.id"
-          class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 bg-success-subtle border-0 rounded-3 shadow-sm mb-2"
+          class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 bg-list-items rounded-3 shadow-sm mb-2"
         >
           <div class="pe-2">
             <div class="fw-semibold">{{ exp.jobTitle }}</div>
@@ -73,7 +73,7 @@ async function del(id:number){
           </button>
         </li>
       </ul>
-      <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#expModal">Ajouter une expérience</button>
+      <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#expModal">Ajouter une expérience</button>
     </div>
   </div>
 
@@ -91,11 +91,29 @@ async function del(id:number){
             <textarea v-model="draft.description" class="form-control mb-2" placeholder="Description"></textarea>
             <input v-model="draft.startDate" type="date" class="form-control mb-2" />
             <input v-model="draft.endDate"   type="date" class="form-control mb-2" />
-            <button class="btn btn-success w-100">Enregistrer</button>
+            <button class="btn btn-outline-primary w-100">Enregistrer</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.btn-outline-primary{
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+
+.bg-list-items {
+  background: #eaebff;
+}
+</style>
+
 

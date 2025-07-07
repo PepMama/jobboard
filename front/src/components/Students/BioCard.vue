@@ -1,14 +1,14 @@
 <template>
   <div class="card bg-white text-dark rounded-3 shadow-sm">
     <div class="card-body">
-      <h5>Bio</h5>
+      <h5>Description</h5>
 
       <div v-if="edit">
         <textarea v-model="localBio" class="form-control"></textarea>
       </div>
-      <p v-else>{{ bio }}</p>
+      <p class="fs-5" v-else>{{ bio }}</p>
 
-      <button class="btn btn-success mt-2" @click="toggle">
+      <button class="btn btn-outline-primary mt-2" @click="toggle">
         {{ edit ? 'Sauvegarder' : 'Modifier' }}
       </button>
     </div>
@@ -31,3 +31,16 @@ function toggle () {
   edit.value = !edit.value
 }
 </script>
+
+<style scoped>
+.btn-outline-primary{
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+</style>

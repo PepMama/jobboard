@@ -15,7 +15,7 @@
           </template>
         </div>
 
-        <button class="btn btn-success">Mettre à jour</button>
+        <button class="btn btn-outline-primary">Mettre à jour</button>
       </form>
     </div>
   </div>
@@ -55,3 +55,16 @@ function onSubmit () {
   emit('submit')
 }
 </script>
+
+<style scoped>
+.btn-outline-primary {
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+</style>

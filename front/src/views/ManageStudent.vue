@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import Sidebar          from '@/components/Global/NavBar.vue'
-import StudentHeader    from '@/components/Students/StudentHeader.vue'
+import Sidebar from '@/components/Global/NavBar.vue'
+import PageHeader from '@/components/Global/PageHeader.vue'
+import StudentHeader from '@/components/Students/StudentHeader.vue'
 import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
-import BioCard          from '@/components/Students/BioCard.vue'
-import ExperienceCard   from '@/components/Students/ExperienceCard.vue'
+import ExperienceCard from '@/components/Students/ExperienceCard.vue'
 import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
 
 const avatar = ref('http://via.placeholder.com/80')
 
 const formData = reactive({
-  firstname:'', 
-  name:'', 
-  phone:'', 
-  age:'', 
-  address:'', 
-  city:'', 
-  postalCode:'', 
+  firstname: '',
+  name: '',
+  phone: '',
+  age: '',
+  address: '',
+  city: '',
+  postalCode: '',
   cv: '',
   github: '',
   linkedin: ''
@@ -26,66 +26,71 @@ const formData = reactive({
 const bio = ref('')
 const experiences = ref<any[]>([])
 const educations = ref<any[]>([])
+const showModal = ref(false)
 
-async function fetchStudentProfile(){
+async function fetchStudentProfile() {
   const t = localStorage.getItem('token')
-  if(!t) return
+  if (!t) return
 
-  const prof = await fetch('http://localhost:8000/student/profile',{
-    headers:{Authorization:`Bearer ${t}`}
+  const prof = await fetch('http://localhost:8000/student/profile', {
+    headers: { Authorization: `Bearer ${t}` }
   })
 
-  if(prof.ok && prof.status!==204){
+  if (prof.ok && prof.status !== 204) {
     const d = await prof.json()
-    formData.firstname=d.firstname??''
-    formData.name = d.name??''
-    formData.phone = d.phone_number??''
-    formData.age = d.age??''
-    formData.address =d.address??''
-    formData.city = d.city??''
-    formData.postalCode = d.postal_code??''
+    formData.firstname = d.firstname ?? ''
+    formData.name = d.name ?? ''
+    formData.phone = d.phone_number ?? ''
+    formData.age = d.age ?? ''
+    formData.address = d.address ?? ''
+    formData.city = d.city ?? ''
+    formData.postalCode = d.postal_code ?? ''
     formData.cv = d.cv ?? ''
     formData.github = d.github ?? ''
     formData.linkedin = d.linkedin ?? ''
     bio.value = d.description ?? ''
-    avatar.value = d.photo??avatar.value
+    avatar.value = d.photo ?? avatar.value
   }
 
-  const exp = await fetch('http://localhost:8000/student/experiences',{
-    headers:{Authorization:`Bearer ${t}`}
+  const exp = await fetch('http://localhost:8000/student/experiences', {
+    headers: { Authorization: `Bearer ${t}` }
   })
   experiences.value = exp.ok ? await exp.json() : []
 
-  const eduRes = await fetch('http://localhost:8000/student/educations',{headers:{
-    Authorization:`Bearer ${t}`}
+  const eduRes = await fetch('http://localhost:8000/student/educations', {
+    headers: { Authorization: `Bearer ${t}` }
   })
   educations.value = eduRes.ok ? await eduRes.json() : []
 }
 
-async function submitForm(){
+async function submitForm() {
   const t = localStorage.getItem('token')
-  if(!t) return
-  const payload={
-    firstname:formData.firstname,
-    name:formData.name,
-    phone_number:formData.phone,
-    age:formData.age,
-    address:formData.address,
-    city:formData.city,
-    postal_code:formData.postalCode,
-    description:bio.value,
-    photo:null,
-    linkedin:formData.linkedin,
+  if (!t) return
+  const payload = {
+    firstname: formData.firstname,
+    name: formData.name,
+    phone_number: formData.phone,
+    age: formData.age,
+    address: formData.address,
+    city: formData.city,
+    postal_code: formData.postalCode,
+    description: bio.value,
+    photo: null,
+    linkedin: formData.linkedin,
     github: formData.github,
     cv: formData.cv
   }
   const res = await fetch('http://localhost:8000/student/manage-profile', {
-    method:'PUT',
-    headers:{'Content-Type':'application/json',Authorization:`Bearer ${t}`},
-    body:JSON.stringify(payload)
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${t}`
+    },
+    body: JSON.stringify(payload)
   })
-  if(res.ok) alert('Profil mis à jour')
+  if (res.ok) alert('Profil mis à jour')
 }
+
 onMounted(fetchStudentProfile)
 
 function updateCv(newCv: string) {
@@ -99,28 +104,56 @@ function updateGithub(newGithub: string) {
 function updateLinkedin(newLinkedin: string) {
   formData.linkedin = newLinkedin
 }
- 
+
 function onBioUpdate(newBio: string) {
   bio.value = newBio
   submitForm()
 }
+
+function handleModalSubmit() {
+  submitForm()
+  showModal.value = false
+}
 </script>
 
 <template>
-  <div class="d-flex w-100 min-vh-100">
-    <Sidebar/>
-    <div class="flex-grow-1">
-      <div class="py-4 px-3 w-100">
-        <StudentHeader :firstname="formData.firstname" :name="formData.name" :avatar="avatar"/>
-        <div class="d-flex flex-nowrap gap-4 overflow-auto mt-3">
-          <div class="flex-fill" style="min-width:400px;max-width:60%">
-            <PersonalInfoForm v-model="formData" @submit="submitForm"/>
+  <div class="d-flex w-100 min-vh-100 dashboard-bg">
+    <Sidebar />
+    <div class="flex-grow-1 p-4">
+      <PageHeader title="Profile" />
+
+      <div class="container-fluid">
+        <div class="row g-4">
+          <!-- Partie gauche : Header + formations/expériences -->
+          <div class="col-12 col-lg-8 d-flex flex-column gap-4">
+            <!-- Bloc infos -->
+            <StudentHeader
+              :firstname="formData.firstname"
+              :name="formData.name"
+              :avatar="avatar"
+              :phone="formData.phone"
+              :age="formData.age"
+              :address="formData.address"
+              :city="formData.city"
+              :postalCode="formData.postalCode"
+              :bio="bio"
+              @update:bio="onBioUpdate"
+              @edit="showModal = true"
+            />
+
+            <!-- Bloc formations + expériences -->
+            <div class="row g-4">
+              <div class="col-12 col-lg-6">
+                <EducationCard :educations="educations" @changed="fetchStudentProfile" />
+              </div>
+              <div class="col-12 col-lg-6">
+                <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" />
+              </div>
+            </div>
           </div>
-          
-          <div class="flex-fill mt-3" style="min-width:300px;max-width:30%">
-            <BioCard :bio="bio" @update:bio="onBioUpdate"/>
-            <EducationCard :educations="educations" @changed="fetchStudentProfile"/>
-            <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile"/>
+
+          <!-- Partie droite : Upload fichiers -->
+          <div class="col-12 col-lg-4">
             <UploadCvAndPortfolio
               :cv="formData.cv"
               :github="formData.github"
@@ -133,10 +166,53 @@ function onBioUpdate(newBio: string) {
         </div>
       </div>
     </div>
+
+    <!-- Modale -->
+    <div
+      class="modal fade"
+      :class="{ show: showModal }"
+      tabindex="-1"
+      v-show="showModal"
+      style="display: block; z-index: 1055;"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifier mes informations</h5>
+            <button type="button" class="btn-close" @click="showModal = false"></button>
+          </div>
+          <div class="modal-body">
+            <PersonalInfoForm v-model="formData" @submit="handleModalSubmit" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-backdrop fade"
+      :class="{ show: showModal }"
+      v-if="showModal"
+      style="z-index: 1050;"
+      @click="showModal = false"
+    />
   </div>
 </template>
 
-<style>
+
+<style scoped>
+.dashboard-bg {
+  background: #f7faff;
+}
+.card {
+  border-radius: 18px !important;
+  box-shadow: 0 2px 16px 0 #e3e8f7 !important;
+  border: none !important;
+}
+@media (max-width: 991px) {
+  .container-fluid .row > div {
+    margin-bottom: 1.5rem;
+  }
+}
 .flex-grow-1 {
   overflow-y: auto;
   max-height: 100vh;
