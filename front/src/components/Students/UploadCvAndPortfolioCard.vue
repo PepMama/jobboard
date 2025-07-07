@@ -19,7 +19,7 @@
         class="w-full border p-2 rounded"
         placeholder="https://github.com/username"
       />
-      <button class="btn btn-success mt-2" @click="updateGithub">Ajouter/modifier</button>
+      <button class="btn btn-outline-primary mt-2" @click="updateGithub">Ajouter/modifier</button>
     </div>
 
     <div class="card-body">
@@ -30,7 +30,7 @@
         class="w-full border p-2 rounded"
         placeholder="https://linkedin.com/in/username"
       />
-      <button class="btn btn-success mt-2" @click="updateLinkLinkedin">Ajouter/modifier</button>
+      <button class="btn btn-outline-primary mt-2" @click="updateLinkLinkedin">Ajouter/modifier</button>
     </div>
   </div>
 </template>
@@ -134,3 +134,16 @@ async function updateGithub() {
   }
 }
 </script>
+
+<style scoped>
+.btn-outline-primary{
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+</style>

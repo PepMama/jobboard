@@ -1,25 +1,27 @@
 <template>
-  <div class="bg-light border-end p-3" style="min-width: 220px;">
-    <div class="mb-3">
-      <img :src="logo" alt="Logo AltMatch" class="img-fluid" />
+  <div class="bg-navbar border-end p-3" style="min-width: 300px;">
+    <div class="mb-4 text-center">
+      <img :src="logo" alt="Logo AltMatch" class="img-fluid" style="max-width:120px;" />
     </div>
-
-    <hr class="mx-2 mb-3" />
+    <hr class="mx-2 mb-4" />
     <ul class="nav flex-column">
       <li
         v-for="item in menuItems"
         :key="item.nom"
-        class="nav-item mb-2 nav-hover"
+        class="nav-item mb-2"
       >
-        <a class="nav-link d-flex align-items-center text-dark" :href="`/${item.url}`">
+        <a
+          class="nav-link d-flex align-items-center nav-link-custom"
+          :href="`/${item.url}`"
+        >
           <component :is="item.icone" class="me-2" :size="20" />
-          {{ item.nom }}
+          <span>{{ item.nom }}</span>
         </a>
       </li>
     </ul>
     <div class="logout-container mt-auto pt-4 align-content-center">
-      <button class="btn w-100 nav-hover" @click="handleLogout">
-        <LogOut />
+      <button class="btn btn-logout w-100 d-flex align-items-center justify-content-center" @click="handleLogout">
+        <LogOut class="me-2" :size="20" />
         Se déconnecter
       </button>
     </div>
@@ -43,7 +45,6 @@ const handleLogout = () => {
   router.push('/')
 }
 
-// Menus selon le rôle
 const studentMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/student' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/student/likes' },
@@ -55,29 +56,49 @@ const companyMenu = [
   { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' }  
 ]
 
-// Récupère le rôle depuis le store ou le localStorage
 const role = authStore.role || localStorage.getItem('role')
 const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 </script>
 
 <style scoped>
-.nav-hover {
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  border-radius: 8px;
-}
-.nav-hover:hover {
-  background-color: #d4edda;
-  transform: scale(1.03);
-}
-
-.bg-light {
+.bg-navbar  {
+  background-color: #5651ab;
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
 }
 
+.nav-link-custom {
+  color: #fff !important;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  font-weight: 500;
+  padding: 10px 14px;
+}
+.nav-link-custom:hover, .nav-link-custom:focus {
+  background-color: #dfeafd !important;
+  color: #5651ab !important;
+  transform: scale(1.03);
+  text-decoration: none;
+}
+
 .logout-container {
   margin-top: auto;
+}
+
+.btn-logout {
+  background: #fff;
+  color: #5651ab;
+  border: 2px solid #5651ab;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  padding: 10px 14px;
+}
+.btn-logout:hover, .btn-logout:focus {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
 }
 </style>
