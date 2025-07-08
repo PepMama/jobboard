@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class StudentController extends AbstractController
 {
-    #[Route('/student/profile', name: 'app_complete_profile', methods: ['PUT'])]
+    #[Route('/student/manage-profile', name: 'app_complete_profile', methods: ['PUT'])]
     public function completeProfile(Request $request, StudentService $studentService, TokenService $tokenService): JsonResponse
     {
         try {
@@ -158,6 +158,20 @@ class StudentController extends AbstractController
         }
     }
 
+    #[Route('/student/update-linkedin', name: 'app_update_linkedin', methods: ['PUT'])]
+    public function updateLinkedin(Request $request, TokenService $tokenService, StudentService $studentService): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            $student = $studentService->getStudentByUser($user);
 
+            $data = json_decode($request->getContent(), true);
+            $student->setLinkedin($data['linkedin'] ?? null);
+            $studentService->save($student);
 
+            return new JsonResponse(['linkedin' => $student->getLinkedin()]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
 }

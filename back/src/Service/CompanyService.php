@@ -47,4 +47,8 @@ class CompanyService
         return $company;
     }
 
+    public function getCompanyByUser(Users $user): ?Company
+    {
+        return $this->companyRepository->findOneBy(['user' => $user]);
+    }
 }

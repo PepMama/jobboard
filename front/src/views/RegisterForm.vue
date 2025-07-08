@@ -79,7 +79,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import signUpImg from '../assets/registerWorkin.svg'
 import logo from '../assets/logo.png'
@@ -106,7 +105,7 @@ const handleRegister = async () => {
   };
 
   try {
-    const response = await fetch('https://localhost:8000/register', {
+    const response = await fetch('http://localhost:8000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -130,8 +129,6 @@ const handleRegister = async () => {
     alert(error.message);
   }
 };
-
-
 </script>
 
 <style>

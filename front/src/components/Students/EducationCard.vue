@@ -23,7 +23,7 @@ const reset = () =>
 async function save () {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch('https://localhost:8000/student/manage-education', {
+  await fetch('http://localhost:8000/student/manage-education', {
     method: 'POST',
     headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
     body:   JSON.stringify(draft.value)
@@ -35,14 +35,14 @@ async function save () {
 async function del (id: number) {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch(`https://localhost:8000/student/delete-education/${id}`, {
+  await fetch(`http://localhost:8000/student/delete-education/${id}`, {
     method:'DELETE', headers:{ Authorization:`Bearer ${token}` }
   }).then(r => r.ok && emit('changed'))
 }
 </script>
 
 <template>
-  <div class="card bg-white shadow-sm mt-3">
+  <div class="card bg-white text-dark rounded-3 shadow-sm">
     <div class="card-body">
       <h5>Formations</h5>
 
@@ -50,7 +50,7 @@ async function del (id: number) {
         <li
           v-for="e in list"
           :key="e.id"
-          class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 bg-success-subtle border-0 rounded-3 shadow-sm mb-2"
+          class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 bg-list-items rounded-3 shadow-sm mb-2"
         >
           <div>
             <strong>{{ e.degree }}</strong> – {{ e.schoolName }}
@@ -69,7 +69,7 @@ async function del (id: number) {
       </ul>
       
       <button
-        class="btn btn-success mt-3 w-100"
+        class="btn btn-outline-primary mt-3 w-100"
         data-bs-toggle="modal"
         data-bs-target="#eduM"
       >
@@ -93,10 +93,27 @@ async function del (id: number) {
             <input v-model="draft.fieldOfStudy" class="form-control mb-2" placeholder="Spécialité">
             <input v-model="draft.startDate" type="date" class="form-control mb-2">
             <input v-model="draft.endDate" type="date" class="form-control mb-2">
-            <button class="btn btn-success w-100">Enregistrer</button>
+            <button class="btn btn-outline-primary w-100">Enregistrer</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.btn-outline-primary{
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+
+.bg-list-items {
+  background: #eaebff;
+}
+</style>

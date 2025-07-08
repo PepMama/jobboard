@@ -10,20 +10,22 @@ import GeneralInfoForm from '@/components/Company/GeneralInfoForm.vue'
 import CompanyHeader from '@/components/Company/CompanyHeader.vue'
 import IndustryCard from '@/components/Company/IndustryCard.vue'
 import DescriptionCard from '@/components/Company/DescriptionCard.vue'
+import CompanyBioCard from '@/components/Company/CompanyBioCard.vue';
 
-const avatar = ref('https://via.placeholder.com/80')
+const avatar = ref('http://via.placeholder.com/80')
 
 const formData = reactive({
-    name: '', phone: '', website: '', linkedin: "", address: '', city: '', postalCode: '',
+    name: '', phone: '', website: '', linkedin: "", address: '', city: '', postal_code: '',
 })
 
 const description = ref('')
 const industry = ref('')
 
-async function fetchStudentProfile() {
+async function fetchCompanyProfile() {
     const t = localStorage.getItem('token')
     if (!t) return
 
+    try {
     const prof = await fetch('http://localhost:8000/company/profile', {
         headers: { Authorization: `Bearer ${t}` }
     })
@@ -36,10 +38,13 @@ async function fetchStudentProfile() {
         formData.linkedin = d.linkedin ?? ''
         formData.address = d.address ?? ''
         formData.city = d.city ?? ''
-        formData.postalCode = d.postal_code ?? ''
+        formData.postal_code = d.postal_code ?? ''
         industry.value = d.industry ?? ''
         description.value = d.description ?? ''
         avatar.value = d.photo ?? avatar.value
+    }
+} catch (error) {
+    console.error('Erreur lors de la récupération du profil de l\'entreprise :', error)
     }
 }
 
@@ -47,9 +52,16 @@ async function submitForm() {
     const t = localStorage.getItem('token')
     if (!t) return
     const payload = {
-        name: formData.name, phone_number: formData.phone, website: formData.website,
-        linkedin: formData.linkedin, logo: null, industry: industry.value, city: formData.city,
-        address: formData.address, postalCode: formData.postalCode, description: description.value
+        name: formData.name,
+        phone_number: formData.phone,
+        website: formData.website,
+        linkedin: formData.linkedin,
+        logo: null,
+        industry: industry.value,
+        city: formData.city,
+        address: formData.address,
+        postal_code: formData.postal_code,
+        description: description.value
     }
     const res = await fetch('http://localhost:8000/company/profile', {
         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
@@ -57,7 +69,13 @@ async function submitForm() {
     })
     if (res.ok) alert('Profil mis à jour')
 }
-onMounted(fetchStudentProfile)
+
+function onBioUpdate(newBio: string) {
+  description.value = newBio
+  submitForm()
+}
+
+onMounted(fetchCompanyProfile)
 </script>
 
 <template>
@@ -71,7 +89,7 @@ onMounted(fetchStudentProfile)
                         <GeneralInfoForm v-model="formData" @submit="submitForm" />
                     </div>
                     <div class="flex-fill mt-3" style="min-width:300px;max-width:30%">
-                        <DescriptionCard :description="description" @update:description="v => description = v" />
+                        <CompanyBioCard :bio="description" @update:bio="onBioUpdate" />
                         <IndustryCard :industry="industry" @update:industry="v => industry = v" />
                     </div>
                 </div>

@@ -6,12 +6,7 @@
                 <div v-for="(label, key) in generalFields" :key="key" class="mb-3">
                     <label class="form-label text-dark">{{ label }}</label>
 
-                    <template v-if="key === 'description'">
-                        <textarea v-model="form[key]" class="form-control"></textarea>
-                    </template>
-                    <template v-else>
-                        <input type="text" v-model="form[key]" class="form-control" />
-                    </template>
+                    <input type="text" v-model="form[key]" class="form-control" />
                 </div>
                 <button type="submit" class="btn btn-success">Mettre à jour</button>
             </form>
@@ -30,7 +25,7 @@ const props = defineProps({
             linkedin: '',
             city: '',
             adress: '',
-            postalCode: ''
+            postal_code: ''
         })
     }
 })
@@ -45,7 +40,7 @@ const generalFields = {
     linkedin: 'LinkedIn :',
     address: 'Adresse :',
     city: 'Ville :',
-    postalCode: 'Code postal :'
+    postal_code: 'Code postal :'
 }
 
 function onSubmit() {

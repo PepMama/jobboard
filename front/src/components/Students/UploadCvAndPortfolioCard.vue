@@ -18,8 +18,19 @@
         type="text"
         class="w-full border p-2 rounded"
         placeholder="https://github.com/username"
-        @blur="updateGithub"
       />
+      <button class="btn btn-outline-primary mt-2" @click="updateGithub">Ajouter/modifier</button>
+    </div>
+
+    <div class="card-body">
+      <label class="block font-bold">Lien Linkedin</label>
+      <input
+        v-model="linkedinUrl"
+        type="text"
+        class="w-full border p-2 rounded"
+        placeholder="https://linkedin.com/in/username"
+      />
+      <button class="btn btn-outline-primary mt-2" @click="updateLinkLinkedin">Ajouter/modifier</button>
     </div>
   </div>
 </template>
@@ -29,16 +40,19 @@ import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
   cv: String,
-  github: String
+  github: String,
+  linkedin: String
 })
 
-const emit = defineEmits(['update:cv', 'update:github'])
+const emit = defineEmits(['update:cv', 'update:github', 'update:linkedin'])
 
 const cvUrl = ref(props.cv || null)
 const githubUrl = ref(props.github || '')
+const linkedinUrl = ref(props.linkedin || '')
 
 watch(() => props.cv, val => (cvUrl.value = val))
 watch(() => props.github, val => (githubUrl.value = val))
+watch(() => props.linkedin, val => (linkedinUrl.value = val))
 
 async function handleCvUpload(e) {
   const file = e.target.files[0]
@@ -84,6 +98,24 @@ async function deleteCv() {
   }
 }
 
+async function updateLinkLinkedin() {
+  const res = await fetch('http://localhost:8000/student/update-linkedin', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ linkedin: linkedinUrl.value })
+  })
+
+  const data = await res.json()
+  if (res.ok) {
+    emit('update:linkedin', data.linkedin)
+  } else {
+    alert(data.error)
+  }
+}
+
 async function updateGithub() {
   const res = await fetch('http://localhost:8000/student/update-github', {
     method: 'PUT',
@@ -102,3 +134,16 @@ async function updateGithub() {
   }
 }
 </script>
+
+<style scoped>
+.btn-outline-primary{
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+</style>
