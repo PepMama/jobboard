@@ -1,84 +1,80 @@
 <template>
-  <div class="p-6">
-    <input
-      type="text"
-      v-model="searchKeyword"
-      placeholder="Rechercher un poste (ex: développeur)"
-      class="border p-2 rounded w-full mb-4"
-      @input="fetchOffers"
-    />
-    <input
-      type="text"
-      v-model="cityFilter"
-      placeholder="Filtrer par ville (ex: Paris)"
-      class="border p-2 rounded w-full mb-4"
-      @input="fetchOffers"
-    />
-
-    <!-- Message si aucune offre -->
-    <div v-if="filteredOffers.length === 0" class="text-center mt-10">
-      Aucune offre trouvée.
+  <div class="offer-swipe-container">
+    <!-- Filtres -->
+    <div class="filters">
+      <input
+        v-model="searchKeyword"
+        @input="fetchOffers"
+        placeholder="Poste"
+        class="filter-input"
+      />
+      <input
+        v-model="cityFilter"
+        @input="fetchOffers"
+        placeholder="Ville"
+        class="filter-input"
+      />
     </div>
 
-    <!-- Affichege des cards avec les offres -->
-    <div v-else class="relative h-[500px] w-full">
-      <Tinder ref="tinder" @swipe="handleSwipe">
-        <TinderCard :key="filteredOffers[0].id" class="absolute w-full h-full">
-          <div class="bg-white p-6 rounded-2xl shadow-lg h-full flex flex-col items-center justify-center text-center">
-            <img
-              v-if="filteredOffers[0].company?.logo"
-              :src="filteredOffers[0].company.logo"
-              alt="logo"
-              class="h-16 mb-4"
-            />
-            <h2 class="text-2xl font-bold mb-2">{{ filteredOffers[0].title }}</h2>
-            <p class="text-gray-700 mb-1">{{ filteredOffers[0].contractType }} – {{ filteredOffers[0].city }}</p>
-            <p class="text-gray-500">Entreprise : {{ filteredOffers[0].company?.name }}</p>
-          </div>
-        </TinderCard>
-      </Tinder>
+    <!-- Carrousel -->
+    <div class="carousel">
+      <div
+        v-for="(offer, index) in visibleCards"
+        :key="offer.id"
+        class="card"
+        :class="{
+          'card-center': index === 1,
+          'card-side': index !== 1,
+        }"
+      >
+        <img v-if="offer.company?.logo" :src="offer.company.logo" class="company-logo" />
+        <h2 class="offer-title">{{ offer.title }}</h2>
+        <p class="offer-info">{{ offer.contractType }} – {{ offer.city }}</p>
+        <p class="offer-company">Entreprise : {{ offer.company?.name }}</p>
 
-      <div class="mt-6 flex justify-center gap-10">
-        <button @click="manualSwipe('left')" class="bg-red-500 text-white px-6 py-2 rounded-full">❌ Passer</button>
-        <button @click="manualSwipe('right')" class="bg-green-500 text-white px-6 py-2 rounded-full">💚 Liker</button>
+        <div v-if="index === 1" class="card-buttons">
+          <button @click="swipeLeft" class="btn-swipe-left">❌ Passer</button>
+          <button @click="swipeRight" class="btn-swipe-right">💚 Liker</button>
+        </div>
       </div>
+    </div>
+
+    <!-- Message si vide -->
+    <div v-if="offers.length === 0" class="empty-message">
+      Aucune offre trouvée.
     </div>
   </div>
 </template>
 
 <script>
-import { Tinder, TinderCard } from 'vue-tinder';
-
 export default {
-  components: { Tinder, TinderCard },
-  //Recherche par mots clés
   data() {
     return {
-      searchKeyword: '',
-      cityFilter: '',
       offers: [],
       currentIndex: 0,
+      searchKeyword: '',
+      cityFilter: '',
     };
   },
   computed: {
-    // Affichage uniquement des offres pas encore swipé
-    filteredOffers() {
-      return this.offers.slice(this.currentIndex);
+    visibleCards() {
+      const prev = this.offers[this.currentIndex - 1] || {};
+      const current = this.offers[this.currentIndex] || {};
+      const next = this.offers[this.currentIndex + 1] || {};
+      return [prev, current, next];
     },
   },
   mounted() {
     this.fetchOffers();
   },
   methods: {
-    // Récupère les offres depuis le back
     async fetchOffers() {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error("Aucun token trouvé.");
+        console.error("Token manquant.");
         return;
       }
 
-      // Prépare les paramètres de recherche
       const params = new URLSearchParams();
       if (this.searchKeyword) params.append('keyword', this.searchKeyword);
       if (this.cityFilter) params.append('city', this.cityFilter);
@@ -88,48 +84,24 @@ export default {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!response.ok) {
-          const text = await response.text();
-          console.error("Erreur HTTP:", response.status, text);
-          throw new Error(`Erreur ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`Erreur ${response.status}`);
         const data = await response.json();
         this.offers = data;
         this.currentIndex = 0;
-      } catch (error) {
-        console.error("Erreur chargement :", error.message);
+      } catch (err) {
+        console.error("Erreur chargement :", err.message);
       }
     },
-
-    // Quand l'utilisateur swipe une carte en tactile
-    async handleSwipe(direction) {
-      const offer = this.filteredOffers[0];
-      if (!offer) return;
-      // Si swipe à droite, l'offre est liké
-      if (direction === 'right') {
-        await this.likeOffer(offer.id);
-      }
-      //Pzassage à l'offre suivante
-      this.currentIndex += 1;
+    async swipeRight() {
+      const currentOffer = this.offers[this.currentIndex];
+      if (currentOffer) await this.likeOffer(currentOffer.id);
+      this.currentIndex++;
     },
-
-    // Quand l'utilisateur swipe une carte via les boutons
-    async manualSwipe(direction) {
-      const tinder = this.$refs.tinder;
-      if (tinder?.swipe) {
-        await tinder.swipe(direction);
-      } else {
-        // Exécuter le swipe manuellement en changeant la direction de la carte
-        this.handleSwipe(direction); 
-      }
+    swipeLeft() {
+      this.currentIndex++;
     },
-
-    //Requête pour liker l'offre
     async likeOffer(offerId) {
       const token = localStorage.getItem('token');
-      if (!token) return;
-
       try {
         const response = await fetch(`https://localhost:8000/student/like-offer/${offerId}`, {
           method: 'POST',
@@ -138,13 +110,12 @@ export default {
             'Content-Type': 'application/json',
           },
         });
-
         if (!response.ok) {
           const text = await response.text();
-          console.error('Erreur like :', response.status, text);
+          console.error("Erreur like :", response.status, text);
         }
-      } catch (error) {
-        console.error('Erreur réseau like :', error.message);
+      } catch (err) {
+        console.error("Erreur réseau like :", err.message);
       }
     },
   },
@@ -152,5 +123,118 @@ export default {
 </script>
 
 <style scoped>
+/* Tu peux maintenant styliser ici librement */
 
+.offer-swipe-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 2rem;
+}
+input::placeholder{
+    font-size: 15px;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border: none ;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 10%;
+}
+
+.card {
+  width: 30rem;
+  height: 30rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card-center {
+  transform: scale(1);
+  opacity: 1;
+  z-index: 2;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.card-side {
+  transform: scale(0.9);
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.company-logo {
+  height: 48px;
+  margin-bottom: 0.5rem;
+}
+
+.offer-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.offer-info {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.offer-company {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
+
+.card-buttons {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.btn-swipe-left,
+.btn-swipe-right {
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-swipe-left {
+  background-color: #e3342f;
+  color: white;
+}
+
+.btn-swipe-right {
+  background-color: #38c172;
+  color: white;
+}
+
+.empty-message {
+  margin-top: 2rem;
+  text-align: center;
+  color: #777;
+}
 </style>
+

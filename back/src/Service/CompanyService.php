@@ -46,4 +46,5 @@ class CompanyService
 
         return $company;
     }
+
 }
