@@ -174,4 +174,25 @@ class StudentController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
+
+    #[Route('/student/{name}', name: 'public_student_profile', methods: ['GET'])]
+    public function publicStudentProfile(string $name, StudentService $studentService): JsonResponse
+    {
+        $student = $studentService->getStudentByName($name);
+
+        if (!$student) {
+            return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
+        }
+        return new JsonResponse([
+            'id'            => $student->getId(),
+            'firstname'     => $student->getFirstname(),
+            'name'          => $student->getName(),
+            'city'          => $student->getCity(),
+            'description'   => $student->getDescription(),
+            'photo'         => $student->getPhoto(),
+            'linkedin'      => $student->getLinkedin(),
+            'github'        => $student->getGithub(),
+            'cv'            => $student->getCv(),
+        ]);
+    }
 }

@@ -78,7 +78,7 @@ async function createOffer(offer: typeof formData.value) {
     if (!t) return
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/company/manage-offer', {
+        const response = await fetch('http://localhost:8000/company/manage-offer', {
             headers: {
                 Authorization: `Bearer ${t}`
             },
