@@ -8,27 +8,14 @@
           <label class="form-label text-dark">{{ label }}</label>
 
           <template v-if="key === 'description'">
-            <textarea
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-            ></textarea>
+            <textarea v-model="form[key]" class="form-control" :disabled="isPublic"></textarea>
           </template>
           <template v-else>
-            <input
-              type="text"
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-            />
+            <input type="text" v-model="form[key]" class="form-control" :disabled="isPublic" />
           </template>
         </div>
 
-        <button
-          class="btn btn-outline-primary"
-          type="submit"
-          :disabled="isPublic"
-        >
+        <button class="btn btn-outline-primary" type="submit" :disabled="isPublic">
           Mettre à jour
         </button>
       </form>
@@ -47,13 +34,13 @@ const props = defineProps({
       age: '',
       address: '',
       city: '',
-      postalCode: ''
-    })
+      postalCode: '',
+    }),
   },
   isPublic: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'submit'])
@@ -67,14 +54,13 @@ const personalFields = {
   age: 'Votre âge :',
   address: 'Adresse :',
   city: 'Ville :',
-  postalCode: 'Code postal :'
+  postalCode: 'Code postal :',
 }
 
-function onSubmit () {
+function onSubmit() {
   emit('update:modelValue', { ...form })
   emit('submit')
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

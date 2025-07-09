@@ -2,10 +2,10 @@
   <div class="card bg-white text-dark rounded-3 shadow-sm mt-3">
     <div class="card-body">
       <h5>Secteur d'activité</h5>
-      
+
       <!-- Affichage lecture seule -->
       <p v-if="readonly">{{ industry }}</p>
-      
+
       <!-- Édition -->
       <select
         v-else
@@ -42,7 +42,10 @@ const emit = defineEmits(['update:industry'])
 const readonly = props.readonly ?? false
 const localIndustry = ref(props.industry)
 
-watch(() => props.industry, (val) => {
-  localIndustry.value = val
-})
+watch(
+  () => props.industry,
+  (val) => {
+    localIndustry.value = val
+  },
+)
 </script>

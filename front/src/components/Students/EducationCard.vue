@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Trash2 }        from 'lucide-vue-next'
+import { Trash2 } from 'lucide-vue-next'
 import type { Education } from '@/types/student'
 
 const props = defineProps<{ educations?: Education[] }>()
-const emit  = defineEmits<{ (e:'changed'): void }>()
+const emit = defineEmits<{ (e: 'changed'): void }>()
 
 const list = computed(() => props.educations ?? [])
 
@@ -13,31 +13,32 @@ const draft = ref<Omit<Education, 'id'>>({
   degree: '',
   fieldOfStudy: '',
   startDate: '',
-  endDate: ''
+  endDate: '',
 })
 
-const fmt   = (v?: string) => v ? v.slice(0, 10) : '…'
+const fmt = (v?: string) => (v ? v.slice(0, 10) : '…')
 const reset = () =>
-  (draft.value = { schoolName:'', degree:'', fieldOfStudy:'', startDate:'', endDate:'' })
+  (draft.value = { schoolName: '', degree: '', fieldOfStudy: '', startDate: '', endDate: '' })
 
-async function save () {
+async function save() {
   const token = localStorage.getItem('token')
   if (!token) return
   await fetch('http://localhost:8000/student/manage-education', {
     method: 'POST',
-    headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
-    body:   JSON.stringify(draft.value)
-  }).then(r => r.ok && emit('changed'))
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(draft.value),
+  }).then((r) => r.ok && emit('changed'))
   reset()
   ;(window as any).bootstrap?.Modal.getOrCreateInstance('#eduM')?.hide()
 }
 
-async function del (id: number) {
+async function del(id: number) {
   const token = localStorage.getItem('token')
   if (!token) return
   await fetch(`http://localhost:8000/student/delete-education/${id}`, {
-    method:'DELETE', headers:{ Authorization:`Bearer ${token}` }
-  }).then(r => r.ok && emit('changed'))
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  }).then((r) => r.ok && emit('changed'))
 }
 </script>
 
@@ -60,14 +61,14 @@ async function del (id: number) {
 
           <button
             class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center rounded-circle"
-            style="width:32px;height:32px"
+            style="width: 32px; height: 32px"
             @click="del(e.id)"
           >
             <Trash2 />
           </button>
         </li>
       </ul>
-      
+
       <button
         class="btn btn-outline-primary mt-3 w-100"
         data-bs-toggle="modal"
@@ -88,11 +89,19 @@ async function del (id: number) {
 
         <div class="modal-body">
           <form @submit.prevent="save">
-            <input v-model="draft.schoolName" class="form-control mb-2" placeholder="Établissement">
-            <input v-model="draft.degree" class="form-control mb-2" placeholder="Diplôme">
-            <input v-model="draft.fieldOfStudy" class="form-control mb-2" placeholder="Spécialité">
-            <input v-model="draft.startDate" type="date" class="form-control mb-2">
-            <input v-model="draft.endDate" type="date" class="form-control mb-2">
+            <input
+              v-model="draft.schoolName"
+              class="form-control mb-2"
+              placeholder="Établissement"
+            />
+            <input v-model="draft.degree" class="form-control mb-2" placeholder="Diplôme" />
+            <input
+              v-model="draft.fieldOfStudy"
+              class="form-control mb-2"
+              placeholder="Spécialité"
+            />
+            <input v-model="draft.startDate" type="date" class="form-control mb-2" />
+            <input v-model="draft.endDate" type="date" class="form-control mb-2" />
             <button class="btn btn-outline-primary w-100">Enregistrer</button>
           </form>
         </div>
@@ -101,5 +110,4 @@ async function del (id: number) {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

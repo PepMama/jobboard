@@ -29,10 +29,10 @@ const formData = reactive({
 async function fetchCompanyProfile() {
   const t = localStorage.getItem('token')
   if (!t) return
-  
+
   try {
     const res = await fetch(`http://localhost:8000/company/${encodeURIComponent(name)}`, {
-      headers: { Authorization: `Bearer ${t}` }
+      headers: { Authorization: `Bearer ${t}` },
     })
     if (!res.ok) throw new Error('Entreprise non trouvée')
     const d = await res.json()
@@ -56,21 +56,21 @@ onMounted(fetchCompanyProfile)
 </script>
 
 <template>
-    <div class="d-flex w-100 min-vh-100">
-        <Sidebar />
-        <div class="flex-grow-1">
-            <div class="py-4 px-3 w-100">
-                <CompanyHeader :name="formData.name" :avatar="avatar" />
-                <div class="d-flex flex-nowrap gap-4 overflow-auto mt-3">
-                    <div class="flex-fill" style="min-width:400px;max-width:60%">
-                        <GeneralInfoForm v-model="formData" :readonly="true" />
-                    </div>
-                    <div class="flex-fill mt-3" style="min-width:300px;max-width:30%">
-                        <CompanyBioCard :bio="formData.description" :readonly="true" />
-                        <IndustryCard :industry="formData.industry" :readonly="true" />
-                    </div>
-                </div>
-            </div>
+  <div class="d-flex w-100 min-vh-100">
+    <Sidebar />
+    <div class="flex-grow-1">
+      <div class="py-4 px-3 w-100">
+        <CompanyHeader :name="formData.name" :avatar="avatar" />
+        <div class="d-flex flex-nowrap gap-4 overflow-auto mt-3">
+          <div class="flex-fill" style="min-width: 400px; max-width: 60%">
+            <GeneralInfoForm v-model="formData" :readonly="true" />
+          </div>
+          <div class="flex-fill mt-3" style="min-width: 300px; max-width: 30%">
+            <CompanyBioCard :bio="formData.description" :readonly="true" />
+            <IndustryCard :industry="formData.industry" :readonly="true" />
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>

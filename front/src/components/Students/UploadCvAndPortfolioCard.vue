@@ -7,7 +7,9 @@
 
       <div v-if="cvUrl" class="mt-2">
         <embed :src="cvUrl" type="application/pdf" width="100%" height="300px" />
-        <button class="mt-2 px-4 py-1 bg-red-500 text-white rounded" @click="deleteCv">Supprimer le CV</button>
+        <button class="mt-2 px-4 py-1 bg-red-500 text-white rounded" @click="deleteCv">
+          Supprimer le CV
+        </button>
       </div>
     </div>
 
@@ -30,7 +32,9 @@
         class="w-full border p-2 rounded"
         placeholder="https://linkedin.com/in/username"
       />
-      <button class="btn btn-outline-primary mt-2" @click="updateLinkLinkedin">Ajouter/modifier</button>
+      <button class="btn btn-outline-primary mt-2" @click="updateLinkLinkedin">
+        Ajouter/modifier
+      </button>
     </div>
   </div>
 </template>
@@ -41,7 +45,7 @@ import { ref, onMounted, watch } from 'vue'
 const props = defineProps({
   cv: String,
   github: String,
-  linkedin: String
+  linkedin: String,
 })
 
 const emit = defineEmits(['update:cv', 'update:github', 'update:linkedin'])
@@ -50,9 +54,18 @@ const cvUrl = ref(props.cv || null)
 const githubUrl = ref(props.github || '')
 const linkedinUrl = ref(props.linkedin || '')
 
-watch(() => props.cv, val => (cvUrl.value = val))
-watch(() => props.github, val => (githubUrl.value = val))
-watch(() => props.linkedin, val => (linkedinUrl.value = val))
+watch(
+  () => props.cv,
+  (val) => (cvUrl.value = val),
+)
+watch(
+  () => props.github,
+  (val) => (githubUrl.value = val),
+)
+watch(
+  () => props.linkedin,
+  (val) => (linkedinUrl.value = val),
+)
 
 async function handleCvUpload(e) {
   const file = e.target.files[0]
@@ -67,9 +80,9 @@ async function handleCvUpload(e) {
   const res = await fetch('http://localhost:8000/student/upload-cv', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-    body: formData
+    body: formData,
   })
 
   const data = await res.json()
@@ -85,8 +98,8 @@ async function deleteCv() {
   const res = await fetch('http://localhost:8000/student/delete-cv', {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
   })
 
   const data = await res.json()
@@ -103,9 +116,9 @@ async function updateLinkLinkedin() {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ linkedin: linkedinUrl.value })
+    body: JSON.stringify({ linkedin: linkedinUrl.value }),
   })
 
   const data = await res.json()
@@ -121,9 +134,9 @@ async function updateGithub() {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ github: githubUrl.value })
+    body: JSON.stringify({ github: githubUrl.value }),
   })
 
   const data = await res.json()
@@ -135,5 +148,4 @@ async function updateGithub() {
 }
 </script>
 
-<style src="@/CSS/global.css">
-</style>
+<style src="@/CSS/global.css"></style>

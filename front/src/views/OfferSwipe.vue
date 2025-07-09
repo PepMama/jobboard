@@ -2,55 +2,143 @@
   <div class="offer-swipe-layout">
     <Sidebar />
     <div class="main-content">
+      <h1>Trouve ton alternance sur-mesure</h1>
       <!-- Filtres -->
       <div class="filters">
-        <input
-          v-model="searchKeyword"
-          @input="fetchOffers"
-          placeholder="Poste"
-          class="filter-input"
-        />
-        <input
-          v-model="cityFilter"
-          @input="fetchOffers"
-          placeholder="Ville"
-          class="filter-input"
-        />
+        <div class="input-with-icon">
+          <!-- Loupe -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            v-model="searchKeyword"
+            @input="fetchOffers"
+            placeholder="mot clé (ex: développeur, infirmier...)"
+            class="filter-input"
+          />
+        </div>
+
+        <div class="input-with-icon">
+          <!-- Épingle -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <input
+            v-model="cityFilter"
+            @input="fetchOffers"
+            placeholder="Ville"
+            class="filter-input"
+          />
+        </div>
       </div>
 
       <!-- Carrousel -->
       <div class="carousel">
         <div
           v-for="(offer, index) in visibleCards"
-          :key="offer.id"
+          :key="offer.id || index"
           class="card"
-          :class="{ 'card-center': index === 1, 'card-side': index !== 1 }"
+          :class="{
+            'card-center': offer.id === offers[currentIndex]?.id,
+            'card-side': offer.id !== offers[currentIndex]?.id,
+          }"
         >
+          <div v-if="offer.id === offers[currentIndex]?.id" class="card-buttons">
+            <div class="view-offer-container">
+              <button @click="openPopup(offer)" class="btn-view-offer">Voir détails</button>
+            </div>
+          </div>
           <img v-if="offer.company?.logo" :src="offer.company.logo" class="company-logo" />
           <h2 class="offer-title">{{ offer.title }}</h2>
-          <p class="offer-info">{{ offer.contractType }} – {{ offer.city }}</p>
-          <p class="offer-company">Entreprise : {{ offer.company?.name }}</p>
-
-          <div v-if="index === 1" class="card-buttons">
-            <button @click="swipeLeft" class="btn-swipe-left">❌ Passer</button>
-            <button @click="swipeRight" class="btn-swipe-right">💚 Liker</button>
+          <h3 class="offer-company">{{ offer.company?.name }}</h3>
+          <div class="offer-details">
+            <p><span class="icon-circle">📍</span> {{ offer.city || 'Ville inconnue' }}</p>
+            <p>
+              <span class="icon-circle">🏠</span> {{ offer.remote ? 'Télétravail' : 'Sur site' }}
+            </p>
+            <p>
+              <span class="icon-circle">📅</span> Début : {{ offer.startDate || 'Non précisé' }}
+            </p>
+            <p>
+              <span class="icon-circle">💰</span>
+              {{ offer.salary ? offer.salary + '€' : 'Salaire non précisé' }}
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- Message si la section est vide -->
-      <div v-if="offers.length === 0" class="empty-message">
-        Aucune offre trouvée.
+      <div class="swipeButton">
+        <button @click="swipeLeft" class="btn-swipe-left">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#fca5a5"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 0 0-1.41 1.41L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"
+            />
+          </svg>
+          Passer
+        </button>
+        <button @click="swipeRight" class="btn-swipe-right">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#86efac"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                    2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                    C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5
+                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+          Postuler
+        </button>
       </div>
+
+      <!-- Message si la section est vide -->
+      <div v-if="offers.length === 0" class="empty-message">Aucune offre trouvée.</div>
     </div>
+    <OfferPopup v-if="showPopup" :offer="selectedOffer" @close="closePopup" />
   </div>
 </template>
 
-<script >
+<script>
 import Sidebar from '@/components/Global/NavBar.vue'
+import OfferPopup from '@/components/Company/OfferPopup.vue'
 export default {
-    components: {
+  components: {
     Sidebar,
+    OfferPopup,
   },
   data() {
     return {
@@ -58,54 +146,88 @@ export default {
       currentIndex: 0,
       searchKeyword: '',
       cityFilter: '',
-    };
+      hasSwipedOnce: false,
+      showPopup: false,
+      selectedOffer: null,
+    }
   },
   computed: {
     visibleCards() {
-      const prev = this.offers[this.currentIndex - 1] || {};
-      const current = this.offers[this.currentIndex] || {};
-      const next = this.offers[this.currentIndex + 1] || {};
-      return [prev, current, next];
+      const cards = []
+
+      if (this.hasSwipedOnce && this.offers[this.currentIndex - 1]) {
+        cards.push(this.offers[this.currentIndex - 1]) // prev
+      }
+
+      if (this.offers[this.currentIndex]) {
+        cards.push(this.offers[this.currentIndex]) // current
+      }
+
+      if (this.offers[this.currentIndex + 1]) {
+        cards.push(this.offers[this.currentIndex + 1]) // next
+      }
+
+      return cards
     },
   },
   mounted() {
-    this.fetchOffers();
+    this.fetchOffers()
   },
   methods: {
     async fetchOffers() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
       if (!token) {
-        console.error("Token manquant.");
-        return;
+        console.error('Token manquant.')
+        return
       }
 
-      const params = new URLSearchParams();
-      if (this.searchKeyword) params.append('keyword', this.searchKeyword);
-      if (this.cityFilter) params.append('city', this.cityFilter);
+      const params = new URLSearchParams()
+      if (this.searchKeyword) params.append('keyword', this.searchKeyword)
+      if (this.cityFilter) params.append('city', this.cityFilter)
 
       try {
         const response = await fetch(`https://localhost:8000/student/offers?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
-        });
+        })
 
-        if (!response.ok) throw new Error(`Erreur ${response.status}`);
-        const data = await response.json();
-        this.offers = data;
-        this.currentIndex = 0;
+        if (!response.ok) throw new Error(`Erreur ${response.status}`)
+        const data = await response.json()
+        this.offers = data
+        this.currentIndex = 0
       } catch (err) {
-        console.error("Erreur chargement :", err.message);
+        console.error('Erreur chargement :', err.message)
       }
     },
-    async swipeRight() {
-      const currentOffer = this.offers[this.currentIndex];
-      if (currentOffer) await this.likeOffer(currentOffer.id);
-      this.currentIndex++;
-    },
     swipeLeft() {
-      this.currentIndex++;
+      if (!this.hasSwipedOnce) this.hasSwipedOnce = true
+      this.currentIndex++
     },
+
+    async swipeRight() {
+      if (!this.hasSwipedOnce) this.hasSwipedOnce = true
+      const currentCard = document.querySelector('.card-center')
+
+      if (currentCard) {
+        currentCard.classList.add('card-zoom-in')
+
+        setTimeout(async () => {
+          const currentOffer = this.offers[this.currentIndex]
+          if (currentOffer) await this.likeOffer(currentOffer.id)
+          currentCard.classList.remove('card-zoom-in')
+          this.currentIndex++
+        }, 400)
+      }
+    },
+    openPopup(offer) {
+      this.selectedOffer = offer
+      this.showPopup = true
+    },
+    closePopup() {
+      this.showPopup = false
+    },
+
     async likeOffer(offerId) {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
       try {
         const response = await fetch(`https://localhost:8000/student/like-offer/${offerId}`, {
           method: 'POST',
@@ -113,20 +235,53 @@ export default {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        });
+        })
         if (!response.ok) {
-          const text = await response.text();
-          console.error("Erreur like :", response.status, text);
+          const text = await response.text()
+          console.error('Erreur like :', response.status, text)
         }
       } catch (err) {
-        console.error("Erreur réseau like :", err.message);
+        console.error('Erreur réseau like :', err.message)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
+* {
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 3%;
+  color: #5651abd9;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.offer-title {
+  margin-top: 4%;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 0.2rem;
+}
+.offer-company {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #777;
+  margin-top: 2%;
+  margin-bottom: 1rem;
+}
+
+P {
+  font-size: 150%;
+}
 .offer-swipe-layout {
   display: flex;
   height: 100vh;
@@ -141,7 +296,7 @@ export default {
 }
 
 .sidebar {
-  width: 250px; 
+  width: 250px;
   background-color: #fff;
   height: 100vh;
 }
@@ -152,23 +307,37 @@ export default {
   padding: 2rem;
   display: flex;
 }
-input::placeholder{
-    font-size: 15px;
+input::placeholder {
+  font-size: 15px;
+  color: #777;
 }
 
 .filters {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin: auto;
+  margin-bottom: 1rem;
+  border-radius: 50px;
+}
+.filter-input {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  font-size: 16px;
+  border: none;
+  border-radius: 50px;
 }
 
-.filter-input {
-  flex: 1;
-  padding: 0.5rem;
-  background-color: #f0f0f0;
-  border: none ;
-  border-radius: 6px;
-  font-size: 0.9rem;
+.input-with-icon {
+  position: relative;
+  width: 95%;
+}
+
+.input-with-icon .icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .carousel {
@@ -176,27 +345,29 @@ input::placeholder{
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 10%;
+  margin-top: 3%;
 }
 
 .card {
-  width: 30rem;
-  height: 30rem;
+  width: 50rem;
+  height: 35rem;
   background-color: white;
   border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   display: flex;
   flex-direction: column;
   text-align: center;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .card-center {
   transform: scale(1);
   opacity: 1;
   z-index: 2;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-side {
@@ -204,15 +375,49 @@ input::placeholder{
   opacity: 0.6;
   z-index: 1;
 }
+.card-zoom-in {
+  animation: zoomIn 0.4s ease-out forwards;
+  z-index: 10;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
 
 .company-logo {
   height: 48px;
   margin-bottom: 0.5rem;
 }
 
-.offer-title {
-  font-weight: bold;
-  font-size: 1.1rem;
+.offer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 1rem;
+  text-align: left;
+  align-items: start;
+  padding-left: 1rem;
+}
+
+.icon-circle {
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  padding: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
 }
 
 .offer-info {
@@ -220,18 +425,12 @@ input::placeholder{
   color: #555;
 }
 
-.offer-company {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 0.5rem;
-}
-
 .card-buttons {
-  margin-top: auto;
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding-top: 1rem;
+  position: absolute;
+  right: 1rem;
 }
 
 .btn-swipe-left,
@@ -241,15 +440,16 @@ input::placeholder{
   border-radius: 999px;
   font-size: 0.8rem;
   cursor: pointer;
+  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn-swipe-left {
-  background-color: #e3342f;
+  background: linear-gradient(to bottom, #f87171, #e3342f);
   color: white;
 }
 
 .btn-swipe-right {
-  background-color: #38c172;
+  background: linear-gradient(to bottom, #51d88a, #38c172);
   color: white;
 }
 
@@ -258,5 +458,28 @@ input::placeholder{
   text-align: center;
   color: #777;
 }
-</style>
+.btn-view-offer {
+  margin-top: 1rem;
+  background: linear-gradient(to bottom, #9e97f3, #5651ab);
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
 
+.btn-view-offer:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.swipeButton {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  border-radius: 50%;
+  width: 25%;
+  margin-top: 2%;
+  gap: 2rem;
+}
+</style>

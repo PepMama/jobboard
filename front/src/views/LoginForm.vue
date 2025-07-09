@@ -109,7 +109,6 @@ const handleLogin = async () => {
 }
 </script>
 
-
 <style scoped>
 .login-form-container {
   display: flex;
@@ -117,7 +116,7 @@ const handleLogin = async () => {
   background-color: #e2eee4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 4rem;
-  margin: 10% 0% 0% 30% ;
+  margin: 10% 0% 0% 30%;
   position: relative;
   border-radius: 10px 10px 10px 10px;
   width: 40%;
@@ -198,24 +197,22 @@ const handleLogin = async () => {
   color: #8e44ad;
 }
 .forgot-password {
-    font-weight: 500;
-  }
-  .register{
-    font-weight: 500;
-  }
-  .text-right{
-     margin-top: 2%;
-  }
-  
+  font-weight: 500;
+}
+.register {
+  font-weight: 500;
+}
+.text-right {
+  margin-top: 2%;
+}
+
 .text-right a {
-  text-decoration: none ;
+  text-decoration: none;
   color: #555;
 }
 
 .text-right a:hover {
-  color: #732d91; 
-  transition: color 0.3s ease; 
+  color: #732d91;
+  transition: color 0.3s ease;
 }
-
-
 </style>

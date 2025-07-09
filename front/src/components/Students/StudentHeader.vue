@@ -8,14 +8,16 @@
           class="rounded-circle"
           width="120"
           height="120"
-          style="object-fit:cover;"
+          style="object-fit: cover"
         />
       </div>
       <div>
         <h4 class="fw-bold mb-3">{{ firstname }} {{ name }}</h4>
         <ul class="list-unstyled text-secondary small mb-3">
           <li v-if="age"><strong>Age :</strong> {{ age }} ans</li>
-          <li v-if="city"><strong>Ville :</strong> {{ city }} <span v-if="postalCode">({{ postalCode }})</span></li>
+          <li v-if="city">
+            <strong>Ville :</strong> {{ city }} <span v-if="postalCode">({{ postalCode }})</span>
+          </li>
           <li v-if="address"><strong>Adresse :</strong> {{ address }}</li>
           <li v-if="email"><strong>Email :</strong> {{ email }}</li>
           <li v-if="phone"><strong>Téléphone :</strong> {{ phone }}</li>
@@ -40,7 +42,6 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
@@ -61,15 +62,17 @@ const emit = defineEmits(['update:bio', 'edit'])
 const edit = ref(false)
 const localBio = ref(props.bio)
 
-watch(() => props.bio, v => {
-  if (!edit.value) localBio.value = v
-})
+watch(
+  () => props.bio,
+  (v) => {
+    if (!edit.value) localBio.value = v
+  },
+)
 
-function toggleEdit () {
+function toggleEdit() {
   if (edit.value) emit('update:bio', localBio.value)
   edit.value = !edit.value
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

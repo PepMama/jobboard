@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-items-center px-4 py-3 rounded-3 mb-4" style="background-color: #f7faff;">
+  <div class="d-flex align-items-center px-4 py-3 rounded-3 mb-4" style="background-color: #f7faff">
     <button class="btn btn-outline-primary d-lg-none me-3" @click="$emit('toggle-sidebar')">
       ☰
     </button>
@@ -7,8 +7,8 @@
     <div class="d-flex align-items-center gap-4 ms-auto">
       <span class="text-muted">{{ today }}</span>
       <Bell class="icon-btn" :size="22" />
-      <Settings class="icon-btn" :size="22" @click="goToSettings" style="cursor:pointer;" />
-      <LogOut class="icon-btn" :size="22" @click="logout" style="cursor:pointer;" />
+      <Settings class="icon-btn" :size="22" @click="goToSettings" style="cursor: pointer" />
+      <LogOut class="icon-btn" :size="22" @click="logout" style="cursor: pointer" />
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ const today = computed(() => {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   })
 })
 

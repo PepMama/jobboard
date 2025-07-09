@@ -26,7 +26,7 @@ const formData = reactive({
   github: '',
   linkedin: '',
   bio: '',
-  avatar: ''
+  avatar: '',
 })
 const showModal = ref(false)
 
@@ -35,7 +35,7 @@ async function fetchStudentProfile() {
   if (!t) return
 
   const prof = await fetch(`http://localhost:8000/company/${encodeURIComponent(name)}`, {
-    headers: { Authorization: `Bearer ${t}` }
+    headers: { Authorization: `Bearer ${t}` },
   })
 
   if (prof.ok && prof.status !== 204) {
@@ -52,18 +52,17 @@ async function fetchStudentProfile() {
     formData.linkedin = d.linkedin ?? ''
     formData.bio = d.description ?? ''
     formData.avatar = d.photo ?? ''
-    
   }
 
-//   const exp = await fetch('http://localhost:8000/student/experiences', {
-//     headers: { Authorization: `Bearer ${t}` }
-//   })
-//   experiences.value = exp.ok ? await exp.json() : []
+  //   const exp = await fetch('http://localhost:8000/student/experiences', {
+  //     headers: { Authorization: `Bearer ${t}` }
+  //   })
+  //   experiences.value = exp.ok ? await exp.json() : []
 
-//   const eduRes = await fetch('http://localhost:8000/student/educations', {
-//     headers: { Authorization: `Bearer ${t}` }
-//   })
-//   educations.value = eduRes.ok ? await eduRes.json() : []
+  //   const eduRes = await fetch('http://localhost:8000/student/educations', {
+  //     headers: { Authorization: `Bearer ${t}` }
+  //   })
+  //   educations.value = eduRes.ok ? await eduRes.json() : []
 }
 
 async function submitForm() {
@@ -82,15 +81,15 @@ async function submitForm() {
     photo: null,
     linkedin: formData.linkedin,
     github: formData.github,
-    cv: formData.cv
+    cv: formData.cv,
   }
   const res = await fetch('http://localhost:8000/student/manage-profile', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${t}`
+      Authorization: `Bearer ${t}`,
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
   if (res.ok) alert('Profil mis à jour')
 }
@@ -151,7 +150,7 @@ onMounted(fetchStudentProfile)
       :class="{ show: showModal }"
       tabindex="-1"
       v-show="showModal"
-      style="display: block; z-index: 1055;"
+      style="display: block; z-index: 1055"
     >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -170,12 +169,11 @@ onMounted(fetchStudentProfile)
       class="modal-backdrop fade"
       :class="{ show: showModal }"
       v-if="showModal"
-      style="z-index: 1050;"
+      style="z-index: 1050"
       @click="showModal = false"
     />
   </div>
 </template>
-
 
 <style scoped>
 .dashboard-bg {
