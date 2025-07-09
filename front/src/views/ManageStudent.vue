@@ -27,6 +27,7 @@ const bio = ref('')
 const experiences = ref<any[]>([])
 const educations = ref<any[]>([])
 const showModal = ref(false)
+const showSidebar = ref(true)
 
 async function fetchStudentProfile() {
   const t = localStorage.getItem('token')
@@ -118,9 +119,9 @@ function handleModalSubmit() {
 
 <template>
   <div class="d-flex w-100 min-vh-100 dashboard-bg">
-    <Sidebar />
+    <Sidebar :visible="showSidebar" @close="showSidebar = false"/>
     <div class="flex-grow-1 p-4">
-      <PageHeader title="Profile" />
+      <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
 
       <div class="container-fluid">
         <div class="row g-4">
