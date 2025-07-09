@@ -1,53 +1,57 @@
 <template>
-  <div class="offer-swipe-container">
-    <!-- Filtres -->
-    <div class="filters">
-      <input
-        v-model="searchKeyword"
-        @input="fetchOffers"
-        placeholder="Poste"
-        class="filter-input"
-      />
-      <input
-        v-model="cityFilter"
-        @input="fetchOffers"
-        placeholder="Ville"
-        class="filter-input"
-      />
-    </div>
+  <div class="offer-swipe-layout">
+    <Sidebar />
+    <div class="main-content">
+      <!-- Filtres -->
+      <div class="filters">
+        <input
+          v-model="searchKeyword"
+          @input="fetchOffers"
+          placeholder="Poste"
+          class="filter-input"
+        />
+        <input
+          v-model="cityFilter"
+          @input="fetchOffers"
+          placeholder="Ville"
+          class="filter-input"
+        />
+      </div>
 
-    <!-- Carrousel -->
-    <div class="carousel">
-      <div
-        v-for="(offer, index) in visibleCards"
-        :key="offer.id"
-        class="card"
-        :class="{
-          'card-center': index === 1,
-          'card-side': index !== 1,
-        }"
-      >
-        <img v-if="offer.company?.logo" :src="offer.company.logo" class="company-logo" />
-        <h2 class="offer-title">{{ offer.title }}</h2>
-        <p class="offer-info">{{ offer.contractType }} – {{ offer.city }}</p>
-        <p class="offer-company">Entreprise : {{ offer.company?.name }}</p>
+      <!-- Carrousel -->
+      <div class="carousel">
+        <div
+          v-for="(offer, index) in visibleCards"
+          :key="offer.id"
+          class="card"
+          :class="{ 'card-center': index === 1, 'card-side': index !== 1 }"
+        >
+          <img v-if="offer.company?.logo" :src="offer.company.logo" class="company-logo" />
+          <h2 class="offer-title">{{ offer.title }}</h2>
+          <p class="offer-info">{{ offer.contractType }} – {{ offer.city }}</p>
+          <p class="offer-company">Entreprise : {{ offer.company?.name }}</p>
 
-        <div v-if="index === 1" class="card-buttons">
-          <button @click="swipeLeft" class="btn-swipe-left">❌ Passer</button>
-          <button @click="swipeRight" class="btn-swipe-right">💚 Liker</button>
+          <div v-if="index === 1" class="card-buttons">
+            <button @click="swipeLeft" class="btn-swipe-left">❌ Passer</button>
+            <button @click="swipeRight" class="btn-swipe-right">💚 Liker</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Message si vide -->
-    <div v-if="offers.length === 0" class="empty-message">
-      Aucune offre trouvée.
+      <!-- Message si la section est vide -->
+      <div v-if="offers.length === 0" class="empty-message">
+        Aucune offre trouvée.
+      </div>
     </div>
   </div>
 </template>
 
-<script>
+<script >
+import Sidebar from '@/components/Global/NavBar.vue'
 export default {
+    components: {
+    Sidebar,
+  },
   data() {
     return {
       offers: [],
@@ -123,12 +127,30 @@ export default {
 </script>
 
 <style scoped>
-/* Tu peux maintenant styliser ici librement */
+.offer-swipe-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+.sidebar {
+  width: 250px; 
+  background-color: #fff;
+  height: 100vh;
+}
 
 .offer-swipe-container {
   background-color: #f5f5f5;
   min-height: 100vh;
   padding: 2rem;
+  display: flex;
 }
 input::placeholder{
     font-size: 15px;
