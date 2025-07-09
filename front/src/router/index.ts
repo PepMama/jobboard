@@ -61,12 +61,14 @@ const router = createRouter({
     {
       path: '/company/:name',
       name: 'PublicCompany',
-      component: PublicCompany
+      component: PublicCompany,
+      meta: { requiresAuth: true, allowedRoles: ['student'] }
     },
     {
       path: '/student/:name',
       name: 'PublicStudent',
-      component: PublicStudent
+      component: PublicStudent,
+      meta: { requiresAuth: true, allowedRoles: ['company'] }
     }
   ],
 })
