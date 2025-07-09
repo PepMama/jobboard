@@ -59,9 +59,15 @@ class StudentService
 
         return $student;
     }
+    
     public function save(Student $student): void
     {
         $this->em->persist($student);
         $this->em->flush();
+    }
+
+    public function getStudentByName(string $name): ?Student
+    {
+        return $this->studentRepository->findOneBy(['name' => $name]);
     }
 }

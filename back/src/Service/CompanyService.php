@@ -51,4 +51,10 @@ class CompanyService
     {
         return $this->companyRepository->findOneBy(['user' => $user]);
     }
+
+    public function getCompanyByName(string $name): ?Company
+    {
+        return $this->companyRepository->findOneBy(['name' => $name]);
+    }
+
 }

@@ -5,16 +5,17 @@
             <form @submit.prevent="onSubmit">
                 <div v-for="(label, key) in generalFields" :key="key" class="mb-3">
                     <label class="form-label text-dark">{{ label }}</label>
-
-                    <input type="text" v-model="form[key]" class="form-control" />
+                    <input type="text" v-model="form[key]" class="form-control" :disabled="readonly" />
                 </div>
-                <button type="submit" class="btn btn-success">Mettre à jour</button>
+                <button v-if="!readonly" type="submit" class="btn btn-success">Mettre à jour</button>
             </form>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import type { readonly } from 'vue'
+
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -27,6 +28,10 @@ const props = defineProps({
             adress: '',
             postal_code: ''
         })
+    },
+    readonly: {
+        type: Boolean,
+        default: false
     }
 })
 const emit = defineEmits(['update:modelValue', 'submit'])

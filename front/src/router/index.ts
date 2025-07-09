@@ -8,6 +8,8 @@ import ManageCompany from '@/views/ManageCompany.vue'
 import CreateOffer from '@/components/Company/CreateOffer.vue'
 import OfferSwipe from '@/views/OfferSwipe.vue'
 import { useAuthStore } from '@/stores/auth'
+import PublicCompany from '@/views/PublicCompany.vue'
+import PublicStudent from '@/views/PublicStudent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +57,16 @@ const router = createRouter({
       name: 'showOffers',
       component: OfferSwipe,
       meta: { requiresAuth: true, allowedRoles: ['student'] }
+    },
+    {
+      path: '/company/:name',
+      name: 'PublicCompany',
+      component: PublicCompany
+    },
+    {
+      path: '/student/:name',
+      name: 'PublicStudent',
+      component: PublicStudent
     }
   ],
 })
