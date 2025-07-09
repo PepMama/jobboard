@@ -1,6 +1,6 @@
 <template>
   <div class="card bg-white shadow-sm mt-3 p-4">
-    <div class="d-flex flex-row flex-wrap align-items-start gap-4">
+    <div class="d-flex flex-row flex-wrap align-items-center gap-4">
       <div class="flex-shrink-0">
         <img
           :src="avatar"
@@ -11,11 +11,10 @@
           style="object-fit:cover;"
         />
       </div>
-      <div class="flex-grow-1">
+      <div>
         <h4 class="fw-bold mb-3">{{ firstname }} {{ name }}</h4>
-
         <ul class="list-unstyled text-secondary small mb-3">
-          <li v-if="age"><strong>Date de naissance :</strong> {{ age }}</li>
+          <li v-if="age"><strong>Age :</strong> {{ age }} ans</li>
           <li v-if="city"><strong>Ville :</strong> {{ city }} <span v-if="postalCode">({{ postalCode }})</span></li>
           <li v-if="address"><strong>Adresse :</strong> {{ address }}</li>
           <li v-if="email"><strong>Email :</strong> {{ email }}</li>
