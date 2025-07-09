@@ -110,6 +110,112 @@ const handleLogin = async () => {
 </script>
 
 
-<style>
-@import '@/CSS/login.css';
+<style scoped>
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #e2eee4;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 4rem;
+  margin: 10% 0% 0% 30% ;
+  position: relative;
+  border-radius: 10px 10px 10px 10px;
+  width: 40%;
+}
+.login-title {
+  color: rgb(39, 38, 38);
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  margin-left: 40%;
+  font-weight: 700;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif;
+}
+.loginImg {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px 0px 0px 10px;
+  background-color: rgb(234, 233, 233);
+  margin-left: -40%;
+  width: 100%;
+}
+
+.login-input {
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.login-button {
+  background-color: #8e44ad;
+  color: white;
+  font-weight: bold;
+  /* border-radius: 5px ; */
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-password:hover svg {
+  transform: scale(1.1);
+  color: #8e44ad;
+}
+.forgot-password {
+    font-weight: 500;
+  }
+  .register{
+    font-weight: 500;
+  }
+  .text-right{
+     margin-top: 2%;
+  }
+  
+.text-right a {
+  text-decoration: none ;
+  color: #555;
+}
+
+.text-right a:hover {
+  color: #732d91; 
+  transition: color 0.3s ease; 
+}
+
+
 </style>

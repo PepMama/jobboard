@@ -8,14 +8,29 @@
           <label class="form-label text-dark">{{ label }}</label>
 
           <template v-if="key === 'description'">
-            <textarea v-model="form[key]" class="form-control"></textarea>
+            <textarea
+              v-model="form[key]"
+              class="form-control"
+              :disabled="isPublic"
+            ></textarea>
           </template>
           <template v-else>
-            <input type="text" v-model="form[key]" class="form-control" />
+            <input
+              type="text"
+              v-model="form[key]"
+              class="form-control"
+              :disabled="isPublic"
+            />
           </template>
         </div>
 
-        <button class="btn btn-outline-primary">Mettre à jour</button>
+        <button
+          class="btn btn-outline-primary"
+          type="submit"
+          :disabled="isPublic"
+        >
+          Mettre à jour
+        </button>
       </form>
     </div>
   </div>
@@ -34,8 +49,13 @@ const props = defineProps({
       city: '',
       postalCode: ''
     })
+  },
+  isPublic: {
+    type: Boolean,
+    default: false
   }
 })
+
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 const form = props.modelValue
@@ -57,14 +77,4 @@ function onSubmit () {
 </script>
 
 <style scoped>
-.btn-outline-primary {
-  color: #5651ab;
-  border-color: #5651ab;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
-.btn-outline-primary:hover {
-  background: #5651ab;
-  color: #fff;
-  border-color: #5651ab;
-}
 </style>
