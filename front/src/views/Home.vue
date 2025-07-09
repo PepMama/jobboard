@@ -197,6 +197,4 @@ import industrial from '../assets/industrial.png';
 import arrow from '../assets/arrow.png';
 </script>
 
-<style src="@/CSS/home.css"></style>
-
-  
+<style src="@/CSS/home.css" scoped></style>
