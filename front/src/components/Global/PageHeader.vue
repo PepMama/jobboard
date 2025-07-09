@@ -1,5 +1,8 @@
 <template>
   <div class="d-flex align-items-center px-4 py-3 rounded-3 mb-4" style="background-color: #f7faff;">
+    <button class="btn btn-outline-primary d-lg-none me-3" @click="$emit('toggle-sidebar')">
+      ☰
+    </button>
     <h2 class="mb-0 fw-bold text-start">{{ title }}</h2>
     <div class="d-flex align-items-center gap-4 ms-auto">
       <span class="text-muted">{{ today }}</span>
@@ -16,7 +19,9 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { Bell, Settings, LogOut } from 'lucide-vue-next'
 
-const props = defineProps<{ title: string }>()
+defineProps<{ title: string }>()
+defineEmits(['toggle-sidebar'])
+
 const router = useRouter()
 const authStore = useAuthStore()
 
@@ -53,6 +58,6 @@ function logout() {
   transition: color 0.2s;
 }
 .icon-btn:hover {
-  color: #5651ab;
+  color: #2d2a6e;
 }
 </style>

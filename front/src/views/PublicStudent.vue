@@ -7,8 +7,12 @@ import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
 import ExperienceCard from '@/components/Students/ExperienceCard.vue'
 import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
+import { useRoute } from 'vue-router'
 
 const avatar = ref('http://via.placeholder.com/80')
+
+const route = useRoute()
+const name = route.params.name as string
 
 const formData = reactive({
   firstname: '',
@@ -20,20 +24,17 @@ const formData = reactive({
   postalCode: '',
   cv: '',
   github: '',
-  linkedin: ''
+  linkedin: '',
+  bio: '',
+  avatar: ''
 })
-
-const bio = ref('')
-const experiences = ref<any[]>([])
-const educations = ref<any[]>([])
 const showModal = ref(false)
-const showSidebar = ref(true)
 
 async function fetchStudentProfile() {
   const t = localStorage.getItem('token')
   if (!t) return
 
-  const prof = await fetch('http://localhost:8000/student/profile', {
+  const prof = await fetch(`http://localhost:8000/company/${encodeURIComponent(name)}`, {
     headers: { Authorization: `Bearer ${t}` }
   })
 
@@ -49,19 +50,20 @@ async function fetchStudentProfile() {
     formData.cv = d.cv ?? ''
     formData.github = d.github ?? ''
     formData.linkedin = d.linkedin ?? ''
-    bio.value = d.description ?? ''
-    avatar.value = d.photo ?? avatar.value
+    formData.bio = d.description ?? ''
+    formData.avatar = d.photo ?? ''
+    
   }
 
-  const exp = await fetch('http://localhost:8000/student/experiences', {
-    headers: { Authorization: `Bearer ${t}` }
-  })
-  experiences.value = exp.ok ? await exp.json() : []
+//   const exp = await fetch('http://localhost:8000/student/experiences', {
+//     headers: { Authorization: `Bearer ${t}` }
+//   })
+//   experiences.value = exp.ok ? await exp.json() : []
 
-  const eduRes = await fetch('http://localhost:8000/student/educations', {
-    headers: { Authorization: `Bearer ${t}` }
-  })
-  educations.value = eduRes.ok ? await eduRes.json() : []
+//   const eduRes = await fetch('http://localhost:8000/student/educations', {
+//     headers: { Authorization: `Bearer ${t}` }
+//   })
+//   educations.value = eduRes.ok ? await eduRes.json() : []
 }
 
 async function submitForm() {
@@ -75,7 +77,8 @@ async function submitForm() {
     address: formData.address,
     city: formData.city,
     postal_code: formData.postalCode,
-    description: bio.value,
+    description: formData.bio,
+    avatar: formData.avatar, // Assuming you handle photo upload separately
     photo: null,
     linkedin: formData.linkedin,
     github: formData.github,
@@ -93,35 +96,13 @@ async function submitForm() {
 }
 
 onMounted(fetchStudentProfile)
-
-function updateCv(newCv: string) {
-  formData.cv = newCv
-}
-
-function updateGithub(newGithub: string) {
-  formData.github = newGithub
-}
-
-function updateLinkedin(newLinkedin: string) {
-  formData.linkedin = newLinkedin
-}
-
-function onBioUpdate(newBio: string) {
-  bio.value = newBio
-  submitForm()
-}
-
-function handleModalSubmit() {
-  submitForm()
-  showModal.value = false
-}
 </script>
 
 <template>
   <div class="d-flex w-100 min-vh-100 dashboard-bg">
-    <Sidebar :visible="showSidebar" @close="showSidebar = false"/>
+    <Sidebar />
     <div class="flex-grow-1 p-4">
-      <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
+      <PageHeader title="Profile" />
 
       <div class="container-fluid">
         <div class="row g-4">
@@ -137,32 +118,28 @@ function handleModalSubmit() {
               :address="formData.address"
               :city="formData.city"
               :postalCode="formData.postalCode"
-              :bio="bio"
-              @update:bio="onBioUpdate"
-              @edit="showModal = true"
+              :bio="formData.bio"
+              @edit="showModal = false"
             />
 
             <!-- Bloc formations + expériences -->
             <div class="row g-4">
               <div class="col-12 col-lg-6">
-                <EducationCard :educations="educations" @changed="fetchStudentProfile" />
+                <!-- <EducationCard :educations="educations" @changed="fetchStudentProfile" /> -->
               </div>
               <div class="col-12 col-lg-6">
-                <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" />
+                <!-- <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" /> -->
               </div>
             </div>
           </div>
 
           <!-- Partie droite : Upload fichiers -->
           <div class="col-12 col-lg-4">
-            <UploadCvAndPortfolio
+            <!-- <UploadCvAndPortfolio
               :cv="formData.cv"
               :github="formData.github"
               :linkedin="formData.linkedin"
-              @update:cv="updateCv"
-              @update:github="updateGithub"
-              @update:linkedin="updateLinkedin"
-            />
+            /> -->
           </div>
         </div>
       </div>
@@ -183,7 +160,7 @@ function handleModalSubmit() {
             <button type="button" class="btn-close" @click="showModal = false"></button>
           </div>
           <div class="modal-body">
-            <PersonalInfoForm v-model="formData" @submit="handleModalSubmit" />
+            <PersonalInfoForm v-model="formData" :is-public="true" />
           </div>
         </div>
       </div>

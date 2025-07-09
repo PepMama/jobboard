@@ -64,4 +64,25 @@ class CompanyController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], 401);
         }
     }
+
+    #[Route('/company/{name}', name: 'public_company_profile', methods: ['GET'])]
+    public function publicCompanyProfile(string $name, CompanyService $companyService): JsonResponse
+    {
+        $company = $companyService->getCompanyByName($name);
+
+        if (!$company) {
+            return new JsonResponse(null, 204);
+        }
+
+        return new JsonResponse([
+            'name' => $company->getName(),
+            'phone_number' => $company->getPhoneNumber(),
+            'city' => $company->getCity(),
+            'address' => $company->getAddress(),
+            'postal_code' => $company->getPostalCode(),
+            'linkedin' => $company->getLinkedin(),
+            'description' => $company->getDescription(),
+            'industry' => $company->getIndustry()
+        ]);
+    }
 }
