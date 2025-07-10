@@ -43,7 +43,10 @@ const emit = defineEmits(['update:industry'])
 const readonly = props.readonly ?? false
 const localIndustry = ref(props.industry)
 
-watch(() => props.industry, (val) => {
-  localIndustry.value = val
-})
+watch(
+  () => props.industry,
+  (val) => {
+    localIndustry.value = val
+  },
+)
 </script>

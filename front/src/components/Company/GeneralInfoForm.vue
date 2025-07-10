@@ -34,39 +34,39 @@
 import type { readonly } from 'vue'
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: () => ({
-            name: '',
-            phone: '',
-            website: '',
-            linkedin: '',
-            city: '',
-            adress: '',
-            postal_code: ''
-        })
-    },
-    readonly: {
-        type: Boolean,
-        default: false
-    }
+  modelValue: {
+    type: Object,
+    default: () => ({
+      name: '',
+      phone: '',
+      website: '',
+      linkedin: '',
+      city: '',
+      adress: '',
+      postal_code: '',
+    }),
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
 })
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 const form = props.modelValue
 
 const generalFields = {
-    name: 'Nom :',
-    phone: 'N° de téléphone :',
-    website: 'Site internet :',
-    linkedin: 'LinkedIn :',
-    address: 'Adresse :',
-    city: 'Ville :',
-    postal_code: 'Code postal :'
+  name: 'Nom :',
+  phone: 'N° de téléphone :',
+  website: 'Site internet :',
+  linkedin: 'LinkedIn :',
+  address: 'Adresse :',
+  city: 'Ville :',
+  postal_code: 'Code postal :',
 }
 
 function onSubmit() {
-    emit('update:modelValue', { ...form })
-    emit('submit')
+  emit('update:modelValue', { ...form })
+  emit('submit')
 }
 </script>

@@ -84,13 +84,13 @@ import signUpImg from '../assets/registerWorkin.svg'
 import logo from '../assets/logo.png'
 import { reactive } from 'vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const role = ref('student') // valeur par défaut
 const showPassword = ref(false)
-const router = useRouter();
-const authStore = useAuthStore();
+const router = useRouter()
+const authStore = useAuthStore()
 
 const form = reactive({
   username: '',
@@ -102,7 +102,7 @@ const handleRegister = async () => {
     email: form.email,
     password: form.password,
     role: role.value,
-  };
+  }
 
   try {
     const response = await fetch('http://localhost:8000/register', {
@@ -111,34 +111,26 @@ const handleRegister = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    });
+    })
 
-    const data = await response.json();
+    const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data.error || "Erreur lors de l'inscription");
+      throw new Error(data.error || "Erreur lors de l'inscription")
     }
 
-    const { token, role, redirect } = data;
+    const { token, role, redirect } = data
 
-    authStore.setAuth(token, role);
+    authStore.setAuth(token, role)
 
-    router.push(redirect);
-
+    router.push(redirect)
   } catch (error) {
-    alert(error.message);
+    alert(error.message)
   }
-};
+}
 </script>
 
 <style scoped>
-body {
-  font-family: 'Arial', sans-serif;
-  padding: 0;
-  height: 100%;
-  background-color: white;
-}
-
 .logo {
   background-size: cover;
   background-position: center;
@@ -176,13 +168,12 @@ input[type='radio'] {
   flex-direction: column;
   background-color: #e2eee4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 10% 0% 0% 30% ;
+  margin: 10% 0% 0% 30%;
   padding: 4rem;
   position: relative;
   border-radius: 10px 10px 10px 10px;
   width: 40%;
 }
-
 
 input {
   padding: 10px;
@@ -278,5 +269,4 @@ a:hover {
     font-size: 1rem;
   }
 }
-
 </style>

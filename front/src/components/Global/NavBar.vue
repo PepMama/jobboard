@@ -1,12 +1,14 @@
 <template>
-  <div class="bg-navbar border-end p-3" :class="{ 'd-none d-lg-flex': !visible }" style="min-width: 260px; z-index: 2000;">
+  <div
+    class="bg-navbar border-end p-3"
+    :class="{ 'd-none d-lg-flex': !visible }"
+    style="min-width: 260px; z-index: 2000"
+  >
     <div class="w-100 d-flex flex-column h-100">
       <div class="mb-4 text-center">
-        <img :src="logo" alt="Logo AltMatch" class="img-fluid" style="max-width:120px;" />
+        <img :src="logo" alt="Logo AltMatch" class="img-fluid" style="max-width: 120px" />
       </div>
-      <button
-        class="btn btn-sm btn-light d-lg-none mb-3 align-self-end"
-        @click="$emit('close')">
+      <button class="btn btn-sm btn-light d-lg-none mb-3 align-self-end" @click="$emit('close')">
         ✖
       </button>
 
@@ -21,7 +23,10 @@
       </ul>
 
       <div class="logout-container mt-auto pt-4">
-        <button class="btn btn-logout w-100 d-flex align-items-center justify-content-center" @click="handleLogout">
+        <button
+          class="btn btn-logout w-100 d-flex align-items-center justify-content-center"
+          @click="handleLogout"
+        >
           <LogOut class="me-2" :size="20" />
           Se déconnecter
         </button>
@@ -33,14 +38,14 @@
 <script setup lang="ts">
 import { User, Heart, Briefcase, Plus, LogOut } from 'lucide-vue-next'
 import logo from '@/assets/altmatch.png'
-import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 defineProps<{ visible: boolean }>()
 defineEmits(['close'])
 
-const authStore = useAuthStore();
-const router = useRouter();
+const authStore = useAuthStore()
+const router = useRouter()
 
 const handleLogout = () => {
   authStore.reset()
@@ -53,12 +58,12 @@ const handleLogout = () => {
 const studentMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/student' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/student/likes' },
-  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' }
+  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' },
 ]
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
-  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' }  
+  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' },
 ]
 
 const role = authStore.role || localStorage.getItem('role')
@@ -74,7 +79,10 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 .nav-link-custom {
   color: #fff !important;
   border-radius: 8px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
   font-weight: 500;
   padding: 10px 14px;
 }
@@ -94,7 +102,10 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
   border: 2px solid #5651ab;
   border-radius: 8px;
   font-weight: 600;
-  transition: background 0.2s, color 0.2s, border 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border 0.2s;
   padding: 10px 14px;
 }
 .btn-logout:hover,

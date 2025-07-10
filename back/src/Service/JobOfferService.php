@@ -163,11 +163,15 @@ class JobOfferService
                 'title' => $offer->getTitle(),
                 'contractType' => $offer->getContractType(),
                 'city' => $offer->getCity(),
+                'salary' => $offer->getSalary(),
+                'startDate' => $offer->getStartDate()?->format('d-m-Y'),
+                'description' => $offer->getDescription(),
                 'company' => [
                     'name' => $company->getName(),
                     'logo' => $company->getLogo(),
                 ]
             ];
+             dump($offer->getStartDate()); 
         }, $offers);
     }
 

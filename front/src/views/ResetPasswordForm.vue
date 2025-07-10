@@ -1,98 +1,98 @@
 <template>
-    <div
-      class="signupImg"
-      :style="`background-image: url(${signUpImg}); width:150%; background-size: contain; background-repeat: no-repeat; background-position: center;`"
-    ></div>
+  <div
+    class="signupImg"
+    :style="`background-image: url(${signUpImg}); width:150%; background-size: contain; background-repeat: no-repeat; background-position: center;`"
+  ></div>
 
-    <div class="form-container">
-      <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
-      <div class="min-h-screen flex">
-        <div class="w-full md:w-1/2 flex items-center justify-center">
-          <div>
-            <h2>Créer un compte</h2>
-            <form @submit.prevent="handleRegister">
-              <label for="user">Nom d'utilisateur</label>
-              <div class="mb-4">
-                <input
-                  v-model="form.username"
-                  type="text"
-                  class="username"
-                  placeholder="Ex: Lorena Yawadio"
-                  required
-                />
-              </div>
+  <div class="form-container">
+    <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
+    <div class="min-h-screen flex">
+      <div class="w-full md:w-1/2 flex items-center justify-center">
+        <div>
+          <h2>Créer un compte</h2>
+          <form @submit.prevent="handleRegister">
+            <label for="user">Nom d'utilisateur</label>
+            <div class="mb-4">
+              <input
+                v-model="form.username"
+                type="text"
+                class="username"
+                placeholder="Ex: Lorena Yawadio"
+                required
+              />
+            </div>
 
-              <label for="email">Adresse e-mail</label>
-              <div class="mb-4">
-                <input
-                  v-model="form.email"
-                  type="email"
-                  class="email"
-                  placeholder="Ex: lorenayawadio@adresse.fr"
-                  required
-                />
-              </div>
+            <label for="email">Adresse e-mail</label>
+            <div class="mb-4">
+              <input
+                v-model="form.email"
+                type="email"
+                class="email"
+                placeholder="Ex: lorenayawadio@adresse.fr"
+                required
+              />
+            </div>
 
-              <label for="password">Mot de passe</label>
-              <div class="mb-4 password-wrapper">
-                <input
-                  :type="showPassword ? 'text' : 'password'"
-                  v-model="form.password"
-                  class="password"
-                  required
-                />
-                <span class="toggle-password" @click="showPassword = !showPassword">
-                  <svg
-                    v-if="showPassword"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"
-                    />
-                    <path d="M12 9c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" />
-                  </svg>
-                  <svg
-                    v-else
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 5c-7 0-10 7-10 7s3 7 10 7c2.5 0 4.6-1 6.2-2.3l1.8 1.8 1.4-1.4-18-18-1.4 1.4 3.2 3.2c-1.3.9-2.3 2-3.2 3.3 0 0 3 7 10 7 1.6 0 3.2-.4 4.5-1l1.5 1.5c-1.8 1.1-4 1.5-6 1.5-7 0-10-7-10-7s3-7 10-7c2.2 0 4.2.6 6 1.5l-1.5 1.5c-1.3-.6-2.9-1-4.5-1z"
-                    />
-                  </svg>
-                </span>
-              </div>
-
-              <label>Vous êtes :</label><br />
-              <div class="radio">
-                <label
-                  ><input type="radio" name="role" v-model="role" value="student" /> Un
-                  étudiant</label
-                ><br />
-                <label
-                  ><input type="radio" name="role" v-model="role" value="company" /> Une
-                  entreprise</label
+            <label for="password">Mot de passe</label>
+            <div class="mb-4 password-wrapper">
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                v-model="form.password"
+                class="password"
+                required
+              />
+              <span class="toggle-password" @click="showPassword = !showPassword">
+                <svg
+                  v-if="showPassword"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
                 >
-              </div>
+                  <path
+                    d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"
+                  />
+                  <path d="M12 9c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" />
+                </svg>
+                <svg
+                  v-else
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 5c-7 0-10 7-10 7s3 7 10 7c2.5 0 4.6-1 6.2-2.3l1.8 1.8 1.4-1.4-18-18-1.4 1.4 3.2 3.2c-1.3.9-2.3 2-3.2 3.3 0 0 3 7 10 7 1.6 0 3.2-.4 4.5-1l1.5 1.5c-1.8 1.1-4 1.5-6 1.5-7 0-10-7-10-7s3-7 10-7c2.2 0 4.2.6 6 1.5l-1.5 1.5c-1.3-.6-2.9-1-4.5-1z"
+                  />
+                </svg>
+              </span>
+            </div>
 
-              <button type="submit" class="inscritpion">S'inscrire</button>
-            </form>
-          </div>
+            <label>Vous êtes :</label><br />
+            <div class="radio">
+              <label
+                ><input type="radio" name="role" v-model="role" value="student" /> Un
+                étudiant</label
+              ><br />
+              <label
+                ><input type="radio" name="role" v-model="role" value="company" /> Une
+                entreprise</label
+              >
+            </div>
+
+            <button type="submit" class="inscritpion">S'inscrire</button>
+          </form>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script setup>
-  import signUpImg from '../assets/registerWorkin.svg'
-  import logo from '../assets/logo.png'
-  import { reactive } from 'vue'
-  import { ref } from 'vue'
+<script setup>
+import signUpImg from '../assets/registerWorkin.svg'
+import logo from '../assets/logo.png'
+import { reactive } from 'vue'
+import { ref } from 'vue'
 
-  const role = ref('student') // valeur par défaut
+const role = ref('student') // valeur par défaut
 //   const showPassword = ref(false)
 
 //   const form = reactive({
@@ -133,8 +133,8 @@
 //       alert(error.message || "Erreur lors de l'inscription")
 //     }
 //   }
-  </script>
+</script>
 
-  <style>
-  @import '@/CSS/register.css';
-  </style>
+<style>
+@import '@/CSS/register.css';
+</style>

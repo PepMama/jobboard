@@ -38,58 +38,60 @@ const router = createRouter({
       path: '/dashboard/student',
       name: 'createStudent',
       component: ManageStudent,
-      meta: { requiresAuth: true, allowedRoles: ['student'] }
+      meta: { requiresAuth: true, allowedRoles: ['student'] },
     },
     {
       path: '/dashboard/company',
       name: 'createCompany',
       component: ManageCompany,
-      meta: { requiresAuth: true, allowedRoles: ['company'] }
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
     {
       path: '/company/create-offer',
       name: 'createOffer',
       component: CreateOffer,
-      meta: { requiresAuth: true, allowedRoles: ['company'] }
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
     {
       path: '/dashboard/student/offers',
       name: 'showOffers',
       component: OfferSwipe,
-      meta: { requiresAuth: true, allowedRoles: ['student'] }
+      meta: { requiresAuth: true, allowedRoles: ['student'] },
     },
     {
       path: '/company/:name',
       name: 'PublicCompany',
-      component: PublicCompany
+      component: PublicCompany,
+      meta: { requiresAuth: true, allowedRoles: ['student'] },
     },
     {
       path: '/student/:name',
       name: 'PublicStudent',
-      component: PublicStudent
-    }
+      component: PublicStudent,
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  authStore.loadFromStorage();
+  const authStore = useAuthStore()
+  authStore.loadFromStorage()
 
-  const isAuthenticated = !!authStore.token;
-  const userRole = (authStore.role ?? '').replace('ROLE_', '').toLowerCase();
+  const isAuthenticated = !!authStore.token
+  const userRole = (authStore.role ?? '').replace('ROLE_', '').toLowerCase()
 
-  const requiresAuth = to.meta.requiresAuth;
-  const allowedRoles = to.meta.allowedRoles as string[] | undefined;
+  const requiresAuth = to.meta.requiresAuth
+  const allowedRoles = to.meta.allowedRoles as string[] | undefined
 
   if (requiresAuth && !isAuthenticated) {
-    return next({ name: 'home' });
+    return next({ name: 'home' })
   }
 
   if (requiresAuth && allowedRoles && (!userRole || !allowedRoles.includes(userRole))) {
-    return next({ name: 'home' });
+    return next({ name: 'home' })
   }
 
-  next();
-});
+  next()
+})
 
 export default router

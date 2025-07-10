@@ -5,46 +5,49 @@ import type { Experience } from '@/types/student'
 import { defineProps } from 'vue'
 
 const props = defineProps<{ experiences: Experience[] }>()
-const emit  = defineEmits<{ (e:'changed'):void }>()
+const emit = defineEmits<{ (e: 'changed'): void }>()
 
-const draft = ref<Omit<Experience,'id'>>({
-  companyName:'',
-  jobTitle:'',
-  description:'',
-  startDate:'',
-  endDate:''
+const draft = ref<Omit<Experience, 'id'>>({
+  companyName: '',
+  jobTitle: '',
+  description: '',
+  startDate: '',
+  endDate: '',
 })
 
-const fmt = (d?:string)=> d? d.slice(0,10) : '…'
+const fmt = (d?: string) => (d ? d.slice(0, 10) : '…')
 
-const reset = ()=> draft.value={
-  companyName:'',
-  jobTitle:'',
-  description:'',
-  startDate:'',
-  endDate:''
-}
-
-async function save(){
-  const token = localStorage.getItem('token')
-  if(!token) return
-  const res = await fetch('http://localhost:8000/student/manage-experience',{
-    method:'POST',
-    headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},
-    body:JSON.stringify(draft.value)
+const reset = () =>
+  (draft.value = {
+    companyName: '',
+    jobTitle: '',
+    description: '',
+    startDate: '',
+    endDate: '',
   })
-  if(!res.ok) return console.error(await res.text())
+
+async function save() {
+  const token = localStorage.getItem('token')
+  if (!token) return
+  const res = await fetch('http://localhost:8000/student/manage-experience', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(draft.value),
+  })
+  if (!res.ok) return console.error(await res.text())
   reset()
   emit('changed')
   ;(window as any).bootstrap?.Modal.getOrCreateInstance('#expModal')?.hide()
 }
 
-async function del(id:number){
-  const t=localStorage.getItem('token')
-  if(!t) return
-  const res=await fetch(`http://localhost:8000/student/delete-experience/${id}`,{
-    method:'DELETE',headers:{Authorization:`Bearer ${t}`}})
-  if(res.ok) emit('changed')
+async function del(id: number) {
+  const t = localStorage.getItem('token')
+  if (!t) return
+  const res = await fetch(`http://localhost:8000/student/delete-experience/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${t}` },
+  })
+  if (res.ok) emit('changed')
 }
 </script>
 
@@ -66,14 +69,20 @@ async function del(id:number){
 
           <button
             class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center rounded-circle"
-            style="width:32px;height:32px"
+            style="width: 32px; height: 32px"
             @click="del(exp.id)"
           >
             <Trash2 />
           </button>
         </li>
       </ul>
-      <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#expModal">Ajouter une expérience</button>
+      <button
+        class="btn btn-outline-primary mt-3"
+        data-bs-toggle="modal"
+        data-bs-target="#expModal"
+      >
+        Ajouter une expérience
+      </button>
     </div>
   </div>
 
@@ -87,10 +96,14 @@ async function del(id:number){
         <div class="modal-body">
           <form @submit.prevent="save">
             <input v-model="draft.companyName" class="form-control mb-2" placeholder="Entreprise" />
-            <input v-model="draft.jobTitle"    class="form-control mb-2" placeholder="Poste" />
-            <textarea v-model="draft.description" class="form-control mb-2" placeholder="Description"></textarea>
+            <input v-model="draft.jobTitle" class="form-control mb-2" placeholder="Poste" />
+            <textarea
+              v-model="draft.description"
+              class="form-control mb-2"
+              placeholder="Description"
+            ></textarea>
             <input v-model="draft.startDate" type="date" class="form-control mb-2" />
-            <input v-model="draft.endDate"   type="date" class="form-control mb-2" />
+            <input v-model="draft.endDate" type="date" class="form-control mb-2" />
             <button class="btn btn-outline-primary w-100">Enregistrer</button>
           </form>
         </div>
@@ -99,7 +112,4 @@ async function del(id:number){
   </div>
 </template>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>

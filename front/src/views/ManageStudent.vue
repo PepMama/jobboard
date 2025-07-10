@@ -20,7 +20,7 @@ const formData = reactive({
   postalCode: '',
   cv: '',
   github: '',
-  linkedin: ''
+  linkedin: '',
 })
 
 const bio = ref('')
@@ -34,7 +34,7 @@ async function fetchStudentProfile() {
   if (!t) return
 
   const prof = await fetch('http://localhost:8000/student/profile', {
-    headers: { Authorization: `Bearer ${t}` }
+    headers: { Authorization: `Bearer ${t}` },
   })
 
   if (prof.ok && prof.status !== 204) {
@@ -54,12 +54,12 @@ async function fetchStudentProfile() {
   }
 
   const exp = await fetch('http://localhost:8000/student/experiences', {
-    headers: { Authorization: `Bearer ${t}` }
+    headers: { Authorization: `Bearer ${t}` },
   })
   experiences.value = exp.ok ? await exp.json() : []
 
   const eduRes = await fetch('http://localhost:8000/student/educations', {
-    headers: { Authorization: `Bearer ${t}` }
+    headers: { Authorization: `Bearer ${t}` },
   })
   educations.value = eduRes.ok ? await eduRes.json() : []
 }
@@ -79,15 +79,15 @@ async function submitForm() {
     photo: null,
     linkedin: formData.linkedin,
     github: formData.github,
-    cv: formData.cv
+    cv: formData.cv,
   }
   const res = await fetch('http://localhost:8000/student/manage-profile', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${t}`
+      Authorization: `Bearer ${t}`,
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
   if (res.ok) alert('Profil mis à jour')
 }
@@ -119,7 +119,7 @@ function handleModalSubmit() {
 
 <template>
   <div class="d-flex w-100 min-vh-100 dashboard-bg">
-    <Sidebar :visible="showSidebar" @close="showSidebar = false"/>
+    <Sidebar :visible="showSidebar" @close="showSidebar = false" />
     <div class="flex-grow-1 p-4">
       <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
 
@@ -174,7 +174,7 @@ function handleModalSubmit() {
       :class="{ show: showModal }"
       tabindex="-1"
       v-show="showModal"
-      style="display: block; z-index: 1055;"
+      style="display: block; z-index: 1055"
     >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -193,12 +193,11 @@ function handleModalSubmit() {
       class="modal-backdrop fade"
       :class="{ show: showModal }"
       v-if="showModal"
-      style="z-index: 1050;"
+      style="z-index: 1050"
       @click="showModal = false"
     />
   </div>
 </template>
-
 
 <style scoped>
 .dashboard-bg {

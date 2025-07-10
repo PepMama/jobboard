@@ -27,7 +27,7 @@
 import { ref, watch } from 'vue'
 
 const props = defineProps<{
-  bio: string,
+  bio: string
   readonly?: boolean
 }>()
 
@@ -36,9 +36,12 @@ const emit = defineEmits(['update:bio'])
 const edit = ref(false)
 const localBio = ref(props.bio)
 
-watch(() => props.bio, v => {
-  if (!edit.value) localBio.value = v
-})
+watch(
+  () => props.bio,
+  (v) => {
+    if (!edit.value) localBio.value = v
+  },
+)
 
 function toggle() {
   if (edit.value) {

@@ -5,11 +5,19 @@
   --white-color: #fff;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    padding: 0;
-    height: 100%;
-    background-color: var(--secondary-color);
+* {
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
+#app {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  padding: 0;
+  height: 100%;
+  background-color: var(--secondary-color);
 }
 
 input {
@@ -31,13 +39,19 @@ button {
   width: 100%;
   color: var(--primary-color);
   border-color: var(--primary-color);
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
 }
 
-.btn-outline-primary{
+.btn-outline-primary {
   color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s !important;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s !important;
 }
 
 .btn-outline-primary:hover {
