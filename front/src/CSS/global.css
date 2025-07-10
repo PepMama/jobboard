@@ -5,7 +5,15 @@
   --white-color: #fff;
 }
 
-body {
+* {
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
+#app {
+  margin: 0;
   font-family: 'Arial', sans-serif;
   padding: 0;
   height: 100%;

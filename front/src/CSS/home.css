@@ -8,14 +8,6 @@
   font-variation-settings: 'wdth' 100;
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  background-color: #e2eee4;
-}
-
 #app {
   display: block;
   max-width: none;
@@ -327,7 +319,6 @@ img {
 
 .section-sectors {
   padding: 2rem;
-  background-color: white;
 }
 
 .sector-list {

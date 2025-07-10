@@ -2,6 +2,7 @@
   <div class="offer-swipe-layout">
     <Sidebar />
     <div class="main-content">
+      <PageHeader title="Offres" @toggle-sidebar="showSidebar = true" />
       <h1>Trouve ton alternance sur-mesure</h1>
       <!-- Filtres -->
       <div class="filters">
@@ -134,11 +135,13 @@
 
 <script>
 import Sidebar from '@/components/Global/NavBar.vue'
-import OfferPopup from '@/components/Company/OfferPopup.vue'
+import OfferPopup from '@/components/Company/OfferPopUp.vue'
+import PageHeader from '@/components/Global/PageHeader.vue'
 export default {
   components: {
     Sidebar,
     OfferPopup,
+    PageHeader
   },
   data() {
     return {
@@ -186,7 +189,7 @@ export default {
       if (this.cityFilter) params.append('city', this.cityFilter)
 
       try {
-        const response = await fetch(`https://localhost:8000/student/offers?${params.toString()}`, {
+        const response = await fetch(`http://localhost:8000/student/offers?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -229,7 +232,7 @@ export default {
     async likeOffer(offerId) {
       const token = localStorage.getItem('token')
       try {
-        const response = await fetch(`https://localhost:8000/student/like-offer/${offerId}`, {
+        const response = await fetch(`http://localhost:8000/student/like-offer/${offerId}`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -248,14 +251,7 @@ export default {
 }
 </script>
 
-<style scoped>
-* {
-  font-family: 'Open Sans', sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variation-settings: 'wdth' 100;
-}
-
+<style  scoped>
 h1 {
   text-align: center;
   margin-bottom: 3%;
@@ -292,7 +288,6 @@ P {
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
-  background-color: #f5f5f5;
 }
 
 .sidebar {
@@ -323,7 +318,7 @@ input::placeholder {
   width: 100%;
   padding: 10px 12px 10px 40px;
   font-size: 16px;
-  border: none;
+  border : 1px solid #ccc;
   border-radius: 50px;
 }
 
