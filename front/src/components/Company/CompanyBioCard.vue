@@ -7,9 +7,10 @@
         <textarea v-model="localBio" class="form-control"></textarea>
       </div>
 
-      <p v-else>{{ bio }}</p>
+      <p v-else class="text-muted" style="white-space: pre-line">
+        {{ bio?.trim() ? bio : 'Non renseigné' }}
+      </p>
 
-      <!-- Le bouton n'apparaît que si le mode édition est activé (non readonly) -->
       <button
         v-if="!readonly"
         class="btn btn-success mt-2"
@@ -20,6 +21,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'

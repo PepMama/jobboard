@@ -3,78 +3,50 @@
     <div class="card-body">
       <h5>Informations personnelles</h5>
 
-      <form @submit.prevent="onSubmit">
-        <div v-for="(label, key) in personalFields" :key="key" class="mb-3">
-          <label class="form-label text-dark">{{ label }}</label>
-
-          <template v-if="key === 'description'">
-            <textarea
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-            ></textarea>
-          </template>
-          <template v-else>
-            <input
-              type="text"
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-            />
-          </template>
-        </div>
-
-        <button
-          class="btn btn-outline-primary"
-          type="submit"
-          :disabled="isPublic"
+      <template v-if="isPublic">
+        <div
+          v-for="(label, key) in personalFields"
+          :key="key"
+          class="mb-3"
         >
-          Mettre à jour
-        </button>
-      </form>
+          <label class="form-label fw-bold text-dark d-block">
+            {{ label }}
+          </label>
+          <p class="text-muted mb-0" style="white-space: pre-line">
+            {{ form[key] || '—' }}
+          </p>
+        </div>
+      </template>
+
+      <template v-else>
+        <form @submit.prevent="onSubmit">
+          <div
+            v-for="(label, key) in personalFields"
+            :key="key"
+            class="mb-3"
+          >
+            <label class="form-label text-dark">{{ label }}</label>
+
+            <template v-if="key === 'description'">
+              <textarea
+                v-model="form[key]"
+                class="form-control"
+              ></textarea>
+            </template>
+            <template v-else>
+              <input
+                type="text"
+                v-model="form[key]"
+                class="form-control"
+              />
+            </template>
+          </div>
+
+          <button class="btn btn-outline-primary" type="submit">
+            Mettre à jour
+          </button>
+        </form>
+      </template>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => ({
-      firstname: '',
-      name: '',
-      phone: '',
-      age: '',
-      address: '',
-      city: '',
-      postalCode: ''
-    })
-  },
-  isPublic: {
-    type: Boolean,
-    default: false
-  }
-})
-
-const emit = defineEmits(['update:modelValue', 'submit'])
-
-const form = props.modelValue
-
-const personalFields = {
-  firstname: 'Prénom :',
-  name: 'Nom :',
-  phone: 'N° de téléphone :',
-  age: 'Votre âge :',
-  address: 'Adresse :',
-  city: 'Ville :',
-  postalCode: 'Code postal :'
-}
-
-function onSubmit () {
-  emit('update:modelValue', { ...form })
-  emit('submit')
-}
-</script>
-
-<style scoped>
-</style>

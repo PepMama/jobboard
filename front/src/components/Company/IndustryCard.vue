@@ -2,11 +2,11 @@
   <div class="card bg-white text-dark rounded-3 shadow-sm mt-3">
     <div class="card-body">
       <h5>Secteur d'activité</h5>
-      
-      <!-- Affichage lecture seule -->
-      <p v-if="readonly">{{ industry }}</p>
-      
-      <!-- Édition -->
+
+      <p v-if="readonly" class="text-muted">
+        {{ industry?.trim() ? industry : 'Non renseigné' }}
+      </p>
+
       <select
         v-else
         v-model="localIndustry"
@@ -28,6 +28,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
