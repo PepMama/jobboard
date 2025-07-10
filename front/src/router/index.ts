@@ -62,13 +62,13 @@ const router = createRouter({
       path: '/company/:name',
       name: 'PublicCompany',
       component: PublicCompany,
-      meta: { requiresAuth: true, allowedRoles: ['student'] },
+      // meta: { requiresAuth: true, allowedRoles: ['student'] },
     },
     {
       path: '/student/:name',
       name: 'PublicStudent',
       component: PublicStudent,
-      meta: { requiresAuth: true, allowedRoles: ['company'] },
+      // meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
   ],
 })

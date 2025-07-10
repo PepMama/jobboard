@@ -93,7 +93,7 @@ onMounted(fetchCompanyProfile)
         <CompanyHeader :name="formData.name" :avatar="avatar" />
         <div class="d-flex flex-nowrap gap-4 overflow-auto mt-3">
           <div class="flex-fill" style="min-width: 400px; max-width: 60%">
-            <GeneralInfoForm v-model="formData" @submit="submitForm" :readonly="false" />
+            <GeneralInfoForm v-model="formData" @submit="submitForm" />
           </div>
           <div class="flex-fill mt-3" style="min-width: 300px; max-width: 30%">
             <CompanyBioCard :bio="description" @update:bio="onBioUpdate" />
