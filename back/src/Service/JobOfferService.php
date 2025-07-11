@@ -79,7 +79,7 @@ class JobOfferService
     {
         $company = $this->companyRepository->findOneBy(['user' => $user]);
         if (!$company) {
-            return ['error' => 'Entreprise introuvable'];
+            return [];
         }
 
         $offers = $this->jobOfferRepository->findBy(['company' => $company]);
@@ -171,7 +171,6 @@ class JobOfferService
                     'logo' => $company->getLogo(),
                 ]
             ];
-             dump($offer->getStartDate()); 
         }, $offers);
     }
 

@@ -91,7 +91,7 @@ async function createOffer(offer: typeof formData.value) {
     }
     const data = await response.json()
     console.log('Offre créée :', data)
-    window.location.href = '/dashboard/company'
+    window.location.href = '/company/offers'
   } catch (error) {
     console.error("Erreur lors de la création de l'offre :", error)
   }

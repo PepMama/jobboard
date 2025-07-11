@@ -6,6 +6,7 @@ import LoginForm from '../views/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
 import ManageCompany from '@/views/ManageCompany.vue'
 import CreateOffer from '@/components/Company/CreateOffer.vue'
+import OffersList from '@/components/Company/OffersList.vue'
 import OfferSwipe from '@/views/OfferSwipe.vue'
 import { useAuthStore } from '@/stores/auth'
 import PublicCompany from '@/views/PublicCompany.vue'
@@ -50,6 +51,12 @@ const router = createRouter({
       path: '/company/create-offer',
       name: 'createOffer',
       component: CreateOffer,
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
+    {
+      path: '/company/offers',
+      name: 'companyOffers',
+      component: OffersList,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
     {

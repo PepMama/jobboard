@@ -50,12 +50,18 @@ class JobOfferController extends AbstractController
             if ($user->getRole() !== 'company') {
                 return new JsonResponse(['error' => 'Accès interdit'], 403);
             }
-
-            return new JsonResponse($service->getAllOffers($user), 200);
+    
+            $result = $service->getAllOffers($user);
+            if (isset($result['error'])) {
+                return new JsonResponse($result, 400);
+            }
+    
+            return new JsonResponse($result, 200);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
+    
 
     #[Route('/company/offer/{id}', name: 'app_get_offer', methods: ['GET'])]
     public function getOffer(

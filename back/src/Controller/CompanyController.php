@@ -66,7 +66,7 @@ class CompanyController extends AbstractController
         }
     }
 
-    #[Route('/company/{name}', name: 'public_company_profile', methods: ['GET'])]
+    #[Route('/company/{id<\d+>}', name: 'public_company_profile', methods: ['GET'])]
     public function publicCompanyProfile(string $name, CompanyService $companyService): JsonResponse
     {
         $company = $companyService->getCompanyByName($name);
