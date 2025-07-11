@@ -6,7 +6,8 @@
         <textarea v-model="localBio" class="form-control"></textarea>
       </div>
       <p v-else>{{ bio }}</p>
-      <button class="btn btn-success mt-2" @click="toggle">
+
+      <button class="btn btn-outline-primary mt-2" @click="toggle">
         {{ edit ? 'Sauvegarder' : 'Modifier' }}
       </button>
     </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex w-100 min-vh-100">
-    <Sidebar />
+    <Sidebar :visible="showSidebar" @close="showSidebar = false" />
     <div class="flex-grow-1 p-4">
-      <h1 class="py-4 px-3">Créer une offre</h1>
-      <form @submit.prevent="createOffer(formData)">
+      <PageHeader title="Créer une offre" @toggle-sidebar="showSidebar = true" />
+      <form class="card bg-white shadow-sm mt-3 p-4" @submit.prevent="createOffer(formData)">
         <div class="mb-3">
           <label for="title" class="form-label">Nom de l'offre</label>
           <input type="text" id="title" class="form-control" v-model="formData.title" />
@@ -50,7 +50,7 @@
           <input type="date" id="startDate" class="form-control" v-model="formData.startDate" />
         </div>
 
-        <button type="submit" class="btn btn-success" style="color: #fff">Créer l'offre</button>
+        <button type="submit" class="btn btn-outline-primary" style="color: #fff">Créer l'offre</button>
       </form>
     </div>
   </div>
@@ -59,6 +59,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
+import PageHeader from '@/components/Global/PageHeader.vue'
 
 const formData = ref({
   title: '',
@@ -70,6 +71,8 @@ const formData = ref({
   remote: false,
   startDate: '',
 })
+
+const showSidebar = ref(true)
 
 async function createOffer(offer: typeof formData.value) {
   const t = localStorage.getItem('token')

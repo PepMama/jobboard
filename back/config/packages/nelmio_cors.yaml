@@ -7,7 +7,7 @@ nelmio_cors:
     origin_regex: true
   paths:
     '^/': # Autorise toutes les routes
-      allow_origin: ['http://localhost:5174']
+      allow_origin: ['http://localhost:5173']
       allow_headers: ['*']
       allow_methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH']
       max_age: 3600
