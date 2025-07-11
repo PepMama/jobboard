@@ -1,29 +1,25 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-
 import Sidebar from '@/components/Global/NavBar.vue'
-import CompanyHeader from '@/components/Company/CompanyHeader.vue'
-import CompanyBioCard from '@/components/Company/CompanyBioCard.vue'
-import IndustryCard from '@/components/Company/IndustryCard.vue'
-import GeneralInfoForm from '@/components/Company/GeneralInfoForm.vue'
-import Avatar from '@/assets/avatar-defaut.jpg'
+import { ArrowLeft } from 'lucide-vue-next'
 
+import Avatar from '@/assets/avatar-defaut.jpg'
+const showSidebar = ref(true)
 const route = useRoute()
 const name = route.params.name as string
 console.log('Company name:', name)
 
-
 const data = reactive({
-  name: '',
-  phone: '',
-  website: '',
-  linkedin: '',
-  address: '',
-  city: '',
-  postal_code: '',
-  description: '',
-  industry: '',
+  name: 'Tesla',
+  phone: '0612345678',
+  website: 'https://www.tesla.com',
+  linkedin: 'https://www.linkedin.com/company/tesla',
+  address: '3500 Deer Creek Road',
+  city: 'Palo Alto',
+  postal_code: '94304',
+  description: 'Tesla, Inc. est une entreprise américaine spécialisée dans la conception et la fabrication de véhicules électriques et de solutions énergétiques durables.',
+  industry: 'Automobile',
   avatar: '',
 })
 
@@ -57,59 +53,95 @@ onMounted(fetchCompanyProfile)
 </script>
 
 <template>
-  <div class="d-flex w-100 min-vh-100">
-    <Sidebar />
+  <div class="d-flex flex-column w-100 min-vh-100">
+    <div class="d-flex align-items-center px-4 py-3 border-bottom bg-light">
+      <button @click="$router.back()" class="btn btn-link text-decoration-none d-flex align-items-center p-0 me-2">
+        <ArrowLeft color="black" :size="24" class="me-2" />
+        <span class="fs-5 fw-semibold text-dark">Entreprise</span>
+      </button>
+    </div>
+    <div class="d-flex w-100 min-vh-100 dashboard-bg">
+    <Sidebar :visible="showSidebar" @close="showSidebar = false" />
     <div class="flex-grow-1 p-4">
-  <div class="d-flex align-items-center mb-3">
-    <img v-if="data.avatar" :src="data.avatar" alt="Company Avatar"
-      class="img-fluid rounded-circle me-3"
-      style="width: 80px; height: 80px;">
-    <img v-else :src="Avatar" alt="Default Company Avatar"
-      class="img-fluid rounded-circle me-3"
-      style="width: 80px; height: 80px;">
-    
-    <h1 class="mb-0">{{ data.name || 'Nom de l\'entreprise inconnu' }}</h1>
-  </div>
-      <hr>
-      <div>
-        <h2>À propos de la compagnie</h2>
-        <p v-if="data.description">{{ data.description || 'L\'entreprise n\'a pas encore de description.' }}</p>
-        <p v-else>L'entreprise n'a pas encore de description.</p>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>Téléphone</strong>
-          <span>{{ data.phone || 'Non renseigné' }}</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>Site web</strong>
-          <span v-if="data.website"><a :href="data.website" target="_blank">{{ data.website || 'Non renseigné'
-              }}</a></span>
+      <div class="d-flex align-items-center mb-3">
+        <img
+          :src="data.avatar || Avatar"
+          alt="Avatar"
+          class="rounded-circle me-3"
+          style="width: 80px; height: 80px;"
+        />
+        <h1 class="mb-0">{{ data.name || 'Nom de l\'entreprise inconnu' }}</h1>
+      </div>
+
+      <hr />
+      <h2>À propos de la compagnie</h2>
+      <p v-if="data.description">{{ data.description }}</p>
+      <p v-else class="fst-italic text-muted">L'entreprise n'a pas encore de description.</p>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2">
+        <strong>Téléphone</strong>
+        <span>{{ data.phone || 'Non renseigné' }}</span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2">
+        <strong>Site web</strong>
+        <span v-if="data.website">
+          <a :href="data.website" target="_blank">{{ data.website }}</a>
+        </span>
+        <span v-else>Non renseigné</span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2">
+        <strong>LinkedIn</strong>
+        <span v-if="data.linkedin">
+          <a :href="data.linkedin" target="_blank">{{ data.linkedin }}</a>
+        </span>
+        <span v-else>Non renseigné</span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2">
+        <strong>Adresse</strong>
+        <span>{{ data.address || 'Non renseigné' }}</span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2 align-items-center">
+        <strong>Ville</strong>
+        <span>
+          <span v-if="data.city" class="badge rounded-pill bg-primary-subtle text-primary px-3 py-1">
+            {{ data.city }}
+          </span>
           <span v-else>Non renseigné</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>LinkedIn</strong>
-          <span v-if="data.linkedin"><a :href="data.linkedin" target="_blank">{{ data.linkedin || 'Non renseigné'
-              }}</a></span>
+        </span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2 align-items-center">
+        <strong>Code postal</strong>
+        <span>
+          <span v-if="data.postal_code" class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-1">
+            {{ data.postal_code }}
+          </span>
           <span v-else>Non renseigné</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>Adresse</strong>
-          <span>{{ data.address || 'Non renseigné' }}</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>Ville</strong>
-          <span>{{ data.city || 'Non renseigné' }}</span>
-        </div>
-        <hr>
-        <div class="d-flex justify-content-between mb-2">
-          <strong>Code postal</strong>
-          <span>{{ data.postal_code || 'Non renseigné' }}</span>
-        </div>
+        </span>
+      </div>
+
+      <hr />
+      <div class="d-flex justify-content-between mb-2 align-items-center">
+        <strong>Secteur</strong>
+        <span>
+          <span v-if="data.industry" class="badge rounded-pill bg-success-subtle text-success px-3 py-1">
+            {{ data.industry }}
+          </span>
+          <span v-else>Non renseigné</span>
+        </span>
       </div>
     </div>
   </div>
+  </div>
 </template>
+
