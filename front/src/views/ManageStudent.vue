@@ -111,6 +111,10 @@ function onBioUpdate(newBio: string) {
   submitForm()
 }
 
+function onPhotoUpdate(newPhoto: string) {
+  avatar.value = newPhoto
+}
+
 function handleModalSubmit() {
   submitForm()
   showModal.value = false
@@ -140,6 +144,7 @@ function handleModalSubmit() {
               :bio="bio"
               @update:bio="onBioUpdate"
               @edit="showModal = true"
+              @photo-updated="onPhotoUpdate"
             />
 
             <!-- Bloc formations + expériences -->

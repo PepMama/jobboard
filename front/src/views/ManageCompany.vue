@@ -44,7 +44,7 @@ async function fetchCompanyProfile() {
       formData.postal_code = d.postal_code ?? ''
       industry.value = d.industry ?? ''
       description.value = d.description ?? ''
-      avatar.value = d.photo ?? avatar.value
+      avatar.value = d.logo ?? avatar.value
     }
   } catch (error) {
     console.error("Erreur lors de la récupération du profil de l'entreprise :", error)
@@ -86,6 +86,10 @@ function onIndustryUpdate(newIndustry: string) {
   submitForm() // Ajoute cette ligne pour sauvegarder automatiquement
 }
 
+function onLogoUpdate(newLogo: string) {
+  avatar.value = newLogo
+}
+
 function handleModalSubmit() {
   submitForm()
   showModal.value = false
@@ -115,6 +119,7 @@ onMounted(fetchCompanyProfile)
               :bio="description"
               @update:bio="onBioUpdate"
               @edit="showModal = true"
+              @logo-updated="onLogoUpdate"
             />
           </div>
           <div class="col-12 col-lg-6">

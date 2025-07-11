@@ -59,4 +59,9 @@ class CompanyService
         return $this->companyRepository->findOneBy(['name' => $name]);
     }
 
+    public function getAllCompanies(): array
+    {
+        return $this->companyRepository->findAll();
+    }
+
 }

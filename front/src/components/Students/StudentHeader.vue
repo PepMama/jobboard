@@ -1,14 +1,29 @@
 <template>
   <div class="card bg-white shadow-sm mt-3 p-4">
     <div class="d-flex flex-row flex-wrap align-items-center gap-4">
-      <div class="flex-shrink-0">
+      <div class="flex-shrink-0 position-relative">
         <img
-          :src="avatar"
+          :src="avatarUrl"
           alt="Profil"
-          class="rounded-circle"
+          class="rounded-circle border"
           width="120"
           height="120"
           style="object-fit: cover"
+        />
+        <button
+          class="btn btn-sm btn-light position-absolute bottom-0 end-0 border shadow"
+          style="transform: translate(25%, 25%);"
+          @click="triggerFileInput"
+          title="Changer la photo"
+        >
+          <Pencil :size="18" />
+        </button>
+        <input
+          ref="fileInput"
+          type="file"
+          accept="image/*"
+          class="d-none"
+          @change="onFileChange"
         />
       </div>
       <div>
@@ -39,11 +54,16 @@
         {{ edit ? 'Sauvegarder' : 'Modifier la description' }}
       </button>
     </div>
+    <div v-if="uploadError" class="alert alert-danger mt-3 py-2 px-3">
+      {{ uploadError }}
+    </div>
+    <div v-if="uploading" class="text-primary small mt-2">Envoi de la photo...</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { Pencil } from 'lucide-vue-next'
 
 const props = defineProps<{
   firstname?: string
@@ -55,9 +75,10 @@ const props = defineProps<{
   city?: string
   postalCode?: string
   bio: string
+  email?: string
 }>()
 
-const emit = defineEmits(['update:bio', 'edit'])
+const emit = defineEmits(['update:bio', 'edit', 'photo-updated'])
 
 const edit = ref(false)
 const localBio = ref(props.bio)
@@ -69,10 +90,89 @@ watch(
   },
 )
 
+watch(
+  () => props.avatar,
+  (v) => {
+    avatarUrl.value = v
+  },
+)
+
 function toggleEdit() {
   if (edit.value) emit('update:bio', localBio.value)
   edit.value = !edit.value
 }
+
+const avatarUrl = ref(props.avatar)
+const fileInput = ref<HTMLInputElement | null>(null)
+const uploading = ref(false)
+const uploadError = ref<string | null>(null)
+
+function triggerFileInput() {
+  uploadError.value = null
+  fileInput.value?.click()
+}
+
+async function onFileChange(e: Event) {
+  uploadError.value = null
+  const files = (e.target as HTMLInputElement).files
+  if (!files || !files[0]) return
+  const file = files[0]
+
+  // Validation côté front
+  if (!file.type.startsWith('image/')) {
+    uploadError.value = 'Le fichier doit être une image.'
+    return
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    uploadError.value = 'Image trop volumineuse (max 5 Mo)'
+    return
+  }
+
+  uploading.value = true
+  try {
+    const formData = new FormData()
+    formData.append('photo', file)
+    const token = localStorage.getItem('token')
+    const response = await fetch('http://localhost:8000/student/upload-photo', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    })
+    const data = await response.json()
+    if (!response.ok) {
+      uploadError.value = data.error || 'Erreur lors de l\'upload.'
+    } else {
+      avatarUrl.value = data.photo_url
+      emit('photo-updated', data.photo_url)
+    }
+  } catch (err) {
+    uploadError.value = 'Erreur lors de l\'upload.'
+  } finally {
+    uploading.value = false
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.position-relative { 
+  position: relative; 
+}
+
+.position-absolute { 
+  position: absolute; 
+}
+
+.bottom-0 { 
+  bottom: 0; 
+}
+
+.end-0 { 
+  right: 0; 
+}
+
+.border { 
+  border: 2px solid #e5e5e5; 
+}
+</style>

@@ -50,6 +50,8 @@ class CompanyController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
+            $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+            
             return new JsonResponse([
                 'name' => $company->getName(),
                 'phone_number' => $company->getPhoneNumber(),
@@ -59,7 +61,8 @@ class CompanyController extends AbstractController
                 'linkedin' => $company->getLinkedin(),
                 'website' => $company->getWebsite(),
                 'description' => $company->getDescription(),
-                'industry' => $company->getIndustry()
+                'industry' => $company->getIndustry(),
+                'logo' => $logoUrl
             ]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
@@ -75,6 +78,8 @@ class CompanyController extends AbstractController
             return new JsonResponse(null, 204);
         }
 
+        $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+        
         return new JsonResponse([
             'name' => $company->getName(),
             'phone_number' => $company->getPhoneNumber(),
@@ -84,7 +89,8 @@ class CompanyController extends AbstractController
             'website' => $company->getWebsite(),
             'linkedin' => $company->getLinkedin(),
             'description' => $company->getDescription(),
-            'industry' => $company->getIndustry()
+            'industry' => $company->getIndustry(),
+            'logo' => $logoUrl
         ]);
     }
 }
