@@ -7,8 +7,7 @@
       </div>
       <p v-else>{{ bio }}</p>
 
-      <!-- Le bouton n'apparaît que si le mode édition est activé (non readonly) -->
-      <button v-if="!readonly" class="btn btn-outline-primary mt-2" @click="toggle">
+      <button class="btn btn-outline-primary mt-2" @click="toggle">
         {{ edit ? 'Sauvegarder' : 'Modifier' }}
       </button>
     </div>

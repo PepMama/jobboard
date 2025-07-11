@@ -57,6 +57,7 @@ class CompanyController extends AbstractController
                 'address' => $company->getAddress(),
                 'postal_code' => $company->getPostalCode(),
                 'linkedin' => $company->getLinkedin(),
+                'website' => $company->getWebsite(),
                 'description' => $company->getDescription(),
                 'industry' => $company->getIndustry()
             ]);
@@ -80,6 +81,7 @@ class CompanyController extends AbstractController
             'city' => $company->getCity(),
             'address' => $company->getAddress(),
             'postal_code' => $company->getPostalCode(),
+            'website' => $company->getWebsite(),
             'linkedin' => $company->getLinkedin(),
             'description' => $company->getDescription(),
             'industry' => $company->getIndustry()
