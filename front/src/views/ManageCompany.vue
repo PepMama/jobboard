@@ -11,6 +11,7 @@ import CompanyHeader from '@/components/Company/CompanyHeader.vue'
 import IndustryCard from '@/components/Company/IndustryCard.vue'
 import DescriptionCard from '@/components/Company/DescriptionCard.vue'
 import CompanyBioCard from '@/components/Company/CompanyBioCard.vue'
+import PageHeader from '@/components/Global/PageHeader.vue'
 
 const avatar = ref('http://via.placeholder.com/80')
 
@@ -26,6 +27,7 @@ const formData = reactive({
 
 const description = ref('')
 const industry = ref('')
+const showSidebar = ref(true)
 
 async function fetchCompanyProfile() {
   const t = localStorage.getItem('token')
@@ -87,8 +89,9 @@ onMounted(fetchCompanyProfile)
 
 <template>
   <div class="d-flex w-100 min-vh-100">
-    <Sidebar />
+    <Sidebar :visible="showSidebar" @close="showSidebar = false" />
     <div class="flex-grow-1">
+      <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
       <div class="py-4 px-3 w-100">
         <CompanyHeader :name="formData.name" :avatar="avatar" />
         <div class="d-flex flex-nowrap gap-4 overflow-auto mt-3">
