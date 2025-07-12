@@ -3,36 +3,28 @@
     <div class="card-body">
       <h5>Informations générales</h5>
 
-      <template v-if="readonly">
+      <form @submit.prevent="onSubmit">
         <div v-for="(label, key) in generalFields" :key="key" class="mb-3">
-          <label class="form-label fw-bold text-dark d-block">{{ label }}</label>
-          <p class="text-muted mb-0" style="white-space: pre-line">
-            {{ form[key] || 'Non renseigné' }}
-          </p>
+          <label class="form-label text-dark">{{ label }}</label>
+          <input
+            type="text"
+            v-model="form[key]"
+            class="form-control"
+          />
         </div>
-      </template>
 
-      <template v-else>
-        <form @submit.prevent="onSubmit">
-          <div v-for="(label, key) in generalFields" :key="key" class="mb-3">
-            <label class="form-label text-dark">{{ label }}</label>
-            <input
-              type="text"
-              v-model="form[key]"
-              class="form-control"
-            />
-          </div>
-          <button type="submit" class="btn btn-success">Mettre à jour</button>
-        </form>
-      </template>
+        <button
+          class="btn btn-outline-primary"
+          type="submit"
+        >
+          Mettre à jour
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-import type { readonly } from 'vue'
-
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -41,28 +33,25 @@ const props = defineProps({
       phone: '',
       website: '',
       linkedin: '',
+      address: '',
       city: '',
-      adress: '',
-      postal_code: '',
-    }),
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
+      postal_code: ''
+    })
+  }
 })
+
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 const form = props.modelValue
 
 const generalFields = {
-  name: 'Nom :',
+  name: 'Nom de l\'entreprise :',
   phone: 'N° de téléphone :',
   website: 'Site internet :',
   linkedin: 'LinkedIn :',
   address: 'Adresse :',
   city: 'Ville :',
-  postal_code: 'Code postal :',
+  postal_code: 'Code postal :'
 }
 
 function onSubmit() {
@@ -70,3 +59,16 @@ function onSubmit() {
   emit('submit')
 }
 </script>
+
+<style scoped>
+.btn-outline-primary {
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
+}
+</style>

@@ -53,6 +53,8 @@ class StudentController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
+            $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
+            
             return new JsonResponse([
                 'firstname'     => $student->getFirstname(),
                 'name'          => $student->getName(),
@@ -62,7 +64,7 @@ class StudentController extends AbstractController
                 'city'          => $student->getCity(),
                 'postal_code'   => $student->getPostalCode(),
                 'description'   => $student->getDescription(),
-                'photo'         => $student->getPhoto(),
+                'photo'         => $photoUrl,
                 'linkedin'      => $student->getLinkedin(),
                 'github'        => $student->getGithub(),
                 'cv'            => $student->getCv(),
@@ -183,13 +185,15 @@ class StudentController extends AbstractController
         if (!$student) {
             return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
         }
+        $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
+        
         return new JsonResponse([
             'id'            => $student->getId(),
             'firstname'     => $student->getFirstname(),
             'name'          => $student->getName(),
             'city'          => $student->getCity(),
             'description'   => $student->getDescription(),
-            'photo'         => $student->getPhoto(),
+            'photo'         => $photoUrl,
             'linkedin'      => $student->getLinkedin(),
             'github'        => $student->getGithub(),
             'cv'            => $student->getCv(),

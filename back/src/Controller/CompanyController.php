@@ -52,6 +52,8 @@ class CompanyController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
+            $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+            
             return new JsonResponse([
                 'name' => $company->getName(),
                 'phone_number' => $company->getPhoneNumber(),
@@ -59,15 +61,17 @@ class CompanyController extends AbstractController
                 'address' => $company->getAddress(),
                 'postal_code' => $company->getPostalCode(),
                 'linkedin' => $company->getLinkedin(),
+                'website' => $company->getWebsite(),
                 'description' => $company->getDescription(),
-                'industry' => $company->getIndustry()
+                'industry' => $company->getIndustry(),
+                'logo' => $logoUrl
             ]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
         }
     }
 
-    #[Route('/company/{name}', name: 'public_company_profile', methods: ['GET'])]
+    #[Route('/company/{id<\d+>}', name: 'public_company_profile', methods: ['GET'])]
     public function publicCompanyProfile(string $name, CompanyService $companyService): JsonResponse
     {
         $company = $companyService->getCompanyByName($name);
@@ -76,15 +80,19 @@ class CompanyController extends AbstractController
             return new JsonResponse(null, 204);
         }
 
+        $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+        
         return new JsonResponse([
             'name' => $company->getName(),
             'phone_number' => $company->getPhoneNumber(),
             'city' => $company->getCity(),
             'address' => $company->getAddress(),
             'postal_code' => $company->getPostalCode(),
+            'website' => $company->getWebsite(),
             'linkedin' => $company->getLinkedin(),
             'description' => $company->getDescription(),
-            'industry' => $company->getIndustry()
+            'industry' => $company->getIndustry(),
+            'logo' => $logoUrl
         ]);
     }
 

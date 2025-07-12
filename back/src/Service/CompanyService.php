@@ -34,7 +34,9 @@ class CompanyService
         $company->setWebsite($data['website'] ?? null);
         $company->setLinkedin($data['linkedin'] ?? null);
         $company->setLogo($data['logo'] ?? null);
-        $company->setIndustry($data['industry'] ?? null);
+        if (isset($data['industry'])) {
+            $company->setIndustry($data['industry']);
+        }
         $company->setCity($data['city'] ?? null);
         $company->setAddress($data['address'] ?? null);
         $company->setPostalCode($data['postal_code'] ?? null);
@@ -55,6 +57,11 @@ class CompanyService
     public function getCompanyByName(string $name): ?Company
     {
         return $this->companyRepository->findOneBy(['name' => $name]);
+    }
+
+    public function getAllCompanies(): array
+    {
+        return $this->companyRepository->findAll();
     }
 
 }
