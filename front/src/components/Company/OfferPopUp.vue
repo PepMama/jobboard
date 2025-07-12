@@ -2,14 +2,14 @@
   <div class="popup-backdrop" @click.self="$emit('close')">
     <div class="popup">
       <button @click="$emit('close')" class="btn-close"></button>
-      <h1>{{ offer.company?.name }}</h1>
+      <h1 >{{ offer.company?.name }}</h1>
       <h2>{{ offer.title }}</h2>
-      <p><strong>Description :</strong> <br />{{ offer.description }}</p>
-      <p><strong>Contrat :</strong> {{ offer.contractType }}</p>
-      <p><strong>Salaire :</strong> {{ offer.salary ?? 'Non précisé' }}</p>
-      <p><strong>Ville :</strong> {{ offer.city ?? 'Non précisé' }}</p>
-      <p><strong>Télétravail :</strong> {{ offer.remote ? 'Oui' : 'Non' }}</p>
-      <p><strong>Date de début :</strong> {{ formatDate(offer.startDate) }}</p>
+      <p><strong class="section-title">Description :</strong> <br />{{ offer.description }}</p>
+      <p><strong class="section-title">Contrat :</strong> {{ offer.contractType }}</p>
+      <p><strong class="section-title">Salaire :</strong> {{ offer.salary ?? 'Non précisé' }}</p>
+      <p><strong class="section-title">Ville :</strong> {{ offer.city ?? 'Non précisé' }}</p>
+      <p><strong class="section-title">Télétravail :</strong> {{ offer.remote ? 'Oui' : 'Non' }}</p>
+      <p><strong class="section-title">Date de début :</strong> {{ formatDate(offer.startDate) }}</p>
     </div>
   </div>
 </template>
@@ -29,29 +29,54 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-weight: 700;
-}
 .popup-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 50;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: #64748b;
+}
+.popup {
+  background: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
-.popup {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 1000px;
-  width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+.btn-close:hover {
+  color: #000;
+}
+
+h1, h2, p {
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #1e293b;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .btn-close {
@@ -64,6 +89,6 @@ h1 {
   cursor: pointer;
   width: 2%;
   position: absolute;
-  right: 30rem;
+  right: 2rem;
 }
 </style>
