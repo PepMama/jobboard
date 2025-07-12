@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity(repositoryClass: StudentRepositoy::class)]
+#[ORM\Entity(repositoryClass: StudentRepository::class)]
 #[ORM\Table(name: "Students")]
 class Student
 {

@@ -59,7 +59,7 @@ class StudentService
 
         return $student;
     }
-   public function getStudentsForCompany(?string $keyword, ?string $city, ?string $degree, ?string $fieldOfStudy): array
+   public function getStudentsForCompany(?string $keyword, ?string $city, ?string $degree, ?string $fieldOfStudy, ?int $companyId = null): array
     {
         $qb = $this->em
         ->getRepository(Student::class)
@@ -85,6 +85,15 @@ class StudentService
         if ($fieldOfStudy) {
             $qb->andWhere('e.fieldOfStudy = :fieldOfStudy')
                 ->setParameter('fieldOfStudy', $fieldOfStudy);
+        }
+        if ($companyId !== null) {
+            $subQb = $this->em->createQueryBuilder()
+                ->select('IDENTITY(ls.student)')
+                ->from('App\Entity\LikesStudent', 'ls')
+                ->where('ls.company = :companyId');
+
+            $qb->andWhere($qb->expr()->notIn('s.id', $subQb->getDQL()))
+            ->setParameter('companyId', $companyId);
         }
 
         $students = $qb->getQuery()->getResult();

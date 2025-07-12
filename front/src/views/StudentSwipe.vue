@@ -134,24 +134,24 @@ export default {
         this.currentIndex++
       }
     },
-    // async contactStudent(studentId) {
-    //   const token = localStorage.getItem('token')
-    //   try {
-    //     const response = await fetch(`http://localhost:8000/company/contact-student/${studentId}`, {
-    //       method: 'POST',
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'application/json'
-    //       }
-    //     })
-    //     if (!response.ok) {
-    //       const text = await response.text()
-    //       console.error('Erreur contact :', response.status, text)
-    //     }
-    //   } catch (err) {
-    //     console.error('Erreur réseau contact :', err.message)
-    //   }
-    // },
+    async contactStudent(studentId) {
+      const token = localStorage.getItem('token')
+      try {
+        const response = await fetch(`https://localhost:8000/company/contact-student/${studentId}`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (!response.ok) {
+          const text = await response.text()
+          console.error('Erreur contact :', response.status, text)
+        }
+      } catch (err) {
+        console.error('Erreur réseau contact :', err.message)
+      }
+    },
     openPopup(student) {
       this.selectedStudent = student
       this.showPopup = true

@@ -100,7 +100,7 @@ class CompanyController extends AbstractController
     public function getStudentsForCompany(
         Request $request,
         StudentService $studentService,
-        // CompanyService $companyService,
+        CompanyService $companyService,
         TokenService $tokenService,
     ): JsonResponse {
         try {
@@ -108,19 +108,18 @@ class CompanyController extends AbstractController
             if (!$user) {
                 return new JsonResponse(['error' => 'Unauthorized'], 401);
             }
-            // $company = $companyService->getCompanyByUser($user);
+            $company = $companyService->getCompanyByUser($user);
             $keyword = $request->query->get('keyword'); 
             $city = $request->query->get('city');
             $degree = $request->query->get('degree');
             $fieldOfStudy = $request->query->get('fieldOfStudy');
-            $students = $studentService->getStudentsForCompany($keyword, $city, $degree, $fieldOfStudy);
+            $students = $studentService->getStudentsForCompany($keyword, $city, $degree, $fieldOfStudy, $company->getId());
 
             if (empty($students)) {
             return new JsonResponse([], 200);
         }
 
-        $studentArray = array_map(fn($s) => $s->toArray(), $students);
-        return new JsonResponse($studentArray, 200);
+       return $this->json($students);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }

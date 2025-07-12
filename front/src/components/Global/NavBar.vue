@@ -63,7 +63,7 @@ const studentMenu = [
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
-  { nom: 'Mes candidats', icone: Briefcase, url: 'company/candidates' },
+  { nom: 'Mes candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes/offers' },
 ]
 

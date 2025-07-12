@@ -91,9 +91,6 @@ const router = createRouter({
       component: Candidates,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
-
-
-    
   ],
 })
 

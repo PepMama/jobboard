@@ -68,7 +68,7 @@ async function submitForm() {
   }
 
   console.log('Envoi des données du formulaire:', payload);
-  const res = await fetch('http://localhost:8000/company/profile', {
+  const res = await fetch('https://localhost:8000/company/profile', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
     body: JSON.stringify(payload),
