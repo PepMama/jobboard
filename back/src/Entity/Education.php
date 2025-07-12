@@ -78,4 +78,11 @@ class Education
         $this->student = $student;
         return $this;
     }
+    public function toArray(): array {
+    return [
+        'degree' => $this->getDegree(),
+        'fieldOfStudy' => $this->getFieldOfStudy(),
+    ];
+}
+
 }

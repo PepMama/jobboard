@@ -63,7 +63,8 @@ const studentMenu = [
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
-  { nom: 'Mes offres', icone: Briefcase, url: 'dashboard/company' },
+  { nom: 'Mes candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
+  { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes' },
 ]
 
 const role = authStore.role || localStorage.getItem('role')

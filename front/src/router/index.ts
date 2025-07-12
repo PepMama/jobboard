@@ -10,6 +10,7 @@ import OfferSwipe from '@/views/OfferSwipe.vue'
 import { useAuthStore } from '@/stores/auth'
 import PublicCompany from '@/views/PublicCompany.vue'
 import PublicStudent from '@/views/PublicStudent.vue'
+import Candidates from '@/views/StudentSwipe.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,15 @@ const router = createRouter({
       component: PublicStudent,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
+    {
+      path: '/dashboard/company/candidates',
+      name: 'CandidatesSwipe',
+      component: Candidates,
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
+
+
+    
   ],
 })
 

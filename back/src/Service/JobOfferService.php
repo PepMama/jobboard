@@ -171,7 +171,6 @@ class JobOfferService
                     'logo' => $company->getLogo(),
                 ]
             ];
-             dump($offer->getStartDate()); 
         }, $offers);
     }
 

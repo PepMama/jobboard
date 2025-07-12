@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use App\Service\CompanyService;
-use App\Service\TokenService;
 use App\Entity\Users;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Attribute\Route;
+use App\Service\TokenService;
+use App\Service\CompanyService;
+use App\Service\StudentService;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CompanyController extends AbstractController
 {
@@ -84,5 +86,35 @@ class CompanyController extends AbstractController
             'description' => $company->getDescription(),
             'industry' => $company->getIndustry()
         ]);
+    }
+
+    #[Route('/company/students', name: 'app_company_students', methods: ['GET'])]
+    public function getStudentsForCompany(
+        Request $request,
+        StudentService $studentService,
+        // CompanyService $companyService,
+        TokenService $tokenService,
+    ): JsonResponse {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if (!$user) {
+                return new JsonResponse(['error' => 'Unauthorized'], 401);
+            }
+            // $company = $companyService->getCompanyByUser($user);
+            $keyword = $request->query->get('keyword'); 
+            $city = $request->query->get('city');
+            $degree = $request->query->get('degree');
+            $fieldOfStudy = $request->query->get('fieldOfStudy');
+            $students = $studentService->getStudentsForCompany($keyword, $city, $degree, $fieldOfStudy);
+
+            if (empty($students)) {
+            return new JsonResponse([], 200);
+        }
+
+        $studentArray = array_map(fn($s) => $s->toArray(), $students);
+        return new JsonResponse($studentArray, 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
     }
 }

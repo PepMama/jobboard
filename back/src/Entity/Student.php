@@ -338,4 +338,22 @@ class Student
         $this->user = $user;
         return $this;
     }
+
+   public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstname(),
+            'lastName' => $this->getName(),
+            'city' => $this->getCity(),
+            'description' => $this->getDescription(),
+            'educations' => array_map(fn($edu) => [
+                'degree' => $edu->getDegree(),
+                'fieldOfStudy' => $edu->getFieldOfStudy(),
+            ], $this->getEducations()->toArray()),
+        ];
+    }
+
+
+
 }

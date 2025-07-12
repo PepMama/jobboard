@@ -7,7 +7,6 @@
       <!-- Filtres -->
       <div class="filters">
         <div class="input-with-icon">
-          <!-- Loupe -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon"
@@ -32,7 +31,6 @@
         </div>
 
         <div class="input-with-icon">
-          <!-- Épingle -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon"
@@ -159,15 +157,15 @@ export default {
       const cards = []
 
       if (this.hasSwipedOnce && this.offers[this.currentIndex - 1]) {
-        cards.push(this.offers[this.currentIndex - 1]) // prev
+        cards.push(this.offers[this.currentIndex - 1])
       }
 
       if (this.offers[this.currentIndex]) {
-        cards.push(this.offers[this.currentIndex]) // current
+        cards.push(this.offers[this.currentIndex])
       }
 
       if (this.offers[this.currentIndex + 1]) {
-        cards.push(this.offers[this.currentIndex + 1]) // next
+        cards.push(this.offers[this.currentIndex + 1]) 
       }
 
       return cards
@@ -189,7 +187,7 @@ export default {
       if (this.cityFilter) params.append('city', this.cityFilter)
 
       try {
-        const response = await fetch(`http://localhost:8000/student/offers?${params.toString()}`, {
+        const response = await fetch(`https://localhost:8000/student/offers?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -257,11 +255,11 @@ h1 {
   margin-bottom: 3%;
   color: #5651abd9;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
 }
 
 .offer-title {
-  margin-top: 4%;
+  margin-top: 2%;
   font-size: 2rem;
   font-weight: 700;
   color: #2d2d2d;
@@ -309,23 +307,23 @@ input::placeholder {
 
 .filters {
   display: flex;
-  gap: 1rem;
   margin: auto;
   margin-bottom: 1rem;
   border-radius: 50px;
 }
 .filter-input {
-  width: 100%;
   padding: 10px 12px 10px 40px;
   font-size: 16px;
-  border : 1px solid #ccc;
+  border : none;
   border-radius: 50px;
 }
 
 .input-with-icon {
   position: relative;
-  width: 95%;
+  margin:auto;
+  width: 40%;
 }
+
 
 .input-with-icon .icon {
   position: absolute;
@@ -344,8 +342,8 @@ input::placeholder {
 }
 
 .card {
-  width: 50rem;
-  height: 35rem;
+  width: 45rem;
+  height: 30rem;
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
