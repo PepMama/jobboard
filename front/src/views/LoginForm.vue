@@ -170,7 +170,6 @@ h1{
   padding-left: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  border: 2px solid #ddd;
   border-radius: 1rem;
   font-size: 1rem;
   background-color: #ffffff;
