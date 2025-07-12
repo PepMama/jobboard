@@ -27,12 +27,6 @@ const degreeOptions = [
   { value: 'BAC +3', label: 'BAC +3' },
   { value: 'BAC +4', label: 'BAC +4' },
   { value: 'BAC +5', label: 'BAC +5' },
-  { value: 'BTS', label: 'BTS' },
-  { value: 'DUT', label: 'DUT' },
-  { value: 'BUT', label: 'BUT' },
-  { value: 'Bachelor', label: 'Bachelor' },
-  { value: 'Licence', label: 'Licence' },
-  { value: 'Master', label: 'Master' },
 ]
 
 const fieldOfStudyOptions = [

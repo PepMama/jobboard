@@ -29,12 +29,35 @@
         </div>
 
 
-        <div class="input-with-icon">
+        <!-- <div class="input-with-icon">
            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 7h7l3 3 3-3h7v13H2z" />
             <line x1="12" y1="10" x2="12" y2="20" />
           </svg>
           <input v-model="fieldOfStudyFilter" @input="fetchStudents" placeholder="Domaine d'étude" class="filter-input" />
+        </div> -->
+
+        <div class="input-with-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 7h7l3 3 3-3h7v13H2z" />
+            <line x1="12" y1="10" x2="12" y2="20" />
+          </svg>
+          <select v-model="fieldOfStudyFilter" @change="fetchStudents" class="filter-input">
+            <option value="" disabled selected>Domaine d'étude</option>
+            <option value="">-- Aucun --</option>
+            <option>Informatique & Numérique</option>
+            <option>Santé & Médecine</option>
+            <option>Commerce, Management & Marketing</option>
+            <option>Ingénierie & Sciences de l’Industrie</option>
+            <option>Droit</option>
+            <option>Sciences Économiques & Gestion</option>
+            <option>Sciences Politiques & Relations Internationales</option>
+            <option>Architecture & Urbanisme</option>
+            <option>Sciences Sociales & Psychologie</option>
+            <option>Arts, Design & Communication Visuelle</option>
+            <option>Agriculture</option>
+            <option>Electromécanique</option>
+          </select>
         </div>
 
 
@@ -43,9 +66,16 @@
             <path d="M22 12l-10 7-10-7 10-7 10 7z" />
             <path d="M2 12v5a10 10 0 0 0 20 0v-5" />
           </svg>
-          <input v-model="degreeFilter" @input="fetchStudents" placeholder="Diplôme" class="filter-input" />
+          <select v-model="degreeFilter" @change="fetchStudents" class="filter-input">
+            <option value="" disabled selected>Diplôme</option>
+            <option value="">-- Aucun --</option>
+            <option>BAC +1</option>
+            <option>BAC +2</option>
+            <option>BAC +3</option>
+            <option>BAC +4</option>
+            <option>BAC +5</option>
+          </select>
         </div>
-
       </div>
 
       <div class="carousel">
@@ -284,18 +314,40 @@ input::placeholder {
   margin-bottom: 1rem;
   border-radius: 50px;
 }
+
 .filter-input {
-  padding: 10px 12px 10px 40px;
-  font-size: 16px;
+  width: 100%;
+  padding: 8px 12px 8px 36px; 
+  font-size: 1rem;
+  border: 1px solid #ccc;
   border : none;
   border-radius: 50px;
-}
+
+  background-color: #fff;
+ appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out;
+} 
 
 .input-with-icon {
   position: relative;
   margin:auto;
   width: 40%;
+  min-width: 200px;
   max-width: 400px;
+}
+.input-with-icon select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  padding-right: 36px; 
+}
+ .filter-input:focus {
+  border-color: #0d6efd; 
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
 }
 
 .input-with-icon .icon {
@@ -305,6 +357,7 @@ input::placeholder {
   transform: translateY(-50%);
   pointer-events: none;
 }
+
 
 .carousel {
   display: flex;

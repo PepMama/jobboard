@@ -44,7 +44,7 @@ watch(() => props.modelValue, (newVal) => {
 
 .form-label {
   font-weight: 600;
-  color: #222222; /* texte foncé */
+  color: #222222; 
   font-size: 1rem;
   display: block;
   margin-bottom: 0.4rem;
@@ -55,8 +55,8 @@ watch(() => props.modelValue, (newVal) => {
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  color: #212529; /* texte standard */
-  background-color: #f8f9fa; /* fond clair légèrement gris */
+  color: #212529; 
+  background-color: #f8f9fa; 
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.375rem;
@@ -65,7 +65,7 @@ watch(() => props.modelValue, (newVal) => {
 }
 
 .form-select:focus {
-  border-color: #0d6efd; /* couleur bootstrap bleu */
+  border-color: #0d6efd; 
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
   background-color: #fff;
@@ -77,12 +77,11 @@ watch(() => props.modelValue, (newVal) => {
   background-color: white;
 }
 
-/* Placeholder option style */
 .form-select option[disabled] {
-  color: #6c757d; /* texte gris pour placeholder */
+  color: #6c757d; 
 }
 
-/* Large select modifier */
+
 .form-select-lg {
   font-size: 1.125rem;
   padding: 0.75rem 1rem;
