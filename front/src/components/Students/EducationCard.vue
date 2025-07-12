@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { Trash2 } from 'lucide-vue-next'
 import type { Education } from '@/types/student'
+import SelectField from '@/components/Students/SelectField.vue'
 
 const props = defineProps<{ educations?: Education[] }>()
 const emit = defineEmits<{ (e: 'changed'): void }>()
@@ -20,10 +21,41 @@ const fmt = (v?: string) => (v ? v.slice(0, 10) : '…')
 const reset = () =>
   (draft.value = { schoolName: '', degree: '', fieldOfStudy: '', startDate: '', endDate: '' })
 
+const degreeOptions = [
+  { value: 'BAC +1', label: 'BAC +1' },
+  { value: 'BAC +2', label: 'BAC +2' },
+  { value: 'BAC +3', label: 'BAC +3' },
+  { value: 'BAC +4', label: 'BAC +4' },
+  { value: 'BAC +5', label: 'BAC +5' },
+  { value: 'BTS', label: 'BTS' },
+  { value: 'DUT', label: 'DUT' },
+  { value: 'BUT', label: 'BUT' },
+  { value: 'Bachelor', label: 'Bachelor' },
+  { value: 'Licence', label: 'Licence' },
+  { value: 'Master', label: 'Master' },
+]
+
+const fieldOfStudyOptions = [
+  { value: 'Informatique & Numérique', label: 'Informatique & Numérique' },
+  { value: 'Santé & Médecine', label: 'Santé & Médecine' },
+  { value: 'Commerce', label: 'Commerce' },
+  { value: 'Management & Marketing', label: 'Management & Marketing' },
+  { value: 'Ingénierie & Sciences de l’Industrie', label: 'Ingénierie & Sciences de l’Industrie' },
+  { value: 'Droit', label: 'Droit' },
+  { value: 'Sciences Économiques & Gestion', label: 'Sciences Économiques & Gestion' },
+  { value: 'Sciences Politiques & Relations Internationales', label: 'Sciences Politiques & Relations Internationales' },
+  { value: 'Architecture & Urbanisme', label: 'Architecture & Urbanisme' },
+  { value: 'Sciences Sociales & Psychologie', label: 'Sciences Sociales & Psychologie' },
+  { value: 'Arts, Design & Communication Visuelle', label: 'Arts, Design & Communication Visuelle' },
+  { value: 'Agriculture', label: 'Agriculture' },
+  { value: 'Electromécanique', label: 'Electromécanique' },
+]
+
+
 async function save() {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch('http://localhost:8000/student/manage-education', {
+  await fetch('https://localhost:8000/student/manage-education', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify(draft.value),
@@ -35,7 +67,7 @@ async function save() {
 async function del(id: number) {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch(`http://localhost:8000/student/delete-education/${id}`, {
+  await fetch(`https://localhost:8000/student/delete-education/${id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   }).then((r) => r.ok && emit('changed'))
@@ -94,11 +126,19 @@ async function del(id: number) {
               class="form-control mb-2"
               placeholder="Établissement"
             />
-            <input v-model="draft.degree" class="form-control mb-2" placeholder="Diplôme" />
-            <input
+
+            <SelectField
+              v-model="draft.degree"
+              :options="degreeOptions"
+              label="Diplôme"
+              placeholder="Choisissez un diplôme"
+            />
+
+            <SelectField
               v-model="draft.fieldOfStudy"
-              class="form-control mb-2"
-              placeholder="Spécialité"
+              :options="fieldOfStudyOptions"
+              label="Domaine d'étude"
+              placeholder="Choisissez un domaine d'étude"
             />
             <input v-model="draft.startDate" type="date" class="form-control mb-2" />
             <input v-model="draft.endDate" type="date" class="form-control mb-2" />
