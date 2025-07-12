@@ -348,13 +348,14 @@ class Student
             'lastName' => $this->getName(),
             'city' => $this->getCity(),
             'description' => $this->getDescription(),
+            'LinkedIn'=> $this->getLinkedin(),
+            'Github'=> $this->getGithub(),
+            'CV'=> $this->getCv(),
             'educations' => array_map(fn($edu) => [
                 'degree' => $edu->getDegree(),
                 'fieldOfStudy' => $edu->getFieldOfStudy(),
             ], $this->getEducations()->toArray()),
+            'skills' => array_map(fn($comp) => $comp->getName(), $this->getCompetencies()->toArray()), 
         ];
     }
-
-
-
 }

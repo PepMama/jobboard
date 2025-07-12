@@ -74,17 +74,17 @@ class StudentService
 
         if ($city) {
             $qb->andWhere('s.city = :city')
-                ->setParameter('city', $city);
+                ->setParameter('city', $city );
         }
 
         if ($degree) {
-            $qb->andWhere('e.degree = :degree')
-                ->setParameter('degree', $degree);
+            $qb->andWhere('e.degree LIKE :degree')
+                ->setParameter('degree', '%' . $degree . '%');
         }
 
         if ($fieldOfStudy) {
-            $qb->andWhere('e.fieldOfStudy = :fieldOfStudy')
-                ->setParameter('fieldOfStudy', $fieldOfStudy);
+            $qb->andWhere('e.fieldOfStudy LIKE :fieldOfStudy')
+                ->setParameter('fieldOfStudy', '%' . $fieldOfStudy . '%');
         }
         if ($companyId !== null) {
             $subQb = $this->em->createQueryBuilder()

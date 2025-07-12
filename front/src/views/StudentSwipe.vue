@@ -1,6 +1,11 @@
 <template>
   <div class="offer-swipe-layout">
     <Sidebar :visible="true"/>
+    <StudentPopup
+      v-if="showPopup"
+      :student="selectedStudent"
+      @close="closePopup"
+    />
     <div class="main-content">
       <PageHeader title="Candidats" @toggle-sidebar="showSidebar = true" />
       <h1>Trouvez votre candidat idéal</h1>
@@ -23,15 +28,31 @@
           <input v-model="cityFilter" @input="fetchStudents" placeholder="Ville" class="filter-input" />
         </div>
 
-        <input v-model="fieldOfStudyFilter" @input="fetchStudents" placeholder="Domaine d'étude" class="filter-input" />
-        <input v-model="degreeFilter" @input="fetchStudents" placeholder="Diplôme" class="filter-input" />
+
+        <div class="input-with-icon">
+           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 7h7l3 3 3-3h7v13H2z" />
+            <line x1="12" y1="10" x2="12" y2="20" />
+          </svg>
+          <input v-model="fieldOfStudyFilter" @input="fetchStudents" placeholder="Domaine d'étude" class="filter-input" />
+        </div>
+
+
+        <div class="input-with-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="25" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12l-10 7-10-7 10-7 10 7z" />
+            <path d="M2 12v5a10 10 0 0 0 20 0v-5" />
+          </svg>
+          <input v-model="degreeFilter" @input="fetchStudents" placeholder="Diplôme" class="filter-input" />
+        </div>
+
       </div>
 
-      <!-- Carrousel de candidats -->
       <div class="carousel">
         <div v-for="(student, index) in visibleCards" :key="student.id || index" class="card" :class="{
           'card-center': student.id === students[currentIndex]?.id,
-          'card-side': student.id !== students[currentIndex]?.id
+          'card-side': student.id !== students[currentIndex]?.id,
+           'card-zoom-in': index === zoomIndex
         }">
           <div v-if="student.id === students[currentIndex]?.id" class="card-buttons">
             <div class="view-offer-container">
@@ -47,12 +68,10 @@
           </div>
         </div>
       </div>
-
       <div class="swipeButton">
         <button @click="swipeLeft" class="btn-swipe-left">Passer</button>
         <button @click="swipeRight" class="btn-swipe-right">Contacter</button>
       </div>
-
       <div v-if="students.length === 0" class="empty-message">Aucun candidat trouvé.</div>
     </div>
   </div>
@@ -61,9 +80,11 @@
 <script>
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
+import StudentPopup from '@/components/Students/StudentPopup.vue'
+
 
 export default {
-  components: { Sidebar, PageHeader },
+  components: { Sidebar, PageHeader, StudentPopup },
   data() {
     return {
       students: [],
@@ -74,7 +95,8 @@ export default {
       degreeFilter: '',
       hasSwipedOnce: false,
       showPopup: false,
-      selectedStudent: null
+      selectedStudent: null,
+      zoomIndex: null,
     }
   },
   computed: {
@@ -96,6 +118,12 @@ export default {
     this.fetchStudents()
   },
   methods: {
+    triggerZoom(index) {
+    this.zoomIndex = index;
+    setTimeout(() => {
+      this.zoomIndex = null;  
+    }, 500); 
+  },
     async fetchStudents() {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -131,6 +159,7 @@ export default {
       const currentStudent = this.students[this.currentIndex]
       if (currentStudent) {
         await this.contactStudent(currentStudent.id)
+         this.triggerZoom(1);
         this.currentIndex++
       }
     },
@@ -167,7 +196,7 @@ export default {
 h1 {
   text-align: center;
   margin-bottom: 3%;
-  color: #5651abd9;
+  color: #5a189a ;
   font-weight: 600;
   font-size: 1.1rem;
 }
@@ -221,6 +250,7 @@ input::placeholder {
 
 .filters {
   display: flex;
+  gap: 1rem;
   margin: auto;
   margin-bottom: 1rem;
   border-radius: 50px;
@@ -236,8 +266,8 @@ input::placeholder {
   position: relative;
   margin:auto;
   width: 40%;
+  max-width: 400px;
 }
-
 
 .input-with-icon .icon {
   position: absolute;
@@ -367,7 +397,7 @@ input::placeholder {
 }
 .btn-view-offer {
   margin-top: 1rem;
-  background: linear-gradient(to bottom, #9e97f3, #5651ab);
+  background: linear-gradient(to bottom, #9e97f3, #5a189a );
   color: white;
   border: none;
   padding: 0.4rem 1rem;
