@@ -33,7 +33,7 @@ async function fetchStudentProfile() {
   const t = localStorage.getItem('token')
   if (!t) return
 
-  const prof = await fetch('http://localhost:8000/student/profile', {
+  const prof = await fetch('https://localhost:8000/student/profile', {
     headers: { Authorization: `Bearer ${t}` },
   })
 
@@ -53,12 +53,12 @@ async function fetchStudentProfile() {
     avatar.value = d.photo ?? avatar.value
   }
 
-  const exp = await fetch('http://localhost:8000/student/experiences', {
+  const exp = await fetch('https://localhost:8000/student/experiences', {
     headers: { Authorization: `Bearer ${t}` },
   })
   experiences.value = exp.ok ? await exp.json() : []
 
-  const eduRes = await fetch('http://localhost:8000/student/educations', {
+  const eduRes = await fetch('https://localhost:8000/student/educations', {
     headers: { Authorization: `Bearer ${t}` },
   })
   educations.value = eduRes.ok ? await eduRes.json() : []
@@ -81,7 +81,7 @@ async function submitForm() {
     github: formData.github,
     cv: formData.cv,
   }
-  const res = await fetch('http://localhost:8000/student/manage-profile', {
+  const res = await fetch('https://localhost:8000/student/manage-profile', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

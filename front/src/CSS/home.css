@@ -56,7 +56,7 @@
   top: 17%;
   right: 2rem;
   transform: translateY(-50%);
-  color: #5651ab ;
+  color: #5a189a ;
   font-size: 3.5rem;
   text-align: right;
   padding: 1.5rem 1rem;
@@ -64,7 +64,7 @@
 .dancingscript {
   font-family: 'Dancing Script', cursive;
   font-size: 4.5rem;
-  color: #5651ab ;
+  color: #5a189a ;
   font-weight: 700;
 }
 
@@ -111,21 +111,21 @@ img {
 }
 
 .btn-outline {
-  border: 1px solid #5651ab ;
+  border: 1px solid #5a189a ;
   background-color: transparent;
-  color: #5651ab 1;
+  color: #5a189a;
   padding: 0.5rem 1rem;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .btn-outline:hover {
-  background-color: #5651ab ;
+  background-color: #5a189a;
   color: white;
 }
 
 .btn-filled {
-  background-color: #5651ab ;
+  background-color: #5a189a;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -212,7 +212,7 @@ img {
 }
 
 .profile-btn {
-  background-color: #5651ab ;
+  background-color: #5a189a ;
   color: white;
   border: none;
   border-radius: 10px;
@@ -366,7 +366,7 @@ p {
   font-size: 1.5rem;
 }
 .footer {
-  background-color: #f2f2f2; /* gris clair */
+  background-color: #f2f2f2;
   padding: 2rem 1rem;
   text-align: center;
   font-size: 1rem;
@@ -394,7 +394,7 @@ p {
 }
 
 .footer-links a:hover {
-  color: #732d91;
+  color: #5a189a;
 }
 
 .footer-copy {

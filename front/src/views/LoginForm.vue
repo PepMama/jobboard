@@ -1,87 +1,61 @@
 <template>
-  <div class="login-form-container">
-    <div class="logo" :style="`background-image: url(${logo}); background-size: cover;`"></div>
-    <div class="min-h-screen flex">
-      <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
-        <div class="p-8 rounded shadow-md w-full max-w-md">
-          <h2 class="login-title">Connexion</h2>
-          <form @submit.prevent="handleLogin">
-            <label for="email">Adresse e-mail</label>
-            <div class="mb-4">
-              <input
-                v-model="form.email"
-                type="email"
-                class="email"
-                placeholder="Ex: utilisateur@exemple.com"
-                required
-              />
-            </div>
-
-            <label for="password">Mot de passe</label>
-            <div class="mb-4 password-wrapper">
-              <input
-                :type="showPassword ? 'text' : 'password'"
-                v-model="form.password"
-                class="password"
-                required
-              />
-              <span class="toggle-password" @click="showPassword = !showPassword">
-                <svg
-                  v-if="showPassword"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"
-                  />
-                  <path d="M12 9c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z" />
-                </svg>
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 5c-7 0-10 7-10 7s3 7 10 7c2.5 0 4.6-1 6.2-2.3l1.8 1.8 1.4-1.4-18-18-1.4 1.4 3.2 3.2c-1.3.9-2.3 2-3.2 3.3 0 0 3 7 10 7 1.6 0 3.2-.4 4.5-1l1.5 1.5c-1.8 1.1-4 1.5-6 1.5-7 0-10-7-10-7s3-7 10-7c2.2 0 4.2.6 6 1.5l-1.5 1.5c-1.3-.6-2.9-1-4.5-1z"
-                  />
-                </svg>
-              </span>
-            </div>
-            <button type="submit" class="login-button">Se connecter</button>
-            <div class="mb-2 text-right">
-              <a href="/reset-password" class="forgot-password">Mot de passe oublié ?</a>
-            </div>
-            <div class="mb-2 text-right">
-              <a href="/" class="register">Vous n'êtes pas encore inscrit? Inscrivez-vous</a>
-            </div>
-          </form>
+  <div class="login-wrapper">
+    <div class="login-left">
+      <img :src="altmatch" alt="altmatch" class="login-logo" />
+      <h1>Bienvenue !</h1>
+        <h2 class="login-title">Connectez vous</h2>
+        <form @submit.prevent="handleLogin">
+          <input type="email" class="email" placeholder="Email" v-model="email" required />
+          <div class="password-wrapper">
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              class="password"
+              placeholder="Mot de passe"
+              v-model="password"
+              required
+            />
+            <span class="toggle-password" @click="togglePassword">
+              <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </span>
+          </div>
+          <router-link to="/resetPassword" class="forgot-password">Mot de passe oublié ?</router-link><br />
+          <button type="submit" class="login-button">Connexion</button>
+        </form>
+        <div class="text-right">
+          
+          <span>Pas encore inscrit ?</span> 
+          <router-link to="/register" class="register">  Créez un compte</router-link>
         </div>
+    </div>
+
+    <div class="login-right">
+      <img src="../assets/login.svg" alt="Illustration de connexion" class="login-image" />
+      <div class="illustration-credit">
+        <a href="https://storyset.com/online" target="_blank" rel="noopener">Online illustrations by Storyset</a>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
-import loginImg from '../assets/login.svg'
-import logo from '../assets/logo.png'
-import { reactive } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import altmatch from '../assets/altmatch.png'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const email = ref('')
+const password = ref('')
 
-const form = reactive({
-  email: '',
-  password: '',
-})
-
-const handleLogin = async () => {
+  const handleLogin = async () => {
   const payload = {
-    email: form.email,
-    password: form.password,
+    email: email.value,
+    password: password.value
   }
 
   try {
@@ -110,109 +84,201 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.login-form-container {
-  display: flex;
-  flex-direction: column;
-  background-color: #e2eee4;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 4rem;
-  margin: 10% 0% 0% 30%;
-  position: relative;
-  border-radius: 10px 10px 10px 10px;
-  width: 40%;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
-.login-title {
-  color: rgb(39, 38, 38);
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-  margin-left: 40%;
+h1{
+  letter-spacing: 0.5px;
+  font-size: 3rem;
   font-weight: 700;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
-}
-.loginImg {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px 0px 0px 10px;
-  background-color: rgb(234, 233, 233);
-  margin-left: -40%;
-  width: 100%;
+   color: #5a189a;
 }
 
-.login-input {
-  background-color: #eee;
-  border-radius: 5px;
-  padding: 10px;
+.login-title {
+  font-size: 1.5rem;
+  margin-top: 1%;
+  color: rgb(85, 85, 85);
+  margin-bottom: 5rem;
+  letter-spacing: 0.5px;
+}
+
+.email,
+.password {
+  width: 80%;
+  padding: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 1rem;
+  background-color: #ffffff;
   font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.email:focus,
+.password:focus {
+  border-color: #9d4edd;
+  box-shadow: 0 0 0 4px rgba(157, 78, 221, 0.2);
 }
 
 .login-button {
-  background-color: #8e44ad;
-  color: white;
-  font-weight: bold;
-  /* border-radius: 5px ; */
+  width: 50%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+  border: none;
+  border-radius: 1rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(123, 44, 191, 0.3);
 }
 
 .password-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
+  width: 80%;
+  margin-top: 2%;
+  margin-bottom: 1rem;
 }
 
-.password-wrapper input {
-  padding-right: 2.5rem;
+.password-wrapper input.password {
+  width: 100%; 
+  padding-right: 3rem; 
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 1rem;
+  font-size: 1rem;
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .toggle-password {
   position: absolute;
-  right: 10px;
+  right: 1rem; /* garde un peu d'espace du bord */
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #555;
-  height: 20px;
-  width: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #bbb;
+  transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #7b2cbf;
 }
 
 .toggle-password svg {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.2s ease;
+  width: 22px;
+  height: 22px;
 }
 
-.toggle-password:hover svg {
-  transform: scale(1.1);
-  color: #8e44ad;
-}
-.forgot-password {
-  font-weight: 500;
-}
-.register {
-  font-weight: 500;
-}
 .text-right {
-  margin-top: 2%;
+  text-align: left;
+  margin-top: 5rem;
 }
 
 .text-right a {
+  margin-left: 10px;
   text-decoration: none;
-  color: #555;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  margin-top: 0.3rem;
+  color:#7b2cbf;
+}
+ .forgot-password{
+  margin-top: 10%;
+  margin-left: 60%;
+  text-decoration: none;
+  color:rgb(156, 156, 156);
+  font-size: 0.95rem;
+  font-weight: 600;
+ }
+ .forgot-password:hover{
+  color: #7b2cbf;
+ }
+
+.register {
+  display: inline-block;
+  margin-top: 3rem;
+}
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f0ff;
 }
 
-.text-right a:hover {
-  color: #732d91;
-  transition: color 0.3s ease;
+.login-left,
+.login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.login-left {
+  background-color: #f8f9fc;
+  position: relative;
+}
+
+.login-logo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  width: 120px;
+  height: auto;
+}
+
+.login-right {
+  background-color: #7b2cbf;;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+.login-image {
+  max-width: 90%;
+  height: auto;
+}
+
+.illustration-credit {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #4b0082;
+}
+
+.illustration-credit a {
+  color: #4b0082;
+  text-decoration: none;
+}
+
+.illustration-credit a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-left {
+    margin: 10% 1rem;
+    padding: 2rem;
+  }
 }
 </style>
