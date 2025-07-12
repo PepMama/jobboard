@@ -54,10 +54,10 @@ function logout() {
 
 <style scoped>
 .icon-btn {
-  color: #5651ab;
+  color: #5a189a;
   transition: color 0.2s;
 }
 .icon-btn:hover {
-  color: #2d2a6e;
+  color: #891ef4;
 }
 </style>

@@ -73,7 +73,7 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 
 <style scoped>
 .bg-navbar {
-  background-color: #5651ab;
+  background-color: #5a189a;
   flex-direction: column;
   overflow: hidden;
 }
@@ -90,7 +90,7 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 .nav-link-custom:hover,
 .nav-link-custom:focus {
   background-color: #dfeafd !important;
-  color: #5651ab !important;
+  color: #5a189a !important;
   transform: scale(1.03);
   text-decoration: none;
 }
@@ -99,8 +99,8 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 }
 .btn-logout {
   background: #fff;
-  color: #5651ab;
-  border: 2px solid #5651ab;
+  color: #5a189a;
+  border: 2px solid #5a189a;
   border-radius: 8px;
   font-weight: 600;
   transition:
@@ -111,8 +111,8 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
 }
 .btn-logout:hover,
 .btn-logout:focus {
-  background: #5651ab;
+  background: #5a189a;
   color: #fff;
-  border-color: #5651ab;
+  border-color: #5a189a;
 }
 </style>
