@@ -60,4 +60,23 @@ function logout() {
 .icon-btn:hover {
   color: #891ef4;
 }
+
+@media (max-width: 992px) {
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .d-flex.align-items-center {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .d-flex.align-items-center > .ms-auto {
+    margin-left: 0 !important;
+    justify-content: center;
+  }
+}
+
 </style>

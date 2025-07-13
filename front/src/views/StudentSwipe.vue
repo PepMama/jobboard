@@ -1,6 +1,6 @@
 <template>
   <div class="offer-swipe-layout">
-    <Sidebar :visible="true"/>
+    <Sidebar/>
     <StudentPopup
       v-if="showPopup"
       :student="selectedStudent"
@@ -27,15 +27,6 @@
           </svg>
           <input v-model="cityFilter" @input="fetchStudents" placeholder="Ville" class="filter-input" />
         </div>
-
-
-        <!-- <div class="input-with-icon">
-           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 7h7l3 3 3-3h7v13H2z" />
-            <line x1="12" y1="10" x2="12" y2="20" />
-          </svg>
-          <input v-model="fieldOfStudyFilter" @input="fetchStudents" placeholder="Domaine d'étude" class="filter-input" />
-        </div> -->
 
         <div class="input-with-icon">
           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -94,7 +85,7 @@
           <div class="offer-details">
             <p><span class="icon-circle">🎓</span> {{ student.educations[0]?.degree || 'Diplôme inconnu' }}</p>
             <p><span class="icon-circle">📘</span> {{ student.educations[0]?.fieldOfStudy || 'Domaine inconnu' }}</p>
-            <p><span class="icon-circle">📝</span> {{ student.description || 'Pas de description' }}</p>
+            <p><span class="icon-circle">📝</span> {{ student.city || 'Pas de description' }}</p>
           </div>
         </div>
       </div>
@@ -261,7 +252,7 @@ h1 {
 }
 
 .offer-title {
-  margin-top: 2%;
+  margin-top: 4rem;
   font-size: 2rem;
   font-weight: 700;
   color: #2d2d2d;
@@ -501,4 +492,139 @@ input::placeholder {
   margin-top: 2%;
   gap: 2rem;
 }
+
+@media (max-width: 1024px) {
+  .carousel {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 22rem;
+    height: 26rem;
+  }
+
+  .input-with-icon {
+    width: 45%;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .swipeButton {
+    width: 60%;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .offer-details {
+    
+    font-size: 0.6rem;
+  }
+  .offer-title {
+    margin-top: 4rem;
+    font-size: 1rem;
+  }
+
+   .btn-view-offer {
+    width: 100%;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+    font-size: 0.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+   .btn-view-offer {
+    width: 100%;
+    font-size: 0.7rem;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+  }
+
+  .offer-swipe-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .input-with-icon {
+    width: 100%;
+  }
+
+  .carousel {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 90vw;
+    height: auto;
+  }
+
+  .card-side {
+    display: none !important;
+  }
+
+  .swipeButton {
+    flex-direction: column;
+    width: 90%;
+    margin-top: 1rem;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-swipe-left,
+  .btn-swipe-right {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1rem;
+  }
+
+  .offer-title {
+    font-size: 1.4rem;
+  }
+
+  .offer-company {
+    font-size: 1.2rem;
+  }
+
+  .offer-details {
+    font-size: 0.9rem;
+  }
+
+
+  .btn-view-offer {
+    width: 90%;
+    font-size: 0.9rem;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+    font-size: 0.5rem;
+  }
+}
+
 </style>

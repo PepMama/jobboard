@@ -188,9 +188,65 @@ h1{
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .login-left {
-    margin: 10% 1rem;
+@media (max-width: 992px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .login-left,
+  .login-right {
+    width: 100%;
     padding: 2rem;
+  }
+
+  .login-left {
+    order: 2;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login-logo {
+    position: static;
+    margin-bottom: 1.5rem;
+    width: 80px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  .login-title {
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+  }
+
+  .email,
+  .password-wrapper {
+    width: 100%;
+  }
+
+  .forgot-password {
+    margin-left: 0;
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .login-button {
+    width: 100%;
+  }
+
+  .text-right {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .register {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .login-right {
+    display: none;
   }
 }

@@ -82,10 +82,10 @@
 img {
   height: 100px;
   width: 100px;
-  margin-left: -145;
+  margin-left: 0;
 }
 
-/* Header */
+
 .header {
   position: fixed;
   top: 0;
@@ -400,4 +400,299 @@ p {
 .footer-copy {
   font-size: 0.9rem;
   color: #777;
+}
+
+
+@media (max-width: 1200px) {
+  .section-match {
+    padding: 2rem 4rem;
+  }
+
+  .student-list,
+  .company-list {
+    gap: 4rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .accroche-texte {
+    font-size: 2.5rem;
+    right: 1rem;
+  }
+  .accroche-texte {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    right: auto; 
+    padding: 1rem;
+    font-size: 2.5rem;
+    width: 80%;
+  }
+
+  .dancingscript {
+    font-size: 3.2rem;
+  }
+
+  .student-list,
+  .company-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .button-group {
+    margin-left: auto;
+  }
+  .section-match {
+    padding: 2rem;
+  }
+
+  .cards-section {
+    align-items: center;
+    padding: 0;
+  }
+
+  .student-list,
+  .company-list {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .student-card,
+  .company-card {
+    width: 90%;
+    max-width: 300px;
+    padding: 1rem;
+  }
+
+  .company-card img {
+    height: 150px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 4rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .sector-card {
+    width: 90%;
+  }
+
+.altmatchwhy {
+    width: 25%;
+    height: auto;
+  }
+
+  .arrow {
+    width: 30%;
+    height: auto;
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .why-us-title {
+    font-size: 2rem;
+  }
+
+  .why-us-right p {
+    font-size: 1rem;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .why-us-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem; 
+  }
+  
+}
+
+@media (max-width: 768px) {
+  .accroche-texte {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    right: auto; 
+    padding: 1rem;
+    font-size: 2rem;
+    width: 80%;
+  }
+
+  .dancingscript {
+    font-size: 2.5rem;
+  }
+  .header {
+    height: auto;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .button-group {
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-left: 0;
+    align-items: center;
+  }
+
+  .btn-outline,
+  .btn-filled {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .logo,
+  .header img {
+    width: 45px;
+    height: auto;
+  }
+  .header img {
+  height: 45px;
+  width: auto;
+  margin: 0 0.5rem;
+}
+
+.altmatch {
+  height: 45px;
+  width: auto;
+}
+
+  .accroche-img {
+    height: 500px;
+  }
+
+  .accroche-texte {
+    font-size: 2rem;
+  }
+
+  .dancingscript {
+    font-size: 2.5rem;
+  }
+
+  .section-match {
+    padding: 2rem;
+  }
+
+  .cards-section {
+    align-items: center;
+    padding: 0;
+  }
+
+  .student-list,
+  .company-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .student-card,
+  .company-card {
+    width: 90%;
+    max-width: 300px;
+    padding: 1rem;
+  }
+
+  .company-card img {
+    height: 150px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .sector-card {
+    width: 90%;
+  }
+
+  .altmatchwhy {
+    width: 25%;
+    height: auto;
+  }
+
+  .arrow {
+    width: 30%;
+    height: auto;
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .why-us-title {
+    font-size: 2rem;
+  }
+
+  .why-us-right p {
+    font-size: 1rem;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .why-us-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem; 
+  }
+
+  h4 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .joined-card {
+    width: 40%;
+  }
+
+  .footer-container {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .accroche-texte {
+    font-size: 1.5rem;
+    right: 0.5rem;
+    padding: 1rem;
+  }
+
+  .dancingscript {
+    font-size: 2rem;
+  }
+
+  .sector-card img {
+    width: 15%;
+  }
+
+  .student-card,
+  .company-card {
+    width: 90%;
+  }
+
+  .joined-card {
+    width: 80%;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
