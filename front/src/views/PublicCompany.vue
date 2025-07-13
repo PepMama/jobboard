@@ -28,7 +28,7 @@ async function fetchCompanyProfile() {
   if (!t) return
 
   try {
-    const res = await fetch(`http://localhost:8000/company/${encodeURIComponent(name)}`, {
+    const res = await fetch(`https://localhost:8000/company/${encodeURIComponent(name)}`, {
       headers: { Authorization: `Bearer ${t}` },
     })
     if (!res.ok) throw new Error('Entreprise non trouvée')

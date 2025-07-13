@@ -65,6 +65,7 @@ const companyMenu = [
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
   { nom: 'Mes candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes/offers' },
+  { nom: 'Mes offres', icone: Briefcase, url: 'company/offers' }
 ]
 
 const role = authStore.role || localStorage.getItem('role')

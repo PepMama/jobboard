@@ -184,7 +184,7 @@ async function loadOffers() {
     if (!token) {
       throw new Error('Token non trouvé')
     }
-    const response = await fetch('http://localhost:8000/company/offers', {
+    const response = await fetch('https://localhost:8000/company/offers', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -234,7 +234,7 @@ async function confirmDelete() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch(`http://localhost:8000/company/delete-offer/${offerToDelete.value}`, {
+    const response = await fetch(`https://localhost:8000/company/delete-offer/${offerToDelete.value}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
