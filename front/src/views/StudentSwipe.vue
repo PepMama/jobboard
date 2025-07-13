@@ -252,7 +252,7 @@ h1 {
 }
 
 .offer-title {
-  margin-top: 2%;
+  margin-top: 4rem;
   font-size: 2rem;
   font-weight: 700;
   color: #2d2d2d;
@@ -493,8 +493,6 @@ input::placeholder {
   gap: 2rem;
 }
 
-/* ----------- RESPONSIVE DESIGN ----------- */
-
 @media (max-width: 1024px) {
   .carousel {
     flex-direction: row;
@@ -522,19 +520,33 @@ input::placeholder {
     gap: 1.5rem;
   }
   .offer-details {
+    
     font-size: 0.6rem;
   }
   .offer-title {
+    margin-top: 4rem;
     font-size: 1rem;
   }
+
    .btn-view-offer {
     width: 100%;
-    height: 60%;
-    font-size: 0.7rem;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+    font-size: 0.4rem;
   }
 }
 
 @media (max-width: 768px) {
+
+   .btn-view-offer {
+    width: 100%;
+    font-size: 0.7rem;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+  }
+
   .offer-swipe-layout {
     flex-direction: column;
   }
@@ -604,8 +616,14 @@ input::placeholder {
     font-size: 0.9rem;
   }
 
+
   .btn-view-offer {
-    width: 100%;
+    width: 90%;
+    font-size: 0.9rem;
+    height: auto;
+    padding: 0.7rem;
+    margin: 0;
+    font-size: 0.5rem;
   }
 }
 
