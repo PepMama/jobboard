@@ -7,6 +7,7 @@ import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
 import ExperienceCard from '@/components/Students/ExperienceCard.vue'
 import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
+import StudentCompetencies from '@/components/Students/StudentCompetencies.vue'
 
 const avatar = ref('https://via.placeholder.com/80')
 
@@ -129,9 +130,7 @@ function handleModalSubmit() {
 
       <div class="container-fluid">
         <div class="row g-4">
-          <!-- Partie gauche : Header + formations/expériences -->
           <div class="col-12 col-lg-8 d-flex flex-column gap-4">
-            <!-- Bloc infos -->
             <StudentHeader
               :firstname="formData.firstname"
               :name="formData.name"
@@ -147,7 +146,6 @@ function handleModalSubmit() {
               @photo-updated="onPhotoUpdate"
             />
 
-            <!-- Bloc formations + expériences -->
             <div class="row g-4">
               <div class="col-12 col-lg-6">
                 <EducationCard :educations="educations" @changed="fetchStudentProfile" />
@@ -156,9 +154,10 @@ function handleModalSubmit() {
                 <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" />
               </div>
             </div>
+
+            <StudentCompetencies />
           </div>
 
-          <!-- Partie droite : Upload fichiers -->
           <div class="col-12 col-lg-4">
             <UploadCvAndPortfolio
               :cv="formData.cv"
