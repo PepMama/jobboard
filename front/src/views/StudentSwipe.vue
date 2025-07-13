@@ -1,6 +1,6 @@
 <template>
   <div class="offer-swipe-layout">
-    <Sidebar :visible="true"/>
+    <Sidebar/>
     <StudentPopup
       v-if="showPopup"
       :student="selectedStudent"
@@ -496,28 +496,41 @@ input::placeholder {
 /* ----------- RESPONSIVE DESIGN ----------- */
 
 @media (max-width: 1024px) {
-  .filters {
-    flex-wrap: wrap;
-    justify-content: center;
+  .carousel {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 22rem;
+    height: 26rem;
   }
 
   .input-with-icon {
     width: 45%;
   }
 
-  .carousel {
-    flex-direction: column;
-  }
-
-  .card {
-    width: 80vw;
-    height: auto;
+  .filters {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .swipeButton {
-    width: 70%;
-    flex-wrap: wrap;
+    width: 60%;
     justify-content: center;
+    gap: 1.5rem;
+  }
+  .offer-details {
+    font-size: 0.6rem;
+  }
+  .offer-title {
+    font-size: 1rem;
+  }
+   .btn-view-offer {
+    width: 100%;
+    height: 60%;
+    font-size: 0.7rem;
   }
 }
 
@@ -534,29 +547,42 @@ input::placeholder {
     padding: 1rem;
   }
 
-  .input-with-icon {
-    width: 100%;
-  }
-
   .filters {
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .card {
+  .input-with-icon {
     width: 100%;
-    padding: 1rem;
-    margin-bottom: 2rem;
+  }
+
+  .carousel {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 90vw;
+    height: auto;
+  }
+
+  .card-side {
+    display: none !important;
   }
 
   .swipeButton {
-    width: 100%;
-    gap: 1rem;
+    flex-direction: column;
+    width: 90%;
+    margin-top: 1rem;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
   }
 
   .btn-swipe-left,
   .btn-swipe-right {
-    flex: 1 1 45%;
+    width: 100%;
     font-size: 1rem;
   }
 }
@@ -582,6 +608,5 @@ input::placeholder {
     width: 100%;
   }
 }
-
 
 </style>

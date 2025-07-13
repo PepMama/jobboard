@@ -475,4 +475,120 @@ input::placeholder {
   margin-top: 2%;
   gap: 2rem;
 }
+
+@media (max-width: 1024px) {
+  .carousel {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 22rem;
+    height: 26rem;
+  }
+
+  .input-with-icon {
+    width: 45%;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .swipeButton {
+    width: 60%;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .offer-details {
+    font-size: 0.6rem;
+  }
+  .offer-title {
+    font-size: 1rem;
+  }
+   .btn-view-offer {
+    margin-bottom: 0;
+    width: 100%;
+    height: 60%;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .offer-swipe-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .input-with-icon {
+    width: 100%;
+  }
+
+  .carousel {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .card {
+    width: 90vw;
+    height: auto;
+  }
+
+  .card-side {
+    display: none !important;
+  }
+
+  .swipeButton {
+    flex-direction: column;
+    width: 90%;
+    margin-top: 1rem;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-swipe-left,
+  .btn-swipe-right {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1rem;
+  }
+
+  .offer-title {
+    font-size: 1.4rem;
+  }
+
+  .offer-company {
+    font-size: 1.2rem;
+  }
+
+  .offer-details {
+    font-size: 0.9rem;
+  }
+
+  .btn-view-offer {
+    width: 100%;
+  }
+}
+
 </style>
