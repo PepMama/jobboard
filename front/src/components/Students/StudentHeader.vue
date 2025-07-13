@@ -44,7 +44,8 @@
       </div>
     </div>
     <div class="mt-4">
-      <label class="fw-bold">Description</label>
+      <label class="fw-bold">Description </label>
+     <p class="form-text text-muted fst-italic mb-2">Cette description sera visible par les entreprises sur votre profil. Présente tes compétences, tes objectifs professionnels et ce que tu recherches en une dizaine de ligne.</p>
       <div v-if="edit">
         <textarea v-model="localBio" class="form-control"></textarea>
       </div>

@@ -28,15 +28,6 @@
           <input v-model="cityFilter" @input="fetchStudents" placeholder="Ville" class="filter-input" />
         </div>
 
-
-        <!-- <div class="input-with-icon">
-           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 7h7l3 3 3-3h7v13H2z" />
-            <line x1="12" y1="10" x2="12" y2="20" />
-          </svg>
-          <input v-model="fieldOfStudyFilter" @input="fetchStudents" placeholder="Domaine d'étude" class="filter-input" />
-        </div> -->
-
         <div class="input-with-icon">
           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 7h7l3 3 3-3h7v13H2z" />
@@ -94,7 +85,7 @@
           <div class="offer-details">
             <p><span class="icon-circle">🎓</span> {{ student.educations[0]?.degree || 'Diplôme inconnu' }}</p>
             <p><span class="icon-circle">📘</span> {{ student.educations[0]?.fieldOfStudy || 'Domaine inconnu' }}</p>
-            <p><span class="icon-circle">📝</span> {{ student.description || 'Pas de description' }}</p>
+            <p><span class="icon-circle">📝</span> {{ student.city || 'Pas de description' }}</p>
           </div>
         </div>
       </div>
@@ -501,4 +492,96 @@ input::placeholder {
   margin-top: 2%;
   gap: 2rem;
 }
+
+/* ----------- RESPONSIVE DESIGN ----------- */
+
+@media (max-width: 1024px) {
+  .filters {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .input-with-icon {
+    width: 45%;
+  }
+
+  .carousel {
+    flex-direction: column;
+  }
+
+  .card {
+    width: 80vw;
+    height: auto;
+  }
+
+  .swipeButton {
+    width: 70%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .offer-swipe-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .input-with-icon {
+    width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .swipeButton {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .btn-swipe-left,
+  .btn-swipe-right {
+    flex: 1 1 45%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1rem;
+  }
+
+  .offer-title {
+    font-size: 1.4rem;
+  }
+
+  .offer-company {
+    font-size: 1.2rem;
+  }
+
+  .offer-details {
+    font-size: 0.9rem;
+  }
+
+  .btn-view-offer {
+    width: 100%;
+  }
+}
+
+
 </style>
