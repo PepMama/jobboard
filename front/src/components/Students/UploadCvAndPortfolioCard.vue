@@ -67,6 +67,7 @@ watch(
   (val) => (linkedinUrl.value = val),
 )
 
+
 async function handleCvUpload(e) {
   const file = e.target.files[0]
   if (!file || file.type !== 'application/pdf') {
@@ -77,20 +78,34 @@ async function handleCvUpload(e) {
   const formData = new FormData()
   formData.append('cv', file)
 
-  const res = await fetch('https://localhost:8000/student/upload-cv', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-    body: formData,
-  })
+  try {
+    const res = await fetch('https://localhost:8000/student/upload-cv', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Accept: 'application/json', 
+      },
+      body: formData,
+    })
 
-  const data = await res.json()
-  if (res.ok) {
-    cvUrl.value = data.cv
+    const responseText = await res.text()
+
+    let data
+    try {
+      data = JSON.parse(responseText)
+    } catch (err) {
+      throw new Error('Réponse non valide : le serveur a renvoyé autre chose que du JSON.')
+    }
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Erreur serveur inconnue')
+    }
+
+    cvUrl.value = `/uploads/cvs/${filename}` 
     emit('update:cv', data.cv)
-  } else {
-    alert(data.error)
+  } catch (error) {
+    console.error('Erreur lors de l’envoi :', error)
+    alert(error.message || 'Erreur réseau')
   }
 }
 

@@ -100,4 +100,10 @@ class StudentService
         return array_map(fn($student) => $student->toArray(), $students);
     }
 
+
+    public function save(Student $student): void
+    {
+        $this->em->persist($student);
+        $this->em->flush();
+    }
 }
