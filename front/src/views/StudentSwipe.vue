@@ -139,7 +139,7 @@
 <script>
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import StudentPopup from '@/components/Students/StudentPopup.vue'
+import StudentPopup from '@/components/Students/StudentPopUp.vue'
 
 
 export default {

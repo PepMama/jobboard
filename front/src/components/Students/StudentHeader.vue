@@ -133,7 +133,7 @@ async function onFileChange(e: Event) {
     const formData = new FormData()
     formData.append('photo', file)
     const token = localStorage.getItem('token')
-    const response = await fetch('http://localhost:8000/student/upload-photo', {
+    const response = await fetch('https://localhost:8000/student/upload-photo', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`

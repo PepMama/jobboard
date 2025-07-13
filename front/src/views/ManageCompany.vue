@@ -7,7 +7,7 @@ import IndustryCard from '@/components/Company/IndustryCard.vue'
 import CompanyBioCard from '@/components/Company/CompanyBioCard.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
 
-const avatar = ref('http://via.placeholder.com/80')
+const avatar = ref('https://via.placeholder.com/80')
 
 const formData = reactive({
   name: '',
@@ -29,7 +29,7 @@ async function fetchCompanyProfile() {
   if (!t) return
 
   try {
-    const prof = await fetch('http://localhost:8000/company/profile', {
+    const prof = await fetch('https://localhost:8000/company/profile', {
       headers: { Authorization: `Bearer ${t}` },
     })
 

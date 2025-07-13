@@ -8,7 +8,7 @@ import ExperienceCard from '@/components/Students/ExperienceCard.vue'
 import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
 
-const avatar = ref('http://via.placeholder.com/80')
+const avatar = ref('https://via.placeholder.com/80')
 
 const formData = reactive({
   firstname: '',

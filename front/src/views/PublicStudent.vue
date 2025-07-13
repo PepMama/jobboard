@@ -9,7 +9,7 @@ import EducationCard from '@/components/Students/EducationCard.vue'
 import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
 import { useRoute } from 'vue-router'
 
-const avatar = ref('http://via.placeholder.com/80')
+const avatar = ref('https://via.placeholder.com/80')
 
 const route = useRoute()
 const name = route.params.name as string
@@ -34,7 +34,7 @@ async function fetchStudentProfile() {
   const t = localStorage.getItem('token')
   if (!t) return
 
-  const prof = await fetch(`http://localhost:8000/company/${encodeURIComponent(name)}`, {
+  const prof = await fetch(`https://localhost:8000/company/${encodeURIComponent(name)}`, {
     headers: { Authorization: `Bearer ${t}` },
   })
 
@@ -83,7 +83,7 @@ async function submitForm() {
     github: formData.github,
     cv: formData.cv,
   }
-  const res = await fetch('http://localhost:8000/student/manage-profile', {
+  const res = await fetch('https://localhost:8000/student/manage-profile', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
