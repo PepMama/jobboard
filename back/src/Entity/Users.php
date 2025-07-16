@@ -23,7 +23,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"string")]
     private ?string $password = null;
 
-    // Définir le role des utilisateurs : companie ou etudiant
     #[ORM\Column(type:"string")]
     private ?string $role = null;
 
@@ -32,6 +31,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(targetEntity: Company::class, mappedBy: "user", cascade: ["persist", "remove"])]
     private ?Company $company = null;
+
+    public function __construct()
+    {
+        $this->notifications = new ArrayCollection();
+    }
 
     public function getId(): ?int{
         return $this->id;

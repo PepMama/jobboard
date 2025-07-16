@@ -15,7 +15,8 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use App\Entity\MatchEntity;
+use App\Entity\Notification;
 class LikesController extends AbstractController
 {
     #[Route('/student/like-offer/{id}', name: 'app_like_offer', methods: ['POST'])]
@@ -39,8 +40,32 @@ class LikesController extends AbstractController
             $like->setStudent($student);
             $like->setJobOffer($offer);
             $em->persist($like);
-            $em->flush();
 
+            $company = $offer->getCompany();
+
+            $existingCompanyLike = $em->getRepository(LikesStudent::class)->findOneBy([
+                'student' => $student,
+                'company' => $company
+            ]);
+
+            if ($existingCompanyLike) {
+                $existingMatch = $em->getRepository(MatchEntity::class)->findOneBy([
+                    'student' => $student,
+                    'company' => $company
+                ]);
+
+                if (!$existingMatch) {
+                    $match = new MatchEntity();
+                    $match->setStudent($student);
+                    $match->setCompany($company);
+                    $match->setMatchedAt(new \DateTimeImmutable());
+                    $match->setIsValid(true);
+                    $match->setIsContacted(false);
+                    $em->persist($match);
+                }
+            }
+
+            $em->flush();
             return new JsonResponse(['message' => 'Offre likée']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
@@ -68,8 +93,32 @@ class LikesController extends AbstractController
             $like->setCompany($company);
             $like->setStudent($student);
             $em->persist($like);
-            $em->flush();
 
+            $studentLikesOffer = $em->getRepository(LikesOffer::class)->findOneBy([
+                'student' => $student,
+            ]);
+
+            if ($studentLikesOffer) {
+                $jobOffer = $studentLikesOffer->getJobOffer();
+                if ($jobOffer && $jobOffer->getCompany()->getId() === $company->getId()) {
+                    $existingMatch = $em->getRepository(MatchEntity::class)->findOneBy([
+                        'student' => $student,
+                        'company' => $company
+                    ]);
+
+                    if (!$existingMatch) {
+                        $match = new MatchEntity();
+                        $match->setStudent($student);
+                        $match->setCompany($company);
+                        $match->setMatchedAt(new \DateTimeImmutable());
+                        $match->setIsValid(true);
+                        $match->setIsContacted(true);
+                        $em->persist($match);
+                    }
+                }
+            }
+
+            $em->flush();
             return new JsonResponse(['message' => 'Étudiant liké']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
