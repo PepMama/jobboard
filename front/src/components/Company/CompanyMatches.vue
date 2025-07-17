@@ -29,7 +29,7 @@ async function fetchMatches() {
   if (!token) return
 
   try {
-    const res = await fetch('https://127.0.0.1:8000/matches/company', {
+    const res = await fetch('http://localhost:8000/matches/company', {
       headers: { Authorization: `Bearer ${token}` },
     })
 
@@ -60,7 +60,7 @@ async function fetchProfile() {
   if (!token || !selectedCompany.value) return
 
   try {
-    const res = await fetch(`https://127.0.0.1:8000/student/${encodeURIComponent(selectedCompany.value)}`, {
+    const res = await fetch(`http://localhost:8000/student/${encodeURIComponent(selectedCompany.value)}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 

@@ -51,7 +51,7 @@ class CompanyController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
-            $logoUrl = $company->getLogo() ? 'https://127.0.0.1:8000' . $company->getLogo() : null;
+            $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
 
             return new JsonResponse([
                 'name' => $company->getName(),
@@ -79,7 +79,7 @@ class CompanyController extends AbstractController
             return new JsonResponse(null, 204);
         }
 
-        $logoUrl = $company->getLogo() ? 'https://127.0.0.1:8000' . $company->getLogo() : null;
+        $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
 
         return new JsonResponse([
             'name' => $company->getName(),
