@@ -67,7 +67,7 @@ class ImageController extends AbstractController
 
             $uploadedFile->move($uploadDir, $filename);
             $filePath = '/uploads/logos/' . $filename;
-            $fullUrl = 'http://localhost:8000' . $filePath;
+            $fullUrl = 'https://127.0.0.1:8000' . $filePath;
 
             if (!file_exists($fullFilePath)) {
                 throw new \Exception('Erreur lors de la création du fichier');
@@ -153,7 +153,7 @@ class ImageController extends AbstractController
 
             $uploadedFile->move($uploadDir, $filename);
             $filePath = '/uploads/photos/' . $filename;
-            $fullUrl = 'http://localhost:8000' . $filePath;
+            $fullUrl = 'https://127.0.0.1:8000' . $filePath;
 
             if (!file_exists($fullFilePath)) {
                 throw new \Exception('Erreur lors de la création du fichier');

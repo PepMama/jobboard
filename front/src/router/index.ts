@@ -13,6 +13,8 @@ import { useAuthStore } from '@/stores/auth'
 import PublicCompany from '@/views/PublicCompany.vue'
 import PublicStudent from '@/views/PublicStudent.vue'
 import Candidates from '@/views/StudentSwipe.vue'
+import StudentMatches from '@/components/Students/StudentMatches.vue'
+import CompanyMatches from '@/components/Company/CompanyMatches.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,6 +91,18 @@ const router = createRouter({
       path: '/dashboard/company/candidates',
       name: 'CandidatesSwipe',
       component: Candidates,
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
+    {
+      path: '/dashboard/student/matches',
+      name: 'StudentMatches',
+      component: StudentMatches,
+      meta: { requiresAuth: true, allowedRoles: ['student'] },
+    },
+    {
+      path: '/dashboard/company/matches',
+      name: 'CompanyMatches',
+      component: CompanyMatches,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
   ],

@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { User, Heart, Briefcase, Plus, LogOut } from 'lucide-vue-next'
+import { User, Heart, Briefcase, Plus, LogOut, Zap } from 'lucide-vue-next'
 import logo from '@/assets/altmatch.png'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
@@ -58,15 +58,17 @@ const handleLogout = () => {
 const studentMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/student' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/student/likes' },
-  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' },
-]
+  { nom: 'Mes matchs', icone: Zap, url: 'dashboard/student/matches' },
+  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' }
+];
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
   { nom: 'Mes candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/company/likes/offers' },
+  { nom: 'Mes matchs', icone: Zap, url: 'dashboard/company/matches' },
   { nom: 'Mes offres', icone: Briefcase, url: 'company/offers' }
-]
+];
 
 const role = authStore.role || localStorage.getItem('role')
 const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu

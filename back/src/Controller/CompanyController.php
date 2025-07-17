@@ -17,9 +17,9 @@ class CompanyController extends AbstractController
     #[Route('/company/profile', name: 'app_complete_profile_company', methods: ['PUT'])]
     public function completeProfile(Request $request, CompanyService $companyService, TokenService $tokenService): JsonResponse
     {
-        try{
+        try {
             $user = $tokenService->getUserFromRequest($request);
-            if($user->getRole() !== 'company'){
+            if ($user->getRole() !== 'company') {
                 return new JsonResponse(['error' => 'Accès réservé aux entreprises'], 403);
             }
 
@@ -30,8 +30,7 @@ class CompanyController extends AbstractController
                 'message' => 'Profil entreprise mis à jour',
                 'id_company' => $company->getId()
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
         }
     }
@@ -52,8 +51,8 @@ class CompanyController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
-            $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
-            
+            $logoUrl = $company->getLogo() ? 'https://127.0.0.1:8000' . $company->getLogo() : null;
+
             return new JsonResponse([
                 'name' => $company->getName(),
                 'phone_number' => $company->getPhoneNumber(),
@@ -80,8 +79,8 @@ class CompanyController extends AbstractController
             return new JsonResponse(null, 204);
         }
 
-        $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
-        
+        $logoUrl = $company->getLogo() ? 'https://127.0.0.1:8000' . $company->getLogo() : null;
+
         return new JsonResponse([
             'name' => $company->getName(),
             'phone_number' => $company->getPhoneNumber(),
@@ -109,17 +108,40 @@ class CompanyController extends AbstractController
                 return new JsonResponse(['error' => 'Unauthorized'], 401);
             }
             $company = $companyService->getCompanyByUser($user);
-            $keyword = $request->query->get('keyword'); 
+            $keyword = $request->query->get('keyword');
             $city = $request->query->get('city');
             $degree = $request->query->get('degree');
             $fieldOfStudy = $request->query->get('fieldOfStudy');
             $students = $studentService->getStudentsForCompany($keyword, $city, $degree, $fieldOfStudy, $company->getId());
 
             if (empty($students)) {
-            return new JsonResponse([], 200);
-        }
+                return new JsonResponse([], 200);
+            }
 
-       return $this->json($students);
+            return $this->json($students);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/company/{name}', name: 'app_company_students', methods: ['GET'])]
+    public function getStudentsForCompanyByName(
+        Request $request,
+        string $name,
+        CompanyService $companyService,
+        TokenService $tokenService
+    ): JsonResponse {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if (!$user) {
+                return new JsonResponse(['error' => 'Unauthorized'], 401);
+            }
+            $company = $companyService->getCompanyByName($name);
+            if (!$company) {
+                return new JsonResponse(['error' => 'Company not found'], 404);
+            }
+
+            return $this->json($company);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }

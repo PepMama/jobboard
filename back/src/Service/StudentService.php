@@ -106,4 +106,10 @@ class StudentService
         $this->em->persist($student);
         $this->em->flush();
     }
+
+    public function getStudentByName(string $name): ?Student
+    {
+        return $this->studentRepository->findOneBy(['name' => $name]);
+    }
+
 }

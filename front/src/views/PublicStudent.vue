@@ -54,12 +54,12 @@ async function fetchStudentProfile() {
     formData.avatar = d.photo ?? ''
   }
 
-  //   const exp = await fetch('http://localhost:8000/student/experiences', {
+  //   const exp = await fetch('https://127.0.0.1:8000/student/experiences', {
   //     headers: { Authorization: `Bearer ${t}` }
   //   })
   //   experiences.value = exp.ok ? await exp.json() : []
 
-  //   const eduRes = await fetch('http://localhost:8000/student/educations', {
+  //   const eduRes = await fetch('https://127.0.0.1:8000/student/educations', {
   //     headers: { Authorization: `Bearer ${t}` }
   //   })
   //   educations.value = eduRes.ok ? await eduRes.json() : []

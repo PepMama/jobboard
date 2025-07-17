@@ -47,38 +47,35 @@ class MatchController extends AbstractController
         return new JsonResponse(['matchCount' => $count]);
     }
 
-    #[Route('', name: 'app_matches', methods: ['GET'])]
-    public function getMatches(
+    #[Route('/student', name: 'app_student_matches', methods: ['GET'])]
+    public function getStudentMatches(
         Request $request,
         TokenService $tokenService,
+        StudentService $studentService,
         EntityManagerInterface $em
     ): JsonResponse {
         $user = $tokenService->getUserFromRequest($request);
+        $student = $studentService->getStudentByUser($user);
 
-        $student = $em->getRepository(Student::class)->findOneBy(['user' => $user]);
-        $company = $em->getRepository(Company::class)->findOneBy(['user' => $user]);
-
-        $criteria = ['isValid' => true];
-        if ($student) {
-            $criteria['student'] = $student;
-        } elseif ($company) {
-            $criteria['company'] = $company;
-        } else {
-            return new JsonResponse(['error' => 'Utilisateur inconnu'], 400);
+        if (!$student) {
+            return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
         }
 
-        $matches = $em->getRepository(MatchEntity::class)->findBy($criteria, ['matchedAt' => 'DESC']);
+        $matches = $em->getRepository(MatchEntity::class)->findBy(
+            ['student' => $student, 'isValid' => true],
+            ['matchedAt' => 'DESC']
+        );
 
         $data = array_map(function (MatchEntity $match) {
+            $company = $match->getCompany();
             return [
-                'id' => $match->getId(),
-                'student' => [
-                    'id' => $match->getStudent()->getId(),
-                    'name' => $match->getStudent()->getName()
-                ],
+                'matchId' => $match->getId(),
                 'company' => [
-                    'id' => $match->getCompany()->getId(),
-                    'name' => $match->getCompany()->getName()
+                    'id' => $company->getId(),
+                    'name' => $company->getName(),
+                    'industry' => $company->getIndustry(),
+                    'city' => $company->getCity(),
+                    'logo' => $company->getLogo(),
                 ],
                 'matchedAt' => $match->getMatchedAt()->format('Y-m-d H:i:s'),
                 'isContacted' => $match->getIsContacted(),
@@ -87,4 +84,39 @@ class MatchController extends AbstractController
 
         return new JsonResponse($data);
     }
+
+    #[Route('/company', name: 'app_company_matches', methods: ['GET'])]
+    public function getCompanyMatches(
+        Request $request,
+        TokenService $tokenService,
+        CompanyService $companyService,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $user = $tokenService->getUserFromRequest($request);
+        $company = $companyService->getCompanyByUser($user);
+
+        if (!$company) {
+            return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
+        }
+        $matches = $em->getRepository(MatchEntity::class)->findBy(
+            ['company' => $company, 'isValid' => true],
+            ['matchedAt' => 'DESC']
+        );
+        $data = array_map(function (MatchEntity $match) {
+            $student = $match->getStudent();
+            return [
+                'matchId' => $match->getId(),
+                'student' => [
+                    'id' => $student->getId(),
+                    'name' => $student->getFirstname() . ' ' . $student->getName(),
+                    'city' => $student->getCity(),
+                    'photo' => $student->getPhoto(),
+                ],
+                'matchedAt' => $match->getMatchedAt()->format('Y-m-d H:i:s'),
+                'isContacted' => $match->getIsContacted(),
+            ];
+        }, $matches);
+        return new JsonResponse($data);
+    }
 }
+
