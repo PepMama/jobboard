@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import { Trash2, Eye } from 'lucide-vue-next'
+import { Trash2, Eye, Search } from 'lucide-vue-next'
 
 interface Company {
   id: number
@@ -31,6 +31,19 @@ const likedOffers = ref<Offer[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 
+const searchTitle = ref('')
+const searchContractType = ref('')
+const searchCompany = ref('')
+const searchCity = ref('')
+
+const contractTypes = [
+  { value: '', label: 'Tous les types' },
+  { value: 'Stage', label: 'Stage' },
+  { value: 'Alternance', label: 'Alternance' }
+]
+
+const searchLoading = ref(false)
+
 onMounted(() => {
   fetchLikedOffers()
 })
@@ -41,7 +54,16 @@ async function fetchLikedOffers() {
   try {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Token non trouvé')
-    const response = await fetch('https://localhost:8000/student/liked-offers', {
+    
+    const params = new URLSearchParams()
+    if (searchTitle.value) params.append('title', searchTitle.value)
+    if (searchContractType.value) params.append('contract_type', searchContractType.value)
+    if (searchCompany.value) params.append('company', searchCompany.value)
+    if (searchCity.value) params.append('city', searchCity.value)
+    
+    const url = `https://localhost:8000/student/liked-offers${params.toString() ? '?' + params.toString() : ''}`
+    
+    const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!response.ok) throw new Error(`Erreur ${response.status}`)
@@ -72,6 +94,17 @@ async function removeLike(offerId: number) {
 function viewOffer(offerId: number) {
   window.open(`/offer/${offerId}`)
 }
+
+watch([searchTitle, searchContractType, searchCompany, searchCity], () => {
+  fetchLikedOffers()
+}, { deep: true })
+
+function clearFilters() {
+  searchTitle.value = ''
+  searchContractType.value = ''
+  searchCompany.value = ''
+  searchCity.value = ''
+}
 </script>
 
 <template>
@@ -80,6 +113,67 @@ function viewOffer(offerId: number) {
     <div class="flex-grow-1 p-4">
       <PageHeader title="Mes Likes" @toggle-sidebar="showSidebar = true" />
       <div class="container-fluid">
+        <!-- Section de recherche -->
+        <div class="card bg-white shadow-sm mb-4">
+          <div class="card-body">
+            <h6 class="card-title mb-3">
+              <Search :size="20" class="me-2" />
+              Rechercher dans mes likes
+            </h6>
+            <div class="row g-3">
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Titre de l'offre</label>
+                <input 
+                  v-model="searchTitle"
+                  type="text" 
+                  class="form-control form-control-sm"
+                  placeholder="Rechercher par titre..."
+                />
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Type de contrat</label>
+                <select 
+                  v-model="searchContractType"
+                  class="form-select form-select-sm"
+                >
+                  <option v-for="type in contractTypes" :key="type.value" :value="type.value">
+                    {{ type.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Nom de l'entreprise</label>
+                <input 
+                  v-model="searchCompany"
+                  type="text" 
+                  class="form-control form-control-sm"
+                  placeholder="Rechercher par entreprise..."
+                />
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Ville</label>
+                <input 
+                  v-model="searchCity"
+                  type="text" 
+                  class="form-control form-control-sm"
+                  placeholder="Rechercher par ville..."
+                />
+              </div>
+            </div>
+            <div class="mt-3">
+              <button 
+                @click="clearFilters"
+                class="btn btn-outline-secondary btn-sm"
+              >
+                Effacer les filtres
+              </button>
+              <span class="ms-3 text-muted small">
+                {{ likedOffers.length }} offre(s) trouvée(s)
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Chargement...</span>
@@ -91,6 +185,10 @@ function viewOffer(offerId: number) {
         <div v-else-if="likedOffers.length === 0" class="text-center py-5">
           <h4 class="text-muted">Aucune offre likée</h4>
           <p class="text-muted">Vous n'avez pas encore liké d'offres.</p>
+        </div>
+        <div v-else-if="likedOffers.length === 0" class="text-center py-5">
+          <h4 class="text-muted">Aucun résultat</h4>
+          <p class="text-muted">Aucune offre ne correspond à vos critères de recherche.</p>
         </div>
         <div v-else class="row g-4">
           <div v-for="offer in likedOffers" :key="offer.id" class="col-12 col-md-6 col-lg-4">
@@ -131,6 +229,10 @@ function viewOffer(offerId: number) {
                   {{ offer.description?.substring(0, 100) }}{{ offer.description?.length > 100 ? '...' : '' }}
                 </p>
                 <div class="mt-auto">
+                  <div class="d-flex gap-2 mb-2">
+                    <span class="badge bg-primary">{{ offer.contract_type }}</span>
+                    <span v-if="offer.city" class="badge bg-secondary">{{ offer.city }}</span>
+                  </div>
                   <div class="d-flex gap-2 mb-2">
                     <a v-if="offer.company.website" :href="offer.company.website" target="_blank" class="btn btn-outline-primary btn-sm">
                       Site Web

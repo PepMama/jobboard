@@ -143,8 +143,27 @@ class LikesController extends AbstractController
                 return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
             }
 
-            // Récupérer les likes de l'entreprise
-            $likes = $em->getRepository(LikesStudent::class)->findBy(['company' => $company]);
+            $searchName = $request->query->get('name', '');
+            $searchCity = $request->query->get('city', '');
+
+            $qb = $em->createQueryBuilder();
+            $qb->select('ls', 's')
+               ->from(LikesStudent::class, 'ls')
+               ->join('ls.student', 's')
+               ->where('ls.company = :company')
+               ->setParameter('company', $company);
+
+            if (!empty($searchName)) {
+                $qb->andWhere('(s.firstname LIKE :name OR s.name LIKE :name OR CONCAT(s.firstname, \' \', s.name) LIKE :name)')
+                   ->setParameter('name', '%' . $searchName . '%');
+            }
+
+            if (!empty($searchCity)) {
+                $qb->andWhere('s.city LIKE :city')
+                   ->setParameter('city', '%' . $searchCity . '%');
+            }
+
+            $likes = $qb->getQuery()->getResult();
 
             $likedStudents = [];
             foreach ($likes as $like) {

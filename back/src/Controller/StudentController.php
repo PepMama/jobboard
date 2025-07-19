@@ -270,7 +270,42 @@ class StudentController extends AbstractController
             if (!$student) {
                 return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
             }
-            $likes = $entityManager->getRepository(LikesOffer::class)->findBy(['student' => $student]);
+
+            $searchTitle = $request->query->get('title', '');
+            $searchContractType = $request->query->get('contract_type', '');
+            $searchCompany = $request->query->get('company', '');
+            $searchCity = $request->query->get('city', '');
+
+            $qb = $entityManager->createQueryBuilder();
+            $qb->select('lo', 'jo', 'c')
+               ->from(LikesOffer::class, 'lo')
+               ->join('lo.jobOffer', 'jo')
+               ->join('jo.company', 'c')
+               ->where('lo.student = :student')
+               ->setParameter('student', $student);
+
+            if (!empty($searchTitle)) {
+                $qb->andWhere('jo.title LIKE :title')
+                   ->setParameter('title', '%' . $searchTitle . '%');
+            }
+
+            if (!empty($searchContractType)) {
+                $qb->andWhere('jo.contractType = :contractType')
+                   ->setParameter('contractType', $searchContractType);
+            }
+
+            if (!empty($searchCompany)) {
+                $qb->andWhere('c.name LIKE :company')
+                   ->setParameter('company', '%' . $searchCompany . '%');
+            }
+
+            if (!empty($searchCity)) {
+                $qb->andWhere('jo.city LIKE :city')
+                   ->setParameter('city', '%' . $searchCity . '%');
+            }
+
+            $likes = $qb->getQuery()->getResult();
+
             $offers = [];
             foreach ($likes as $like) {
                 $offer = $like->getJobOffer();
