@@ -22,7 +22,7 @@ class MatchEntity
     private ?Company $company = null;
 
     #[ORM\Column(name: "matched_at", type: "datetime")]
-    private \DateTimeInterface $matchedAt;
+    private \DateTime $matchedAt;
 
     #[ORM\Column(name: "is_valid", type: "boolean")]
     private bool $isValid = false;
@@ -52,10 +52,10 @@ class MatchEntity
         $this->company = $company;
         return $this;
     }
-    public function getMatchedAt(): \DateTimeInterface {
+    public function getMatchedAt(): \DateTime {
         return $this->matchedAt;
     }
-    public function setMatchedAt(\DateTimeInterface $matchedAt): self {
+    public function setMatchedAt(\DateTime $matchedAt): self {
         $this->matchedAt = $matchedAt;
         return $this;
     }

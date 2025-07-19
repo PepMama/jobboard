@@ -9,6 +9,7 @@ import CreateOffer from '@/components/Company/CreateOffer.vue'
 import EditOffer from '@/components/Company/EditOffer.vue'
 import OffersList from '@/components/Company/OffersList.vue'
 import OfferSwipe from '@/views/OfferSwipe.vue'
+import CompanyLikes from '@/views/CompanyLikes.vue'
 import { useAuthStore } from '@/stores/auth'
 import PublicCompany from '@/views/PublicCompany.vue'
 import PublicStudent from '@/views/PublicStudent.vue'
@@ -103,6 +104,12 @@ const router = createRouter({
       path: '/dashboard/company/matches',
       name: 'CompanyMatches',
       component: CompanyMatches,
+      meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
+    {
+      path: '/company/likes',
+      name: 'CompanyLikes',
+      component: CompanyLikes,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
     },
   ],
