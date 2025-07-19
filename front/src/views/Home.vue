@@ -166,7 +166,7 @@
       <div class="footer-container">
         <div class="footer-links">
           <router-link to="/mentions-legales">Mentions légales</router-link>
-          <router-link to="/statuts">Statuts</router-link>
+          <router-link to="/statuts">CGU</router-link>
           <router-link to="/cookies">Cookies</router-link>
         </div>
         <div class="footer-copy">

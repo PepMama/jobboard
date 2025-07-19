@@ -24,9 +24,12 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/competencies, roles: PUBLIC_ACCESS }
+        - { path: ^/forgot-password, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/student, roles: ROLE_STUDENT }
         - { path: ^/company, roles: ROLE_COMPANY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+        
 
 
 when@test:

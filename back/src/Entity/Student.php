@@ -40,6 +40,9 @@ class Student
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $photo = null;
 
+     #[ORM\Column(type: "string", length: 255)]
+    private string $title;
+
     #[ORM\Column(type: "text")]
     private string $description;
 
@@ -178,6 +181,15 @@ class Student
     
     public function setDescription(string $description): self {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getTitle(): string {
+        return $this->title;
+    }
+    
+    public function setTitle(string $title): self {
+        $this->title = $title;
         return $this;
     }
     

@@ -32,10 +32,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Company::class, mappedBy: "user", cascade: ["persist", "remove"])]
     private ?Company $company = null;
 
-    public function __construct()
-    {
-        $this->notifications = new ArrayCollection();
-    }
+    #[ORM\Column(nullable: true)]
+    private ?string $resetPassword = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resetPasswordRequestedAt = null;
+
+
+    // public function __construct()
+    // {
+    //     $this->notifications = new ArrayCollection();
+    // }
 
     public function getId(): ?int{
         return $this->id;
@@ -116,6 +123,29 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $roles;
+    }
+    public function getResetPassword(): ?string
+    {
+        return $this->resetPassword;
+    }
+
+    public function setResetPassword(?string $resetPassword): self
+    {
+        $this->resetPassword = $resetPassword;
+
+        return $this;
+    }
+
+    public function getResetPasswordRequestedAt(): ?\DateTimeImmutable
+    {
+        return $this->resetPasswordRequestedAt;
+    }
+
+    public function setResetPasswordRequestedAt(?\DateTimeImmutable $resetPasswordRequestedAt): self
+    {
+        $this->resetPasswordRequestedAt = $resetPasswordRequestedAt;
+
+        return $this;
     }
 
     public function eraseCredentials(): void
