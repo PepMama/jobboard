@@ -47,6 +47,10 @@ class JobOfferController extends AbstractController
     {
         try {
             $user = $tokenService->getUserFromRequest($request);
+            if (!$user) {
+                return new JsonResponse(['error' => 'Unauthorized'], 401);
+            }
+            
             if ($user->getRole() !== 'company') {
                 return new JsonResponse(['error' => 'Accès interdit'], 403);
             }

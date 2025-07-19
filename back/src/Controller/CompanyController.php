@@ -95,7 +95,7 @@ class CompanyController extends AbstractController
         ]);
     }
 
-    #[Route('/company/students', name: 'app_company_students', methods: ['GET'])]
+    #[Route('/company/students', name: 'app_company_students_list', methods: ['GET'])]
     public function getStudentsForCompany(
         Request $request,
         StudentService $studentService,
@@ -107,7 +107,12 @@ class CompanyController extends AbstractController
             if (!$user) {
                 return new JsonResponse(['error' => 'Unauthorized'], 401);
             }
+            
             $company = $companyService->getCompanyByUser($user);
+            if (!$company) {
+                return new JsonResponse(['error' => 'Company not found'], 404);
+            }
+            
             $keyword = $request->query->get('keyword');
             $city = $request->query->get('city');
             $degree = $request->query->get('degree');
@@ -124,7 +129,7 @@ class CompanyController extends AbstractController
         }
     }
 
-    #[Route('/company/{name}', name: 'app_company_students', methods: ['GET'])]
+    #[Route('/company/by-name/{name}', name: 'app_company_by_name', methods: ['GET'])]
     public function getStudentsForCompanyByName(
         Request $request,
         string $name,
