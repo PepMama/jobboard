@@ -15,10 +15,14 @@
       <hr class="mx-2 mb-4" />
       <ul class="nav flex-column">
         <li v-for="item in menuItems" :key="item.nom" class="nav-item mb-2">
-          <a class="nav-link d-flex align-items-center nav-link-custom" :href="`/${item.url}`">
+          <router-link 
+            :to="`/${item.url}`" 
+            class="nav-link d-flex align-items-center nav-link-custom"
+            :class="{ 'nav-link-active': isActiveRoute(item.url) }"
+          >
             <component :is="item.icone" class="me-2" :size="20" />
             <span>{{ item.nom }}</span>
-          </a>
+          </router-link>
         </li>
       </ul>
 
@@ -39,13 +43,14 @@
 import { User, Heart, Briefcase, Plus, LogOut, Zap } from 'lucide-vue-next'
 import logo from '@/assets/altmatch.png'
 import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 defineProps<{ visible: boolean }>()
 defineEmits(['close'])
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const handleLogout = () => {
   authStore.reset()
@@ -53,6 +58,20 @@ const handleLogout = () => {
   localStorage.removeItem('role')
   localStorage.removeItem('user')
   router.push('/')
+}
+
+const isActiveRoute = (url: string) => {
+  const currentPath = route.path
+  const targetPath = `/${url}`
+  
+  if (url === 'dashboard/student' && currentPath === '/dashboard/student') {
+    return true
+  }
+  if (url === 'dashboard/company' && currentPath === '/dashboard/company') {
+    return true
+  }
+  
+  return currentPath === targetPath
 }
 
 const studentMenu = [
@@ -80,6 +99,7 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
   flex-direction: column;
   overflow: hidden;
 }
+
 .nav-link-custom {
   color: #fff !important;
   border-radius: 8px;
@@ -89,7 +109,9 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
     transform 0.2s;
   font-weight: 500;
   padding: 10px 14px;
+  position: relative;
 }
+
 .nav-link-custom:hover,
 .nav-link-custom:focus {
   background-color: #dfeafd !important;
@@ -97,9 +119,37 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
   transform: scale(1.03);
   text-decoration: none;
 }
+
+.nav-link-active {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+  border-left: 4px solid #fff;
+  padding-left: 10px;
+  position: relative;
+}
+
+.nav-link-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-link-active:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  color: #fff !important;
+  transform: translateX(4px);
+}
+
 .logout-container {
   margin-top: auto;
 }
+
 .btn-logout {
   background: #fff;
   color: #5a189a;
@@ -112,6 +162,7 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
     border 0.2s;
   padding: 10px 14px;
 }
+
 .btn-logout:hover,
 .btn-logout:focus {
   background: #5a189a;
