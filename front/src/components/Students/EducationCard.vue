@@ -43,6 +43,7 @@ const fieldOfStudyOptions = [
   { value: 'Arts, Design & Communication Visuelle', label: 'Arts, Design & Communication Visuelle' },
   { value: 'Agriculture', label: 'Agriculture' },
   { value: 'Electromécanique', label: 'Electromécanique' },
+  { value: 'Autre', label: 'Autre' },
 ]
 
 

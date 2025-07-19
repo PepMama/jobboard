@@ -25,7 +25,7 @@
             </span>
 
           </div>
-          <router-link to="/resetPassword" class="forgot-password">Mot de passe oublié ?</router-link><br />
+          <router-link to="/forgotPassword" class="forgot-password">Mot de passe oublié ?</router-link><br />
           <button type="submit" class="login-button">Connexion</button>
         </form>
         <div class="text-right">

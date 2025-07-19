@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AuthForm from '../views/RegisterForm.vue'
 import ResetPasswordForm from '../views/ResetPasswordForm.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
 import Home from '../views/Home.vue'
 import LoginForm from '../views/LoginForm.vue'
 import ManageStudent from '../views/ManageStudent.vue'
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/resetPassword',
       name: 'resetPassword',
       component: ResetPasswordForm,
+    },
+    {
+      path: '/forgotPassword',
+      name: 'forgotPassword',
+      component: ForgotPassword,
     },
     {
       path: '/dashboard/student',

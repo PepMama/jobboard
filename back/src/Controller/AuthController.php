@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Users;
-use App\Entity\Student;
+use Firebase\JWT\JWT;
 use App\Entity\Company;
+use App\Entity\Student;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Firebase\JWT\JWT;
 
 class AuthController extends AbstractController
 {
@@ -99,4 +100,51 @@ class AuthController extends AbstractController
         }
     }
 
+    #[Route('/forgot-password', name: 'forgot_password', methods: ['POST'])]
+    public function forgotPassword(Request $request, EntityManagerInterface $em, MailerService $mailer): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'];
+
+        $user = $em->getRepository(Users::class)->findOneBy(['email' => $email]);
+        if (!$user) {
+            return new JsonResponse(['error' => 'Email non trouvé'], 404);
+        }
+
+        $token = bin2hex(random_bytes(4)); 
+        $user->setResetPassword($token);
+        $user->setResetPasswordRequestedAt(new \DateTimeImmutable());
+        $em->persist($user);
+        $em->flush();
+
+        $mailer->sendResetPasswordEmail($email, $token);
+
+        return new JsonResponse(['message' => 'Email envoyé']);
+    }
+
+    #[Route('/reset-password', name: 'reset_password', methods: ['POST'])]
+    public function resetPassword(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $token = $data['token'];
+        $newPassword = $data['newPassword'];
+        $user = $em->getRepository(Users::class)->findOneBy(['resetPassword' => $token]);
+        if (!$user || !$user->getResetPasswordRequestedAt()) {
+            return new JsonResponse(['error' => 'Token invalide'], 400);
+        }
+
+        $expiresAt = $user->getResetPasswordRequestedAt()->modify('+10 minutes');
+        if (new \DateTimeImmutable() > $expiresAt) {
+            return new JsonResponse(['error' => 'Token expiré'], 410);
+        }
+
+        $hashed = $hasher->hashPassword($user, $newPassword);
+        $user->setPassword($hashed);
+        $user->setResetPassword(null);
+        $user->setResetPasswordRequestedAt(null);
+        $em->persist($user);
+        $em->flush();
+
+        return new JsonResponse(['message' => 'Mot de passe mis à jour']);
+    }
 }
