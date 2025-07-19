@@ -22,7 +22,7 @@ class LikesOffer
     private ?JobOffer $jobOffer = null;
 
     #[ORM\Column(name: "liked_at", type: "datetime")]
-    private \DateTimeInterface $likedAt;
+    private \DateTime $likedAt;
 
     public function __construct() {
         $this->likedAt = new \DateTime();
@@ -51,11 +51,11 @@ class LikesOffer
         return $this;
     }
 
-    public function getLikedAt(): \DateTimeInterface {
+    public function getLikedAt(): \DateTime {
         return $this->likedAt;
     }
 
-    public function setLikedAt(\DateTimeInterface $likedAt): self {
+    public function setLikedAt(\DateTime $likedAt): self {
         $this->likedAt = $likedAt;
         return $this;
     }
