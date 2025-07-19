@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="auth-container">
     <h3>Réinitialiser le mot de passe</h3>
     <input v-model="token" placeholder="Mot de passe temporaire" class="form-control mb-2" />
     <input type="password" v-model="password" placeholder="Nouveau mot de passe" class="form-control mb-2" />
@@ -59,3 +59,4 @@ const validatePassword = (pwd) => {
 }
 
 </script>
+<style scoped src="@/CSS/resertPassword.css"></style>
