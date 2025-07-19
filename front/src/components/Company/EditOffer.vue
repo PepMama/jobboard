@@ -50,9 +50,8 @@
             <label for="state" class="form-label">État</label>
             <select id="state" class="form-select" v-model="formData.state" required>
               <option value="">Sélectionnez l'état</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="draft">Brouillon</option>
+              <option value="visible">Visible</option>
+              <option value="non_visible">Non visible</option>
             </select>
           </div>
 
@@ -62,8 +61,6 @@
               <option value="">Sélectionnez le type de contrat</option>
               <option value="Stage">Stage</option>
               <option value="Alternance">Alternance</option>
-              <option value="CDI">CDI</option>
-              <option value="CDD">CDD</option>
             </select>
           </div>
 
