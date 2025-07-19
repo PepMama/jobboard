@@ -104,6 +104,10 @@ onMounted(fetchCompanyProfile)
     <div class="flex-grow-1 p-4">
       <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
 
+      <div v-if="$route.query.incomplete" class="alert alert-warning text-center fw-bold mb-4" style="font-size:1.2rem;">
+        Veuillez compléter vos informations avant de continuer.
+      </div>
+
       <div class="container-fluid">
         <div class="row g-4">
           <div class="col-12 col-lg-6">

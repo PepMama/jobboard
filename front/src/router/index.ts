@@ -18,6 +18,31 @@ import Candidates from '@/views/StudentSwipe.vue'
 import StudentMatches from '@/components/Students/StudentMatches.vue'
 import CompanyMatches from '@/components/Company/CompanyMatches.vue'
 import OfferDetails from '@/views/OfferDetails.vue'
+import { ref } from 'vue'
+
+const profileChecked = ref(false)
+const profileComplete = ref(true)
+
+async function checkProfile(role: string) {
+  const token = localStorage.getItem('token')
+  if (!token) return false
+  let url = ''
+  if (role === 'student') url = 'https://localhost:8000/student/profile'
+  else if (role === 'company') url = 'https://localhost:8000/company/profile'
+  else return true
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    if (!res.ok || res.status === 204) return false
+    const data = await res.json()
+    if (role === 'student') {
+      return !!(data.firstname && data.name && data.city && data.description)
+    } else {
+      return !!(data.name && data.city && data.description)
+    }
+  } catch {
+    return false
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -129,7 +154,7 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   authStore.loadFromStorage()
 
@@ -145,6 +170,14 @@ router.beforeEach((to, from, next) => {
 
   if (requiresAuth && allowedRoles && (!userRole || !allowedRoles.includes(userRole))) {
     return next({ name: 'home' })
+  }
+
+  // Bloque la navigation si le profil n'est pas complété (hors page de profil)
+  if (requiresAuth && !['/dashboard/student', '/dashboard/company'].includes(to.path)) {
+    const complete = await checkProfile(userRole)
+    if (!complete) {
+      return next({ path: userRole === 'student' ? '/dashboard/student' : '/dashboard/company', query: { incomplete: '1' } })
+    }
   }
 
   next()
