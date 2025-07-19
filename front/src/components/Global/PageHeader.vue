@@ -45,7 +45,7 @@ async function getNumberMatches() {
     return
   }
   try {
-    const res = await fetch('https://127.0.0.1:8000/matches/count', {
+    const res = await fetch('https://localhost:8000/matches/count', {
       headers: { Authorization: `Bearer ${t}` },
     })
     if (!res.ok) {

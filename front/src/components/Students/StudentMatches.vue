@@ -42,7 +42,7 @@ async function fetchMatchedCompanies() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch('https://127.0.0.1:8000/matches/student', {
+    const response = await fetch('https://localhost:8000/matches/student', {
       headers: { Authorization: `Bearer ${token}` },
     })
 

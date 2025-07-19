@@ -36,7 +36,7 @@ async function fetchLikedStudents() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch('https://127.0.0.1:8000/company/liked-students', {
+    const response = await fetch('https://localhost:8000/company/liked-students', {
       headers: { Authorization: `Bearer ${token}` },
     })
 
@@ -60,7 +60,7 @@ async function removeLike(studentId: number) {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch(`https://127.0.0.1:8000/company/unlike-student/${studentId}`, {
+    const response = await fetch(`https://localhost:8000/company/unlike-student/${studentId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     })

@@ -27,7 +27,7 @@ async function fetchCompanyProfile() {
   const t = localStorage.getItem('token');
   if (!t) return;
 
-  const endpoint = `https://127.0.0.1:8000/company/by-name/${encodeURIComponent(name)}`;
+  const endpoint = `https://localhost:8000/company/by-name/${encodeURIComponent(name)}`;
   try {
     const res = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${t}` },
