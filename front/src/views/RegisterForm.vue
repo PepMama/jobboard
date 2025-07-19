@@ -6,9 +6,7 @@
       <h1>Bienvenue !</h1>
       <h2 class="login-title">Créer un compte</h2>
 
-      <!-- Formulaire d'inscription -->
       <form @submit.prevent="handleRegister">
-        <!-- Email -->
         <input
           type="email"
           class="email"
@@ -17,7 +15,6 @@
           required
         />
 
-        <!-- Mot de passe -->
         <div class="password-wrapper">
           <input
             :type="showPassword ? 'text' : 'password'"
@@ -26,6 +23,7 @@
             v-model="form.password"
             required
           />
+
           <span class="toggle-password" @click="showPassword = !showPassword">
             <svg
               v-if="!showPassword"
@@ -63,8 +61,8 @@
             </svg>
           </span>
         </div>
+        <p v-if="passwordError" class="text-danger">{{ passwordError }}</p>
 
-        <!-- Rôle -->
         <div class="form-group">
           <label class="label-role">Vous êtes :</label>
           <div class="radio-options">
@@ -79,7 +77,6 @@
           </div>
         </div>
 
-        <!-- Bouton inscription -->
         <button type="submit" class="login-button">S'inscrire</button>
       </form>
 
@@ -115,12 +112,26 @@ const showPassword = ref(false)
 const router = useRouter()
 const authStore = useAuthStore()
 
+const validatePassword = (pwd) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{6,}$/
+  return regex.test(pwd)
+}
+
 const form = reactive({
   username: '',
   email: '',
   password: '',
 })
+const passwordError = ref('')
 const handleRegister = async () => {
+
+if (!validatePassword(form.password)) {
+    passwordError.value = 'Le mot de passe doit contenir au moins 6 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.'
+    return
+  } else {
+    passwordError.value = ''
+  }
+
   const payload = {
     email: form.email,
     password: form.password,
