@@ -33,7 +33,7 @@ class StudentService
         // On vérifie si l'étudiant existe déjà
         $student = $this->studentRepository->findOneBy(['user' => $user]);
 
-        if(!$student){
+        if (!$student) {
             $student = new Student();
             $student->setUser($user);
             $student->setCreatedAt(new \DateTime());
@@ -59,13 +59,13 @@ class StudentService
 
         return $student;
     }
-   public function getStudentsForCompany(?string $keyword, ?string $city, ?string $degree, ?string $fieldOfStudy, ?int $companyId = null): array
+    public function getStudentsForCompany(?string $keyword, ?string $city, ?string $degree, ?string $fieldOfStudy, ?int $companyId = null): array
     {
         $qb = $this->em
-        ->getRepository(Student::class)
-        ->createQueryBuilder('s')
-        ->leftJoin('s.educations', 'e')
-        ->where('1 = 1');
+            ->getRepository(Student::class)
+            ->createQueryBuilder('s')
+            ->leftJoin('s.educations', 'e')
+            ->where('1 = 1');
 
         if ($keyword) {
             $qb->andWhere('s.description LIKE :keyword')
@@ -74,7 +74,7 @@ class StudentService
 
         if ($city) {
             $qb->andWhere('s.city = :city')
-                ->setParameter('city', $city );
+                ->setParameter('city', $city);
         }
 
         if ($degree) {
@@ -93,7 +93,7 @@ class StudentService
                 ->where('ls.company = :companyId');
 
             $qb->andWhere($qb->expr()->notIn('s.id', $subQb->getDQL()))
-            ->setParameter('companyId', $companyId);
+                ->setParameter('companyId', $companyId);
         }
 
         $students = $qb->getQuery()->getResult();
@@ -107,9 +107,14 @@ class StudentService
         $this->em->flush();
     }
 
-    public function getStudentByName(string $name): ?Student
+    public function getStudentByName(string $fullName): ?Student
     {
-        return $this->studentRepository->findOneBy(['name' => $name]);
+        [$firstname, $lastname] = array_pad(explode(' ', trim($fullName), 2), 2, null);
+        return $this->studentRepository->findOneBy([
+            'firstname' => $firstname,
+            'name' => $lastname,
+        ]);
     }
+
 
 }

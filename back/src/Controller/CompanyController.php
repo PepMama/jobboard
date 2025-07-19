@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+
 
 class CompanyController extends AbstractController
 {
@@ -107,12 +109,12 @@ class CompanyController extends AbstractController
             if (!$user) {
                 return new JsonResponse(['error' => 'Unauthorized'], 401);
             }
-            
+
             $company = $companyService->getCompanyByUser($user);
             if (!$company) {
                 return new JsonResponse(['error' => 'Company not found'], 404);
             }
-            
+
             $keyword = $request->query->get('keyword');
             $city = $request->query->get('city');
             $degree = $request->query->get('degree');
@@ -141,12 +143,22 @@ class CompanyController extends AbstractController
             if (!$user) {
                 return new JsonResponse(['error' => 'Unauthorized'], 401);
             }
+
             $company = $companyService->getCompanyByName($name);
             if (!$company) {
                 return new JsonResponse(['error' => 'Company not found'], 404);
             }
 
-            return $this->json($company);
+            return $this->json(
+                $company,
+                200,
+                [],
+                [
+                    AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
+                        return $obj->getId();
+                    }
+                ]
+            );
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }

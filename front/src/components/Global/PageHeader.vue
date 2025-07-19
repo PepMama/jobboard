@@ -4,9 +4,20 @@
       ☰
     </button>
     <h2 class="mb-0 fw-bold text-start">{{ title }}</h2>
+
     <div class="d-flex align-items-center gap-4 ms-auto">
       <span class="text-muted">{{ today }}</span>
-      <Bell class="icon-btn" :size="22" />
+      <div class="position-relative" style="width: 24px; height: 24px">
+        <Bell class="icon-btn" :size="22" @click="goToMatchs" style="cursor: pointer" />
+
+        <span
+          v-if="nbMatches > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+          style="font-size: 0.6rem; min-width: 18px"
+        >
+          {{ nbMatches }}
+        </span>
+      </div>
       <Settings class="icon-btn" :size="22" @click="goToSettings" style="cursor: pointer" />
       <LogOut class="icon-btn" :size="22" @click="logout" style="cursor: pointer" />
     </div>
@@ -14,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { Bell, Settings, LogOut } from 'lucide-vue-next'
@@ -24,6 +35,43 @@ defineEmits(['toggle-sidebar'])
 
 const router = useRouter()
 const authStore = useAuthStore()
+const role = authStore.role || localStorage.getItem('role')
+const nbMatches = ref(0)
+
+async function getNumberMatches() {
+  const t = localStorage.getItem('token')
+  if (!t) {
+    console.warn('Token manquant')
+    return
+  }
+  try {
+    const res = await fetch('https://127.0.0.1:8000/matches/count', {
+      headers: { Authorization: `Bearer ${t}` },
+    })
+    if (!res.ok) {
+      throw new Error('Profil non trouvé')
+    }
+    const data = await res.json()
+    return data.matchCount || 0
+  } catch (error) {
+    console.error('Erreur lors de la récupérationde des matchs:', error)
+    return 0
+  }
+}
+
+onMounted(async () => {
+  const matchesCount = await getNumberMatches()
+  console.log('Nombre de matchs:', matchesCount)
+  nbMatches.value = matchesCount
+})
+
+const goToMatchs = () => {
+  if (role == 'ROLE_COMPANY') {
+    router.push('/dashboard/company/matches')
+  } else {
+    router.push('/dashboard/student/matches')
+  }
+}
 
 const today = computed(() => {
   return new Date().toLocaleDateString('fr-FR', {
@@ -57,6 +105,7 @@ function logout() {
   color: #5a189a;
   transition: color 0.2s;
 }
+
 .icon-btn:hover {
   color: #891ef4;
 }
@@ -73,10 +122,9 @@ function logout() {
     gap: 0.5rem;
   }
 
-  .d-flex.align-items-center > .ms-auto {
+  .d-flex.align-items-center>.ms-auto {
     margin-left: 0 !important;
     justify-content: center;
   }
 }
-
 </style>
