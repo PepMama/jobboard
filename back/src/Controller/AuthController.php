@@ -26,7 +26,7 @@ class AuthController extends AbstractController
             $existingUser = $em->getRepository(Users::class)->findOneBy(['email' => $data['email']]);
             if ($existingUser) {
                 return new JsonResponse([
-                    'error' => 'Cet utilisateur existe déjà.'
+                    'error' => 'Cet email est déjà associé à un compte.'
                 ], 409);
             }
 
@@ -77,7 +77,7 @@ class AuthController extends AbstractController
             $user = $em->getRepository(Users::class)->findOneBy(['email' => $email]);
 
             if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
-                return new JsonResponse(['error' => 'Invalid credentials'], 401);
+                return new JsonResponse(['error' => 'Mot de passe incorrect'], 401);
             }
 
             // Génération du token JWT

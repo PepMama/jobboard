@@ -360,6 +360,7 @@ class Student
             'lastName' => $this->getName(),
             'city' => $this->getCity(),
             'description' => $this->getDescription(),
+            'title' => $this->getTitle(),
             'LinkedIn'=> $this->getLinkedin(),
             'Github'=> $this->getGithub(),
             'CV'=> $this->getCv(),

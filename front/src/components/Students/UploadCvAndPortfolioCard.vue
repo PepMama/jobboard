@@ -6,7 +6,7 @@
       <input type="file" accept="application/pdf" @change="handleCvUpload" />
 
       <div v-if="cvUrl" class="mt-2">
-        <embed :src="cvUrl" type="application/pdf" width="100%" height="300px" />
+        <embed :src="cvUrl" type="application/pdf" width="100%" height="600px" />
         <button class="mt-2 px-4 py-1 bg-red-500 text-white rounded" @click="deleteCv">
           Supprimer le CV
         </button>
@@ -101,8 +101,9 @@ async function handleCvUpload(e) {
       throw new Error(data.error || 'Erreur serveur inconnue')
     }
 
-    cvUrl.value = `/uploads/cvs/${filename}` 
+    cvUrl.value = data.cv 
     emit('update:cv', data.cv)
+
   } catch (error) {
     console.error('Erreur lors de l’envoi :', error)
     alert(error.message || 'Erreur réseau')
