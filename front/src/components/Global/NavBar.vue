@@ -57,14 +57,14 @@ const handleLogout = () => {
 
 const studentMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/student' },
+  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' },
   { nom: 'Mes likes', icone: Heart, url: 'dashboard/student/likes' },
   { nom: 'Mes matchs', icone: Zap, url: 'dashboard/student/matches' },
-  { nom: 'Offres', icone: Briefcase, url: 'dashboard/student/offers' }
 ];
 const companyMenu = [
   { nom: 'Profil', icone: User, url: 'dashboard/company' },
   { nom: 'Créer une offre', icone: Plus, url: 'company/create-offer' },
-  { nom: 'Mes candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
+  { nom: 'Les candidats', icone: Briefcase, url: 'dashboard/company/candidates' },
   { nom: 'Mes likes', icone: Heart, url: 'company/likes' },
   { nom: 'Mes matchs', icone: Zap, url: 'dashboard/company/matches' },
   { nom: 'Mes offres', icone: Briefcase, url: 'company/offers' }
