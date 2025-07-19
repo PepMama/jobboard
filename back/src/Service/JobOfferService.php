@@ -131,7 +131,7 @@ class JobOfferService
             ->join('o.company', 'c')
             ->addSelect('c')
             ->where('o.state = :state')
-            ->setParameter('state', 'active');
+            ->setParameter('state', 'visible');
 
         if ($keyword) {
             $qb->andWhere('LOWER(o.title) LIKE :keyword OR LOWER(o.description) LIKE :keyword')

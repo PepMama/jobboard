@@ -82,10 +82,16 @@ const togglePassword = () => {
     }
 
     const data = await response.json()
-    const { token, role, redirect } = data
+    const { token, role } = data
 
     authStore.setAuth(token, role)
-    router.push(redirect)
+    if (role === 'ROLE_STUDENT') {
+      router.push('/dashboard/student/offers')
+    } else if (role === 'ROLE_COMPANY') {
+      router.push('/dashboard/company/candidates')
+    } else {
+      router.push('/')
+    }
   } catch (error) {
     alert(error.message || 'Erreur lors de la connexion')
   }

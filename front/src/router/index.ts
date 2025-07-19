@@ -10,12 +10,14 @@ import EditOffer from '@/components/Company/EditOffer.vue'
 import OffersList from '@/components/Company/OffersList.vue'
 import OfferSwipe from '@/views/OfferSwipe.vue'
 import CompanyLikes from '@/views/CompanyLikes.vue'
+import StudentLikes from '@/views/StudentLikes.vue'
 import { useAuthStore } from '@/stores/auth'
 import PublicCompany from '@/views/PublicCompany.vue'
 import PublicStudent from '@/views/PublicStudent.vue'
 import Candidates from '@/views/StudentSwipe.vue'
 import StudentMatches from '@/components/Students/StudentMatches.vue'
 import CompanyMatches from '@/components/Company/CompanyMatches.vue'
+import OfferDetails from '@/views/OfferDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -111,6 +113,18 @@ const router = createRouter({
       name: 'CompanyLikes',
       component: CompanyLikes,
       meta: { requiresAuth: true, allowedRoles: ['company'] },
+    },
+    {
+      path: '/dashboard/student/likes',
+      name: 'StudentLikes',
+      component: StudentLikes,
+      meta: { requiresAuth: true, allowedRoles: ['student'] },
+    },
+    {
+      path: '/offer/:id',
+      name: 'OfferDetails',
+      component: OfferDetails,
+      meta: { requiresAuth: true },
     },
   ],
 })

@@ -10,13 +10,17 @@
         </div>
 
         <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
+          <label for="description" class="form-label">détail de l'offre</label>
           <textarea id="description" class="form-control" v-model="formData.description"></textarea>
         </div>
 
         <div class="mb-3">
           <label for="state" class="form-label">État</label>
-          <input type="text" id="state" class="form-control" v-model="formData.state" />
+          <select id="state" class="form-select" v-model="formData.state">
+            <option disabled value="">Sélectionnez l'état</option>
+            <option value="visible">Visible</option>
+            <option value="non_visible">Non visible</option>
+          </select>
         </div>
 
         <div class="mb-3">
@@ -25,8 +29,6 @@
             <option disabled value="">Sélectionnez le type de contrat</option>
             <option value="Stage">Stage</option>
             <option value="Alternance">Alternance</option>
-            <option value="CDI">CDI</option>
-            <option value="CDD">CDD</option>
           </select>
         </div>
 
