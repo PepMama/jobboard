@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="auth-container">
     <h3>Mot de passe oublié</h3>
     <input v-model="email" placeholder="Votre email" class="form-control mb-3" />
     <button class="btn btn-primary" @click="submit">Envoyer</button>
@@ -29,3 +29,4 @@ const submit = async () => {
   }
 }
 </script>
+<style scoped src="@/CSS/resertPassword.css"></style>
