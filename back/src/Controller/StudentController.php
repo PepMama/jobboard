@@ -6,6 +6,8 @@ use App\Service\StudentService;
 use App\Service\TokenService;
 use App\Entity\Student;
 use App\Entity\Users;
+use App\Entity\Company;
+use App\Entity\LikesStudent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,6 +174,83 @@ class StudentController extends AbstractController
             $studentService->save($student);
 
             return new JsonResponse(['linkedin' => $student->getLinkedin()]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/liked-companies', name: 'app_get_liked_companies', methods: ['GET'])]
+    public function getLikedCompanies(Request $request, TokenService $tokenService, \Doctrine\ORM\EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès réservé aux étudiants'], 403);
+            }
+
+            $student = $entityManager->getRepository(Student::class)->findOneBy(['user' => $user]);
+            if (!$student) {
+                return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
+            }
+
+            $likesRepository = $entityManager->getRepository(LikesStudent::class);
+            $likes = $likesRepository->findBy(['student' => $student]);
+
+            $companies = [];
+            foreach ($likes as $like) {
+                $company = $like->getCompany();
+                $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+                
+                $companies[] = [
+                    'id' => $company->getId(),
+                    'name' => $company->getName(),
+                    'city' => $company->getCity(),
+                    'description' => $company->getDescription(),
+                    'logo' => $logoUrl,
+                    'website' => $company->getWebsite(),
+                    'industry' => $company->getIndustry(),
+                    'liked_at' => $like->getLikedAt()->format('Y-m-d H:i:s')
+                ];
+            }
+
+            return new JsonResponse($companies);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/unlike-company/{companyId}', name: 'app_unlike_company', methods: ['DELETE'])]
+    public function unlikeCompany(int $companyId, Request $request, TokenService $tokenService, \Doctrine\ORM\EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès réservé aux étudiants'], 403);
+            }
+
+            $student = $entityManager->getRepository(Student::class)->findOneBy(['user' => $user]);
+            if (!$student) {
+                return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
+            }
+
+            $company = $entityManager->getRepository(Company::class)->find($companyId);
+            if (!$company) {
+                return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
+            }
+
+            $like = $entityManager->getRepository(LikesStudent::class)->findOneBy([
+                'student' => $student,
+                'company' => $company
+            ]);
+
+            if (!$like) {
+                return new JsonResponse(['error' => 'Like non trouvé'], 404);
+            }
+
+            $entityManager->remove($like);
+            $entityManager->flush();
+
+            return new JsonResponse(['message' => 'Like supprimé']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
