@@ -79,7 +79,7 @@ async function handleCvUpload(e) {
   formData.append('cv', file)
 
   try {
-    const res = await fetch('https://localhost:8000/student/upload-cv', {
+    const res = await fetch('https://127.0.0.1:8000/student/upload-cv', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -110,7 +110,7 @@ async function handleCvUpload(e) {
 }
 
 async function deleteCv() {
-  const res = await fetch('https://localhost:8000/student/delete-cv', {
+  const res = await fetch('https://127.0.0.1:8000/student/delete-cv', {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -127,7 +127,7 @@ async function deleteCv() {
 }
 
 async function updateLinkLinkedin() {
-  const res = await fetch('https://localhost:8000/student/update-linkedin', {
+  const res = await fetch('https://127.0.0.1:8000/student/update-linkedin', {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -145,7 +145,7 @@ async function updateLinkLinkedin() {
 }
 
 async function updateGithub() {
-  const res = await fetch('https://localhost:8000/student/update-github', {
+  const res = await fetch('https://127.0.0.1:8000/student/update-github', {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,

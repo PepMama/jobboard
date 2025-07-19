@@ -24,8 +24,8 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/competencies, roles: PUBLIC_ACCESS }
-        - { path: ^/student, roles: ROLE_STUDENT }
-        - { path: ^/company, roles: ROLE_COMPANY }
+        - { path: ^/student, roles: PUBLIC_ACCESS }
+        - { path: ^/company, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 

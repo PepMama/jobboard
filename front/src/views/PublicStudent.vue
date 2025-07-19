@@ -1,196 +1,146 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import Sidebar from '@/components/Global/NavBar.vue'
-import PageHeader from '@/components/Global/PageHeader.vue'
-import StudentHeader from '@/components/Students/StudentHeader.vue'
-import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
-import ExperienceCard from '@/components/Students/ExperienceCard.vue'
-import EducationCard from '@/components/Students/EducationCard.vue'
-import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
 import { useRoute } from 'vue-router'
+import Sidebar from '@/components/Global/NavBar.vue'
+import { ArrowLeft } from 'lucide-vue-next'
+import PageHeader from '@/components/Global/PageHeader.vue'
 
-const avatar = ref('https://via.placeholder.com/80')
-
+import Avatar from '@/assets/avatar-defaut.jpg'
+const showSidebar = ref(true)
 const route = useRoute()
 const name = route.params.name as string
+console.log('Company name:', name)
 
-const formData = reactive({
-  firstname: '',
+const data = reactive({
   name: '',
-  phone: '',
-  age: '',
+  firstName: '',
+  phoneNumber: '',
+  github: '',
+  linkedin: '',
   address: '',
   city: '',
   postalCode: '',
-  cv: '',
-  github: '',
-  linkedin: '',
-  bio: '',
-  avatar: '',
+  description: '',
+  photo: '',
 })
-const showModal = ref(false)
 
 async function fetchStudentProfile() {
-  const t = localStorage.getItem('token')
-  if (!t) return
+  const t = localStorage.getItem('token');
+  if (!t) return;
 
-  const prof = await fetch(`https://localhost:8000/company/${encodeURIComponent(name)}`, {
-    headers: { Authorization: `Bearer ${t}` },
-  })
-
-  if (prof.ok && prof.status !== 204) {
-    const d = await prof.json()
-    formData.firstname = d.firstname ?? ''
-    formData.name = d.name ?? ''
-    formData.phone = d.phone_number ?? ''
-    formData.age = d.age ?? ''
-    formData.address = d.address ?? ''
-    formData.city = d.city ?? ''
-    formData.postalCode = d.postal_code ?? ''
-    formData.cv = d.cv ?? ''
-    formData.github = d.github ?? ''
-    formData.linkedin = d.linkedin ?? ''
-    formData.bio = d.description ?? ''
-    formData.avatar = d.photo ?? ''
+  const endpoint = `https://127.0.0.1:8000/student/by-name/${encodeURIComponent(name)}`;
+  try {
+    console.log('Fetching student profile for:', name);
+    const res = await fetch(endpoint, {
+      headers: { Authorization: `Bearer ${t}` },
+    });
+    if (!res.ok) throw new Error('Étudiant non trouvé');
+    const d = await res.json();
+    console.log(d);
+    data.name = d.name ?? '';
+    data.firstName = d.firstname ?? '';
+    data.phoneNumber = d.phoneNumber ?? '';
+    data.github = d.github ?? '';
+    data.linkedin = d.linkedin ?? '';
+    data.address = d.address ?? '';
+    data.city = d.city ?? '';
+    data.postalCode = d.postalCode ?? '';
+    data.description = d.description ?? '';
+    data.photo = d.photo ?? '';
+  } catch (e) {
+    console.error(e);
   }
-
-  //   const exp = await fetch('http://localhost:8000/student/experiences', {
-  //     headers: { Authorization: `Bearer ${t}` }
-  //   })
-  //   experiences.value = exp.ok ? await exp.json() : []
-
-  //   const eduRes = await fetch('http://localhost:8000/student/educations', {
-  //     headers: { Authorization: `Bearer ${t}` }
-  //   })
-  //   educations.value = eduRes.ok ? await eduRes.json() : []
 }
 
-async function submitForm() {
-  const t = localStorage.getItem('token')
-  if (!t) return
-  const payload = {
-    firstname: formData.firstname,
-    name: formData.name,
-    phone_number: formData.phone,
-    age: formData.age,
-    address: formData.address,
-    city: formData.city,
-    postal_code: formData.postalCode,
-    description: formData.bio,
-    avatar: formData.avatar,
-    photo: null,
-    linkedin: formData.linkedin,
-    github: formData.github,
-    cv: formData.cv,
-  }
-  const res = await fetch('https://localhost:8000/student/manage-profile', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${t}`,
-    },
-    body: JSON.stringify(payload),
-  })
-  if (res.ok) alert('Profil mis à jour')
-}
+onMounted(fetchStudentProfile);
 
-onMounted(fetchStudentProfile)
 </script>
 
 <template>
-  <div class="d-flex w-100 min-vh-100 dashboard-bg">
-    <Sidebar />
-    <div class="flex-grow-1 p-4">
-      <PageHeader title="Profile" />
+  <div class="d-flex flex-column w-100 min-vh-100">
+    <div class="d-flex w-100 min-vh-100 dashboard-bg">
+      <Sidebar :visible="showSidebar" @close="showSidebar = false" />
+      <div class="flex-grow-1 p-4">
+        <PageHeader title="Mes matchs" @toggle-sidebar="showSidebar = true" />
+        <div class="d-flex align-items-center px-4 py-3 border-bottom bg-light">
+          <button @click="$router.back()" class="btn btn-link text-decoration-none d-flex align-items-center p-0 me-2">
+            <ArrowLeft color="black" :size="24" class="me-2" />
+            <span class="fs-5 fw-semibold text-dark">Entreprise</span>
+          </button>
+        </div>
+        <div class="d-flex align-items-center mb-3">
+          <img :src="data.photo || Avatar" alt="Avatar" class="rounded-circle me-3"
+            style="width: 80px; height: 80px;" />
+          <h1 class="mb-0">{{ data.firstName || '' }} {{ data.name || 'Nom de l\'étudiant inconnu' }}</h1>
+        </div>
 
-      <div class="container-fluid">
-        <div class="row g-4">
-          <!-- Partie gauche : Header + formations/expériences -->
-          <div class="col-12 col-lg-8 d-flex flex-column gap-4">
-            <!-- Bloc infos -->
-            <StudentHeader
-              :firstname="formData.firstname"
-              :name="formData.name"
-              :avatar="avatar"
-              :phone="formData.phone"
-              :age="formData.age"
-              :address="formData.address"
-              :city="formData.city"
-              :postalCode="formData.postalCode"
-              :bio="formData.bio"
-              @edit="showModal = false"
-            />
+        <hr />
+        <h2>À propos de l'étudiant</h2>
+        <p v-if="data.description">{{ data.description }}</p>
+        <p v-else class="fst-italic text-muted">L'étudiant n'a pas encore de description.</p>
 
-            <!-- Bloc formations + expériences -->
-            <div class="row g-4">
-              <div class="col-12 col-lg-6">
-                <!-- <EducationCard :educations="educations" @changed="fetchStudentProfile" /> -->
-              </div>
-              <div class="col-12 col-lg-6">
-                <!-- <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" /> -->
-              </div>
-            </div>
-          </div>
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+          <strong>Téléphone</strong>
+          <span>{{ data.phoneNumber || 'Non renseigné' }}</span>
+        </div>
 
-          <!-- Partie droite : Upload fichiers -->
-          <div class="col-12 col-lg-4">
-            <!-- <UploadCvAndPortfolio
-              :cv="formData.cv"
-              :github="formData.github"
-              :linkedin="formData.linkedin"
-            /> -->
-          </div>
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+          <strong>Site web</strong>
+          <span v-if="data.github">
+            <a :href="data.github" target="_blank">{{ data.github }}</a>
+          </span>
+          <span v-else>Non renseigné</span>
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+          <strong>LinkedIn</strong>
+          <span v-if="data.linkedin">
+            <a :href="data.linkedin" target="_blank">{{ data.linkedin }}</a>
+          </span>
+          <span v-else>Non renseigné</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between mb-2 align-items-center">
+          <strong>Secteur</strong>
+          <span>
+            <span v-if="data.github" class="badge rounded-pill bg-success-subtle text-success px-3 py-1">
+              {{ data.github }}
+            </span>
+            <span v-else>Non renseigné</span>
+          </span>
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+          <strong>Adresse</strong>
+          <span>{{ data.address || 'Non renseigné' }}</span>
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between mb-2 align-items-center">
+          <strong>Ville</strong>
+          <span>
+            <span v-if="data.city" class="badge rounded-pill bg-primary-subtle text-primary px-3 py-1">
+              {{ data.city }}
+            </span>
+            <span v-else>Non renseigné</span>
+          </span>
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between mb-2 align-items-center">
+          <strong>Code postal</strong>
+          <span>
+            <span v-if="data.postalCode" class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-1">
+              {{ data.postalCode }}
+            </span>
+            <span v-else>Non renseigné</span>
+          </span>
         </div>
       </div>
     </div>
-
-    <!-- Modale -->
-    <div
-      class="modal fade"
-      :class="{ show: showModal }"
-      tabindex="-1"
-      v-show="showModal"
-      style="display: block; z-index: 1055"
-    >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modifier mes informations</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body">
-            <PersonalInfoForm v-model="formData" :is-public="true" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal-backdrop fade"
-      :class="{ show: showModal }"
-      v-if="showModal"
-      style="z-index: 1050"
-      @click="showModal = false"
-    />
   </div>
 </template>
-
-<style scoped>
-.dashboard-bg {
-  background: #f7faff;
-}
-.card {
-  border-radius: 18px !important;
-  box-shadow: 0 2px 16px 0 #e3e8f7 !important;
-  border: none !important;
-}
-@media (max-width: 991px) {
-  .container-fluid .row > div {
-    margin-bottom: 1.5rem;
-  }
-}
-.flex-grow-1 {
-  overflow-y: auto;
-  max-height: 100vh;
-}
-</style>

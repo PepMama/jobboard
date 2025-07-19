@@ -188,7 +188,7 @@ export default {
         if (this.fieldOfStudyFilter) params.append('fieldOfStudy', this.fieldOfStudyFilter);
 
       try {
-        const response = await fetch(`https://localhost:8000/company/students?${params.toString()}`, {
+        const response = await fetch(`https://127.0.0.1:8000/company/students?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -216,7 +216,7 @@ export default {
     async contactStudent(studentId) {
       const token = localStorage.getItem('token')
       try {
-        const response = await fetch(`https://localhost:8000/company/contact-student/${studentId}`, {
+        const response = await fetch(`https://127.0.0.1:8000/company/contact-student/${studentId}`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,

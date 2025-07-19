@@ -177,7 +177,7 @@ class StudentController extends AbstractController
         }
     }
 
-    #[Route('/student/{name}', name: 'public_student_profile', methods: ['GET'])]
+    #[Route('/student/by-name/{name}', name: 'public_student_profile', methods: ['GET'])]
     public function publicStudentProfile(string $name, StudentService $studentService): JsonResponse
     {
         $student = $studentService->getStudentByName($name);
@@ -193,10 +193,13 @@ class StudentController extends AbstractController
             'name'          => $student->getName(),
             'city'          => $student->getCity(),
             'description'   => $student->getDescription(),
-            'photo'         => $photoUrl,
             'linkedin'      => $student->getLinkedin(),
             'github'        => $student->getGithub(),
             'cv'            => $student->getCv(),
+            'phoneNumber'   => $student->getPhoneNumber(),
+            'address'       => $student->getAddress(),
+            'photo'       => $student->getPhoto(),
+            'postalCode'   => $student->getPostalCode(),
         ]);
     }
 }
