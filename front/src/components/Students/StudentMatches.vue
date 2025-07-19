@@ -29,7 +29,7 @@ async function fetchMatches() {
     if (!t) return
 
     try {
-        const res = await fetch('http://localhost:8000/matches/student', {
+        const res = await fetch('https://localhost:8000/matches/student', {
             headers: { Authorization: `Bearer ${t}` },
         })
 
@@ -65,7 +65,7 @@ async function fetchProfile() {
     console.log('Nom entreprise:', selectedCompany.value)
 
     try {
-        const res = await fetch(`http://localhost:8000/company/${encodeURIComponent(selectedCompany.value)}`, {
+        const res = await fetch(`https://localhost:8000/company/${encodeURIComponent(selectedCompany.value)}`, {
             headers: { Authorization: `Bearer ${t}` },
         })
 
