@@ -8,6 +8,8 @@ use App\Entity\Student;
 use App\Entity\Users;
 use App\Entity\Company;
 use App\Entity\LikesStudent;
+use App\Entity\LikesOffer;
+use App\Entity\JobOffer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -250,6 +252,81 @@ class StudentController extends AbstractController
             $entityManager->remove($like);
             $entityManager->flush();
 
+            return new JsonResponse(['message' => 'Like supprimé']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/liked-offers', name: 'app_get_liked_offers', methods: ['GET'])]
+    public function getLikedOffers(Request $request, TokenService $tokenService, \Doctrine\ORM\EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès réservé aux étudiants'], 403);
+            }
+            $student = $entityManager->getRepository(Student::class)->findOneBy(['user' => $user]);
+            if (!$student) {
+                return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
+            }
+            $likes = $entityManager->getRepository(LikesOffer::class)->findBy(['student' => $student]);
+            $offers = [];
+            foreach ($likes as $like) {
+                $offer = $like->getJobOffer();
+                $company = $offer->getCompany();
+                $logoUrl = $company && $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+                $offers[] = [
+                    'id' => $offer->getId(),
+                    'title' => $offer->getTitle(),
+                    'description' => $offer->getDescription(),
+                    'contract_type' => $offer->getContractType(),
+                    'salary' => $offer->getSalary(),
+                    'city' => $offer->getCity(),
+                    'remote' => $offer->getRemote(),
+                    'start_date' => $offer->getStartDate()?->format('Y-m-d'),
+                    'company' => [
+                        'id' => $company?->getId(),
+                        'name' => $company?->getName(),
+                        'logo' => $logoUrl,
+                        'city' => $company?->getCity(),
+                        'industry' => $company?->getIndustry(),
+                        'website' => $company?->getWebsite(),
+                    ],
+                    'liked_at' => $like->getLikedAt()->format('Y-m-d H:i:s'),
+                ];
+            }
+            return new JsonResponse($offers);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/student/unlike-offer/{offerId}', name: 'app_unlike_offer', methods: ['DELETE'])]
+    public function unlikeOffer(int $offerId, Request $request, TokenService $tokenService, \Doctrine\ORM\EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if ($user->getRole() !== 'student') {
+                return new JsonResponse(['error' => 'Accès réservé aux étudiants'], 403);
+            }
+            $student = $entityManager->getRepository(Student::class)->findOneBy(['user' => $user]);
+            if (!$student) {
+                return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
+            }
+            $offer = $entityManager->getRepository(JobOffer::class)->find($offerId);
+            if (!$offer) {
+                return new JsonResponse(['error' => 'Offre non trouvée'], 404);
+            }
+            $like = $entityManager->getRepository(LikesOffer::class)->findOneBy([
+                'student' => $student,
+                'jobOffer' => $offer
+            ]);
+            if (!$like) {
+                return new JsonResponse(['error' => 'Like non trouvé'], 404);
+            }
+            $entityManager->remove($like);
+            $entityManager->flush();
             return new JsonResponse(['message' => 'Like supprimé']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);

@@ -87,6 +87,12 @@
             <p><span class="icon-circle">📘</span> {{ student.educations[0]?.fieldOfStudy || 'Domaine inconnu' }}</p>
             <p><span class="icon-circle">📝</span> {{ student.city || 'Pas de description' }}</p>
           </div>
+          <div v-if="student.CV" class="cv-btn-container">
+            <a :href="`https://localhost:8000/uploads/cvs/${student.CV}`" target="_blank" class="btn-cv">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              CV
+            </a>
+          </div>
         </div>
       </div>
       <div class="swipeButton">
@@ -491,6 +497,32 @@ input::placeholder {
   width: 25%;
   margin-top: 2%;
   gap: 2rem;
+}
+
+.cv-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.btn-cv {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(to bottom, #51d88a, #38c172);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(56, 193, 114, 0.15);
+}
+.btn-cv:hover {
+  background: linear-gradient(to bottom, #38c172, #51d88a);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(56, 193, 114, 0.25);
 }
 
 @media (max-width: 1024px) {

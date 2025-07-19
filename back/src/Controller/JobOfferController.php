@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\JobOffer;
+use App\Entity\Company;
 
 class JobOfferController extends AbstractController
 {
@@ -129,6 +131,48 @@ class JobOfferController extends AbstractController
 
             $offers = $service->getOffersForStudents($keyword, $city, $student->getId());
             return new JsonResponse($offers, 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/offer/{id}', name: 'public_offer_details', methods: ['GET'])]
+    public function publicOfferDetails(
+        int $id,
+        Request $request,
+        TokenService $tokenService,
+        \Doctrine\ORM\EntityManagerInterface $entityManager
+    ): JsonResponse {
+        try {
+            $user = $tokenService->getUserFromRequest($request);
+            if (!$user) {
+                return new JsonResponse(['error' => 'Non authentifié'], 401);
+            }
+            $offer = $entityManager->getRepository(JobOffer::class)->find($id);
+            if (!$offer) {
+                return new JsonResponse(['error' => 'Offre non trouvée'], 404);
+            }
+            $company = $offer->getCompany();
+            $logoUrl = $company && $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+            $data = [
+                'id' => $offer->getId(),
+                'title' => $offer->getTitle(),
+                'description' => $offer->getDescription(),
+                'contract_type' => $offer->getContractType(),
+                'salary' => $offer->getSalary(),
+                'city' => $offer->getCity(),
+                'remote' => $offer->getRemote(),
+                'start_date' => $offer->getStartDate()?->format('Y-m-d'),
+                'company' => [
+                    'id' => $company?->getId(),
+                    'name' => $company?->getName(),
+                    'logo' => $logoUrl,
+                    'city' => $company?->getCity(),
+                    'industry' => $company?->getIndustry(),
+                    'website' => $company?->getWebsite(),
+                ],
+            ];
+            return new JsonResponse($data);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
