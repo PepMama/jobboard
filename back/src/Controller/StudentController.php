@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\MatchEntity;
+use Doctrine\ORM\EntityManagerInterface;
 
 class StudentController extends AbstractController
 {
@@ -58,20 +60,20 @@ class StudentController extends AbstractController
             }
 
             $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
-            
+
             return new JsonResponse([
-                'firstname'     => $student->getFirstname(),
-                'name'          => $student->getName(),
-                'phone_number'  => $student->getPhoneNumber(),
-                'age'           => $student->getAge(),
-                'address'       => $student->getAddress(),
-                'city'          => $student->getCity(),
-                'postal_code'   => $student->getPostalCode(),
-                'description'   => $student->getDescription(),
-                'photo'         => $photoUrl,
-                'linkedin'      => $student->getLinkedin(),
-                'github'        => $student->getGithub(),
-                'cv'            => $student->getCv(),
+                'firstname' => $student->getFirstname(),
+                'name' => $student->getName(),
+                'phone_number' => $student->getPhoneNumber(),
+                'age' => $student->getAge(),
+                'address' => $student->getAddress(),
+                'city' => $student->getCity(),
+                'postal_code' => $student->getPostalCode(),
+                'description' => $student->getDescription(),
+                'photo' => $photoUrl,
+                'linkedin' => $student->getLinkedin(),
+                'github' => $student->getGithub(),
+                'cv' => $student->getCv(),
             ]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
@@ -84,10 +86,10 @@ class StudentController extends AbstractController
         $students = $studentService->getAllStudent();
 
         $data = array_map(fn(Student $s) => [
-            'id'        => $s->getId(),
+            'id' => $s->getId(),
             'firstname' => $s->getFirstname(),
-            'name'      => $s->getName(),
-            'city'      => $s->getCity(),
+            'name' => $s->getName(),
+            'city' => $s->getCity(),
         ], $students);
 
         return new JsonResponse($data);
@@ -202,7 +204,7 @@ class StudentController extends AbstractController
             foreach ($likes as $like) {
                 $company = $like->getCompany();
                 $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
-                
+
                 $companies[] = [
                     'id' => $company->getId(),
                     'name' => $company->getName(),
@@ -303,21 +305,29 @@ class StudentController extends AbstractController
     }
 
     #[Route('/student/unlike-offer/{offerId}', name: 'app_unlike_offer', methods: ['DELETE'])]
-    public function unlikeOffer(int $offerId, Request $request, TokenService $tokenService, \Doctrine\ORM\EntityManagerInterface $entityManager): JsonResponse
-    {
+    public function unlikeOffer(
+        int $offerId,
+        Request $request,
+        TokenService $tokenService,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
         try {
             $user = $tokenService->getUserFromRequest($request);
             if ($user->getRole() !== 'student') {
                 return new JsonResponse(['error' => 'Accès réservé aux étudiants'], 403);
             }
-            $student = $entityManager->getRepository(Student::class)->findOneBy(['user' => $user]);
+
+            $student = $entityManager->getRepository(Student::class)
+                ->findOneBy(['user' => $user]);
             if (!$student) {
                 return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
             }
+
             $offer = $entityManager->getRepository(JobOffer::class)->find($offerId);
             if (!$offer) {
                 return new JsonResponse(['error' => 'Offre non trouvée'], 404);
             }
+
             $like = $entityManager->getRepository(LikesOffer::class)->findOneBy([
                 'student' => $student,
                 'jobOffer' => $offer
@@ -326,12 +336,23 @@ class StudentController extends AbstractController
                 return new JsonResponse(['error' => 'Like non trouvé'], 404);
             }
             $entityManager->remove($like);
+
+            $matches = $entityManager->getRepository(MatchEntity::class)->findBy([
+                'student' => $student
+            ]);
+
+            foreach ($matches as $match) {
+                $entityManager->remove($match);
+            }
+
             $entityManager->flush();
-            return new JsonResponse(['message' => 'Like supprimé']);
+
+            return new JsonResponse(['message' => 'Like supprimé et tous les matchs liés à l\'étudiant ont été supprimés']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
+
 
     #[Route('/student/by-name/{name}', name: 'public_student_profile', methods: ['GET'])]
     public function publicStudentProfile(string $name, StudentService $studentService): JsonResponse
@@ -342,20 +363,20 @@ class StudentController extends AbstractController
             return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
         }
         $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
-        
+
         return new JsonResponse([
-            'id'            => $student->getId(),
-            'firstname'     => $student->getFirstname(),
-            'name'          => $student->getName(),
-            'city'          => $student->getCity(),
-            'description'   => $student->getDescription(),
-            'linkedin'      => $student->getLinkedin(),
-            'github'        => $student->getGithub(),
-            'cv'            => $student->getCv(),
-            'phoneNumber'   => $student->getPhoneNumber(),
-            'address'       => $student->getAddress(),
-            'photo'       => $student->getPhoto(),
-            'postalCode'   => $student->getPostalCode(),
+            'id' => $student->getId(),
+            'firstname' => $student->getFirstname(),
+            'name' => $student->getName(),
+            'city' => $student->getCity(),
+            'description' => $student->getDescription(),
+            'linkedin' => $student->getLinkedin(),
+            'github' => $student->getGithub(),
+            'cv' => $student->getCv(),
+            'phoneNumber' => $student->getPhoneNumber(),
+            'address' => $student->getAddress(),
+            'photo' => $student->getPhoto(),
+            'postalCode' => $student->getPostalCode(),
         ]);
     }
 }

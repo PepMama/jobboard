@@ -72,14 +72,14 @@ const availableCompetencies = computed(() =>
 async function fetchCompetencies() {
   const t = localStorage.getItem('token')
   if (!t) return
-  const res = await fetch('https://localhost:8000/student/competencies', {
+  const res = await fetch('https://127.0.0.1:8000/student/competencies', {
     headers: { Authorization: `Bearer ${t}` },
   })
   competencies.value = res.ok ? await res.json() : []
 }
 
 async function fetchAllCompetencies() {
-  const res = await fetch('https://localhost:8000/competencies')
+  const res = await fetch('https://127.0.0.1:8000/competencies')
   allCompetencies.value = res.ok ? await res.json() : []
 }
 
@@ -114,7 +114,7 @@ async function addCompetency() {
     error.value = 'Veuillez sélectionner ou saisir une compétence.'
     return
   }
-  const res = await fetch('https://localhost:8000/student/add-competency', {
+  const res = await fetch('https://127.0.0.1:8000/student/add-competency', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
     body: JSON.stringify({ name })
@@ -132,7 +132,7 @@ async function removeCompetency(id: number) {
   error.value = ''
   const t = localStorage.getItem('token')
   if (!t) return
-  const res = await fetch(`https://localhost:8000/student/delete-competency/${id}`, {
+  const res = await fetch(`https://127.0.0.1:8000/student/delete-competency/${id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${t}` },
   })

@@ -59,6 +59,7 @@ class LikesController extends AbstractController
                     $match->setStudent($student);
                     $match->setCompany($company);
                     $match->setMatchedAt(new \DateTime());
+                    $match->setJob($offer);
                     $match->setIsValid(true);
                     $match->setIsContacted(false);
                     $em->persist($match);
@@ -110,6 +111,7 @@ class LikesController extends AbstractController
                         $match = new MatchEntity();
                         $match->setStudent($student);
                         $match->setCompany($company);
+                        $match->setJob($jobOffer);
                         $match->setMatchedAt(new \DateTime());
                         $match->setIsValid(true);
                         $match->setIsContacted(true);
@@ -143,15 +145,13 @@ class LikesController extends AbstractController
                 return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
             }
 
-            // Récupérer les likes de l'entreprise
             $likes = $em->getRepository(LikesStudent::class)->findBy(['company' => $company]);
-
             $likedStudents = [];
             foreach ($likes as $like) {
                 $student = $like->getStudent();
                 if ($student) {
                     $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
-                    
+
                     $likedStudents[] = [
                         'id' => $student->getId(),
                         'firstname' => $student->getFirstname(),
@@ -186,31 +186,36 @@ class LikesController extends AbstractController
             if ($user->getRole() !== 'company') {
                 return new JsonResponse(['error' => 'Accès réservé aux entreprises'], 403);
             }
-
             $company = $companyService->getCompanyByUser($user);
             if (!$company) {
                 return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
             }
-
             $student = $em->getRepository(Student::class)->find($id);
             if (!$student) {
                 return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
             }
 
-            // Trouver et supprimer le like
+            // Faut voir si il y a un like
             $like = $em->getRepository(LikesStudent::class)->findOneBy([
                 'company' => $company,
                 'student' => $student
             ]);
-
             if (!$like) {
                 return new JsonResponse(['error' => 'Like non trouvé'], 404);
             }
-
             $em->remove($like);
+
+            $matches = $em->getRepository(MatchEntity::class)->findBy([
+                'company' => $company,
+                'student' => $student
+            ]);
+            foreach ($matches as $match) {
+                $em->remove($match);
+            }
+
             $em->flush();
 
-            return new JsonResponse(['message' => 'Like supprimé']);
+            return new JsonResponse(['message' => 'tous les matchs supprimés']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }

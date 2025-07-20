@@ -29,7 +29,7 @@ async function fetchCompanyProfile() {
   if (!t) return
 
   try {
-    const prof = await fetch('https://localhost:8000/company/profile', {
+    const prof = await fetch('https://127.0.0.1:8000/company/profile', {
       headers: { Authorization: `Bearer ${t}` },
     })
 
@@ -68,7 +68,7 @@ async function submitForm() {
   }
 
   console.log('Envoi des données du formulaire:', payload);
-  const res = await fetch('https://localhost:8000/company/profile', {
+  const res = await fetch('https://127.0.0.1:8000/company/profile', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
     body: JSON.stringify(payload),

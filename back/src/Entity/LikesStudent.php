@@ -21,35 +21,56 @@ class LikesStudent
     #[ORM\JoinColumn(name: "company_id", referencedColumnName: "id_company", onDelete: "CASCADE")]
     private ?Company $company = null;
 
+    #[ORM\ManyToOne(targetEntity: JobOffer::class)]
+    #[ORM\JoinColumn(name: "job_id", referencedColumnName: "id_job", nullable: true, onDelete: "CASCADE")]
+    private ?JobOffer $jobOffer = null;
+
     #[ORM\Column(name: "liked_at", type: "datetime")]
     private \DateTime $likedAt;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->likedAt = new \DateTime();
     }
 
     // Getters and setters
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
-    public function getStudent(): ?Student {
+    public function getStudent(): ?Student
+    {
         return $this->student;
     }
-    public function setStudent(?Student $student): self {
+    public function setStudent(?Student $student): self
+    {
         $this->student = $student;
         return $this;
     }
-    public function getCompany(): ?Company {
+    public function getCompany(): ?Company
+    {
         return $this->company;
     }
-    public function setCompany(?Company $company): self {
+    public function setCompany(?Company $company): self
+    {
         $this->company = $company;
         return $this;
     }
-    public function getLikedAt(): \DateTime {
+    public function getJobOffer(): ?JobOffer
+    {
+        return $this->jobOffer;
+    }
+    public function setJobOffer(?JobOffer $jobOffer): self
+    {
+        $this->jobOffer = $jobOffer;
+        return $this;
+    }
+    public function getLikedAt(): \DateTime
+    {
         return $this->likedAt;
     }
-    public function setLikedAt(\DateTime $likedAt): self {
+    public function setLikedAt(\DateTime $likedAt): self
+    {
         $this->likedAt = $likedAt;
         return $this;
     }

@@ -3,6 +3,7 @@ import { reactive, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from '@/components/Global/NavBar.vue'
 import { ArrowLeft } from 'lucide-vue-next'
+import PageHeader from '@/components/Global/PageHeader.vue'
 
 import Avatar from '@/assets/avatar-defaut.jpg'
 const showSidebar = ref(true)
@@ -27,7 +28,7 @@ async function fetchCompanyProfile() {
   const t = localStorage.getItem('token');
   if (!t) return;
 
-  const endpoint = `https://localhost:8000/company/by-name/${encodeURIComponent(name)}`;
+  const endpoint = `https://127.0.0.1:8000/company/by-name/${encodeURIComponent(name)}`;
   try {
     const res = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${t}` },
@@ -56,15 +57,10 @@ onMounted(fetchCompanyProfile);
 
 <template>
   <div class="d-flex flex-column w-100 min-vh-100">
-    <div class="d-flex align-items-center px-4 py-3 border-bottom bg-light">
-      <button @click="$router.back()" class="btn btn-link text-decoration-none d-flex align-items-center p-0 me-2">
-        <ArrowLeft color="black" :size="24" class="me-2" />
-        <span class="fs-5 fw-semibold text-dark">Entreprise</span>
-      </button>
-    </div>
     <div class="d-flex w-100 min-vh-100 dashboard-bg">
       <Sidebar :visible="showSidebar" @close="showSidebar = false" />
       <div class="flex-grow-1 p-4">
+        <PageHeader title="Mes matchs" @toggle-sidebar="showSidebar = true" />
         <div class="d-flex align-items-center mb-3">
           <img :src="data.avatar || Avatar" alt="Avatar" class="rounded-circle me-3"
             style="width: 80px; height: 80px;" />

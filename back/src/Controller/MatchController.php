@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\MatchEntity;
-use App\Entity\Student;
-use App\Entity\Company;
 use App\Service\StudentService;
 use App\Service\CompanyService;
 use App\Service\TokenService;
@@ -13,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\JobOffer;
 
 #[Route('/matches')]
 class MatchController extends AbstractController
@@ -26,25 +25,27 @@ class MatchController extends AbstractController
         EntityManagerInterface $em
     ): JsonResponse {
         $user = $tokenService->getUserFromRequest($request);
-
         $student = $studentService->getStudentByUser($user);
-        $company = $companyService->getCompanyByUser($user);
-
         if ($student) {
             $count = $em->getRepository(MatchEntity::class)->count([
                 'student' => $student,
                 'isValid' => true
             ]);
-        } elseif ($company) {
+            return new JsonResponse(['matchCount' => $count]);
+        }
+        $company = $companyService->getCompanyByUser($user);
+        if ($company) {
+            if (!$company) {
+                return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
+            }
+
             $count = $em->getRepository(MatchEntity::class)->count([
                 'company' => $company,
                 'isValid' => true
             ]);
-        } else {
-            return new JsonResponse(['error' => 'Utilisateur inconnu'], 400);
+            return new JsonResponse(['matchCount' => $count]);
         }
-
-        return new JsonResponse(['matchCount' => $count]);
+        return new JsonResponse(['error' => 'Utilisateur inconnu'], 400);
     }
 
     #[Route('/student', name: 'app_student_matches', methods: ['GET'])]
@@ -60,23 +61,31 @@ class MatchController extends AbstractController
         if (!$student) {
             return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
         }
-
         $matches = $em->getRepository(MatchEntity::class)->findBy(
             ['student' => $student, 'isValid' => true],
             ['matchedAt' => 'DESC']
         );
-
         $data = array_map(function (MatchEntity $match) {
-            $company = $match->getCompany();
+            $job = $match->getJob();
+            $company = $job->getCompany();
+
             return [
                 'matchId' => $match->getId(),
+                'job' => [
+                    'id' => $job->getId(),
+                    'title' => $job->getTitle(),
+                    'city' => $job->getCity(),
+                    'contractType' => $job->getContractType(),
+                    'remote' => $job->getRemote(),
+                    'salary' => $job->getSalary(),
+                    'description' => $job->getDescription(),
+                ],
                 'company' => [
                     'id' => $company->getId(),
                     'name' => $company->getName(),
                     'industry' => $company->getIndustry(),
                     'city' => $company->getCity(),
                     'logo' => $company->getLogo(),
-                    'description' => $company->getDescription(),
                     'linkedin' => $company->getLinkedin(),
                     'website' => $company->getWebsite(),
                 ],
@@ -84,7 +93,6 @@ class MatchController extends AbstractController
                 'isContacted' => $match->getIsContacted(),
             ];
         }, $matches);
-
         return new JsonResponse($data);
     }
 
@@ -101,12 +109,23 @@ class MatchController extends AbstractController
         if (!$company) {
             return new JsonResponse(['error' => 'Entreprise non trouvée'], 404);
         }
-        $matches = $em->getRepository(MatchEntity::class)->findBy(
-            ['company' => $company, 'isValid' => true],
-            ['matchedAt' => 'DESC']
-        );
+        $jobOffers = $em->getRepository(JobOffer::class)->findBy(['company' => $company]);
+        if (empty($jobOffers)) {
+            return new JsonResponse([], 200);
+        }
+        $matches = $em->getRepository(MatchEntity::class)
+            ->createQueryBuilder('m')
+            ->innerJoin('m.job', 'j')
+            ->where('m.isValid = true')
+            ->andWhere('j IN (:jobs)')
+            ->setParameter('jobs', $jobOffers)
+            ->orderBy('m.matchedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
         $data = array_map(function (MatchEntity $match) {
             $student = $match->getStudent();
+            $job = $match->getJob();
             return [
                 'matchId' => $match->getId(),
                 'student' => [
@@ -119,11 +138,20 @@ class MatchController extends AbstractController
                     'github' => $student->getGithub(),
                     'cv' => $student->getCv(),
                 ],
+                'job' => [
+                    'id' => $job->getId(),
+                    'title' => $job->getTitle(),
+                    'city' => $job->getCity(),
+                    'contractType' => $job->getContractType(),
+                    'remote' => $job->getRemote(),
+                    'salary' => $job->getSalary(),
+                ],
                 'matchedAt' => $match->getMatchedAt()->format('Y-m-d H:i:s'),
                 'isContacted' => $match->getIsContacted(),
             ];
         }, $matches);
         return new JsonResponse($data);
     }
+
 }
 
