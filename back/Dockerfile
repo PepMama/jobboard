@@ -24,5 +24,5 @@ RUN mkdir -p var && chown -R www-data:www-data var
 # Expose le port 8000
 EXPOSE 8000
 
-# Démarre le serveur PHP intégré
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"] 
+# Démarre le serveur PHP intégré depuis la racine avec le router vers public/
+CMD ["php", "-S", "0.0.0.0:8000", "-t", ".", "public/index.php"] 
