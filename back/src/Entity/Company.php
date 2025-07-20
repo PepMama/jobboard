@@ -40,6 +40,9 @@ class Company
     #[ORM\Column(name: "postal_code", type: "string", length: 10, nullable: true)]
     private ?string $postalCode = null;
 
+    #[ORM\Column(type: "string", length: 14, nullable: true)]
+    private ?string $siret = null;
+
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
@@ -141,6 +144,15 @@ class Company
     
     public function setPostalCode(?string $postalCode): self {
         $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    public function getSiret(): ?string {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): self {
+        $this->siret = $siret;
         return $this;
     }
     

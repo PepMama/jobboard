@@ -40,6 +40,21 @@ class CompanyService
         $company->setCity($data['city'] ?? null);
         $company->setAddress($data['address'] ?? null);
         $company->setPostalCode($data['postal_code'] ?? null);
+        
+        // Validation du SIRET
+        if (isset($data['siret']) && !empty($data['siret'])) {
+            $siret = preg_replace('/\s+/', '', $data['siret']); // Supprime les espaces
+            if (strlen($siret) > 14) {
+                throw new \InvalidArgumentException('Le numéro SIRET ne peut pas dépasser 14 caractères');
+            }
+            if (!preg_match('/^\d{14}$/', $siret)) {
+                throw new \InvalidArgumentException('Le numéro SIRET doit contenir exactement 14 chiffres');
+            }
+            $company->setSiret($siret);
+        } else {
+            $company->setSiret(null);
+        }
+        
         $company->setDescription($data['description'] ?? $company->getDescription());
         $company->setUpdatedAt(new \DateTime());
 

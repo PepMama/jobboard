@@ -9,8 +9,14 @@
           <input
             type="text"
             v-model="form[key]"
+            :maxlength="getMaxLength(key)"
             class="form-control"
+            :placeholder="getPlaceholder(key)"
+            @input="validateSiret(key, $event)"
           />
+          <small v-if="key === 'siret'" class="form-text text-muted">
+            Le numéro SIRET doit contenir exactement 14 chiffres
+          </small>
         </div>
 
         <button
@@ -35,7 +41,8 @@ const props = defineProps({
       linkedin: '',
       address: '',
       city: '',
-      postal_code: ''
+      postal_code: '',
+      siret: ''
     })
   }
 })
@@ -51,7 +58,35 @@ const generalFields = {
   linkedin: 'LinkedIn :',
   address: 'Adresse :',
   city: 'Ville :',
-  postal_code: 'Code postal :'
+  postal_code: 'Code postal :',
+  siret: 'SIRET :'
+}
+
+function getMaxLength(key: string): number {
+  const maxLengths: Record<string, number> = {
+    siret: 14,
+    postal_code: 10,
+    phone: 20
+  }
+  return maxLengths[key] || 255
+}
+
+function getPlaceholder(key: string): string {
+  const placeholders: Record<string, string> = {
+    siret: '12345678901234',
+    postal_code: '75001',
+    phone: '0123456789'
+  }
+  return placeholders[key] || ''
+}
+
+function validateSiret(key: string, event: Event) {
+  if (key === 'siret') {
+    const target = event.target as HTMLInputElement
+    // Supprime tous les caractères non numériques
+    target.value = target.value.replace(/\D/g, '')
+    form[key] = target.value
+  }
 }
 
 function onSubmit() {

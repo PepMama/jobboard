@@ -34,6 +34,7 @@
             <strong>Ville :</strong> {{ city }} <span v-if="postalCode">({{ postalCode }})</span>
           </li>
           <li v-if="address"><strong>Adresse :</strong> {{ address }}</li>
+          <li v-if="siret"><strong>SIRET :</strong> {{ siret }}</li>
           <li v-if="linkedin"><strong>LinkedIn :</strong> {{ linkedin }}</li>
           <li v-if="phone"><strong>Téléphone :</strong> {{ phone }}</li>
         </ul>
@@ -74,6 +75,7 @@ const props = defineProps<{
   address?: string
   city?: string
   postalCode?: string
+  siret?: string
   bio: string
 }>()
 

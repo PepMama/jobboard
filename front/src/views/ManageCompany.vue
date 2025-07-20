@@ -17,6 +17,7 @@ const formData = reactive({
   address: '',
   city: '',
   postal_code: '',
+  siret: '',
 })
 
 const description = ref('')
@@ -42,6 +43,7 @@ async function fetchCompanyProfile() {
       formData.address = d.address ?? ''
       formData.city = d.city ?? ''
       formData.postal_code = d.postal_code ?? ''
+      formData.siret = d.siret ?? ''
       industry.value = d.industry ?? ''
       description.value = d.description ?? ''
       avatar.value = d.logo ?? avatar.value
@@ -64,6 +66,7 @@ async function submitForm() {
     city: formData.city,
     address: formData.address,
     postal_code: formData.postal_code,
+    siret: formData.siret,
     description: description.value,
   }
 
@@ -120,6 +123,7 @@ onMounted(fetchCompanyProfile)
               :address="formData.address"
               :city="formData.city"
               :postalCode="formData.postal_code"
+              :siret="formData.siret"
               :bio="description"
               @update:bio="onBioUpdate"
               @edit="showModal = true"

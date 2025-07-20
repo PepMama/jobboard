@@ -122,13 +122,13 @@ function viewProfile(studentName: string) {
 
                 <div class="mt-auto">
                   <div class="d-flex gap-2 mb-2">
-                    <a v-if="student.student.linkedin" :href="student.student.linkedin" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <a v-if="student.student.linkedin" :href="student.student.linkedin" class="btn btn-outline-primary btn-sm">
                       LinkedIn
                     </a>
-                    <a v-if="student.student.github" :href="student.student.github" target="_blank" class="btn btn-outline-dark btn-sm">
+                    <a v-if="student.student.github" :href="student.student.github" class="btn btn-outline-dark btn-sm">
                       GitHub
                     </a>
-                    <a v-if="student.student.cv" :href="student.student.cv" target="_blank" class="btn btn-outline-success btn-sm">
+                    <a v-if="student.student.cv" :href="student.student.cv" class="btn btn-outline-success btn-sm">
                       CV
                     </a>
                   </div>

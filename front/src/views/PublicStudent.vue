@@ -89,7 +89,7 @@ onMounted(fetchStudentProfile);
         <div class="d-flex justify-content-between mb-2">
           <strong>Site web</strong>
           <span v-if="data.github">
-            <a :href="data.github" target="_blank">{{ data.github }}</a>
+            <a :href="data.github">{{ data.github }}</a>
           </span>
           <span v-else>Non renseigné</span>
         </div>
@@ -98,7 +98,7 @@ onMounted(fetchStudentProfile);
         <div class="d-flex justify-content-between mb-2">
           <strong>LinkedIn</strong>
           <span v-if="data.linkedin">
-            <a :href="data.linkedin" target="_blank">{{ data.linkedin }}</a>
+            <a :href="data.linkedin">{{ data.linkedin }}</a>
           </span>
           <span v-else>Non renseigné</span>
         </div>

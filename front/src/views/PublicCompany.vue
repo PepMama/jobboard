@@ -18,6 +18,7 @@ const data = reactive({
   address: '',
   city: '',
   postalCode: '',
+  siret: '',
   description: '',
   industry: '',
   avatar: '',
@@ -42,6 +43,7 @@ async function fetchCompanyProfile() {
     data.address = d.address ?? '';
     data.city = d.city ?? '';
     data.postalCode = d.postalCode ?? '';
+    data.siret = d.siret ?? '';
     data.description = d.description ?? '';
     data.industry = d.industry ?? '';
     data.avatar = d.photo ?? '';
@@ -86,7 +88,7 @@ onMounted(fetchCompanyProfile);
         <div class="d-flex justify-content-between mb-2">
           <strong>Site web</strong>
           <span v-if="data.website">
-            <a :href="data.website" target="_blank">{{ data.website }}</a>
+            <a :href="data.website">{{ data.website }}</a>
           </span>
           <span v-else>Non renseigné</span>
         </div>
@@ -95,7 +97,7 @@ onMounted(fetchCompanyProfile);
         <div class="d-flex justify-content-between mb-2">
           <strong>LinkedIn</strong>
           <span v-if="data.linkedin">
-            <a :href="data.linkedin" target="_blank">{{ data.linkedin }}</a>
+            <a :href="data.linkedin">{{ data.linkedin }}</a>
           </span>
           <span v-else>Non renseigné</span>
         </div>
@@ -126,6 +128,12 @@ onMounted(fetchCompanyProfile);
             </span>
             <span v-else>Non renseigné</span>
           </span>
+        </div>
+
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+          <strong>SIRET</strong>
+          <span>{{ data.siret || 'Non renseigné' }}</span>
         </div>
 
         <hr />

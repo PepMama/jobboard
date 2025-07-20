@@ -212,13 +212,13 @@ function clearFilters() {
                     <span v-if="student.city" class="badge bg-secondary">{{ student.city }}</span>
                   </div>
                   <div class="d-flex gap-2 mb-2">
-                    <a v-if="student.linkedin" :href="student.linkedin" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <a v-if="student.linkedin" :href="student.linkedin" class="btn btn-outline-primary btn-sm">
                       LinkedIn
                     </a>
-                    <a v-if="student.github" :href="student.github" target="_blank" class="btn btn-outline-dark btn-sm">
+                    <a v-if="student.github" :href="student.github" class="btn btn-outline-dark btn-sm">
                       GitHub
                     </a>
-                    <a v-if="student.cv" :href="student.cv" target="_blank" class="btn btn-outline-success btn-sm">
+                    <a v-if="student.cv" :href="student.cv" class="btn btn-outline-success btn-sm">
                       CV
                     </a>
                   </div>

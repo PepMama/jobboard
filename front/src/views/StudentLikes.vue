@@ -234,7 +234,7 @@ function clearFilters() {
                     <span v-if="offer.city" class="badge bg-secondary">{{ offer.city }}</span>
                   </div>
                   <div class="d-flex gap-2 mb-2">
-                    <a v-if="offer.company.website" :href="offer.company.website" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <a v-if="offer.company.website" :href="offer.company.website" class="btn btn-outline-primary btn-sm">
                       Site Web
                     </a>
                   </div>

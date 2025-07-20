@@ -122,10 +122,10 @@ function viewProfile(companyName: string) {
 
                 <div class="mt-auto">
                   <div class="d-flex gap-2 mb-2">
-                    <a v-if="company.company.linkedin" :href="company.company.linkedin" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <a v-if="company.company.linkedin" :href="company.company.linkedin" class="btn btn-outline-primary btn-sm">
                       LinkedIn
                     </a>
-                    <a v-if="company.company.website" :href="company.company.website" target="_blank" class="btn btn-outline-dark btn-sm">
+                    <a v-if="company.company.website" :href="company.company.website" class="btn btn-outline-dark btn-sm">
                         Website
                     </a>
                   </div>

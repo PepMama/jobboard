@@ -75,7 +75,7 @@ function formatDate(date: string) {
               <p><strong>Télétravail :</strong> {{ offer.remote ? 'Oui' : 'Non' }}</p>
               <p><strong>Date de début :</strong> {{ formatDate(offer.start_date) }}</p>
               <div class="mt-4">
-                <a v-if="offer.company?.website" :href="offer.company.website" target="_blank" class="btn btn-outline-primary btn-sm me-2">Site de l'entreprise</a>
+                <a v-if="offer.company?.website" :href="offer.company.website" class="btn btn-outline-primary btn-sm me-2">Site de l'entreprise</a>
               </div>
             </div>
           </div>
