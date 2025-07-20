@@ -21,6 +21,10 @@ class MatchEntity
     #[ORM\JoinColumn(name: "company_id", referencedColumnName: "id_company", onDelete: "CASCADE")]
     private ?Company $company = null;
 
+    #[ORM\ManyToOne(targetEntity: JobOffer::class)]
+    #[ORM\JoinColumn(name: "job_id", referencedColumnName: "id_job", onDelete: "CASCADE")]
+    private ?JobOffer $job = null;
+
     #[ORM\Column(name: "matched_at", type: "datetime")]
     private \DateTime $matchedAt;
 
@@ -30,46 +34,67 @@ class MatchEntity
     #[ORM\Column(name: "is_contacted", type: "boolean")]
     private bool $isContacted = false;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->matchedAt = new \DateTime();
     }
 
     // Getters and setters
-    public function getId(): ?int {
+    public function getId(): ?int
+    {
         return $this->id;
     }
-    public function getStudent(): ?Student {
+    public function getStudent(): ?Student
+    {
         return $this->student;
     }
-    public function setStudent(?Student $student): self {
+    public function setStudent(?Student $student): self
+    {
         $this->student = $student;
         return $this;
     }
-    public function getCompany(): ?Company {
+    public function getCompany(): ?Company
+    {
         return $this->company;
     }
-    public function setCompany(?Company $company): self {
+    public function setCompany(?Company $company): self
+    {
         $this->company = $company;
         return $this;
     }
-    public function getMatchedAt(): \DateTime {
+    public function getJob(): ?JobOffer
+    {
+        return $this->job;
+    }
+    public function setJob(?JobOffer $job): self
+    {
+        $this->job = $job;
+        return $this;
+    }
+    public function getMatchedAt(): \DateTime
+    {
         return $this->matchedAt;
     }
-    public function setMatchedAt(\DateTime $matchedAt): self {
+    public function setMatchedAt(\DateTime $matchedAt): self
+    {
         $this->matchedAt = $matchedAt;
         return $this;
     }
-    public function getIsValid(): bool {
+    public function getIsValid(): bool
+    {
         return $this->isValid;
     }
-    public function setIsValid(bool $isValid): self {
+    public function setIsValid(bool $isValid): self
+    {
         $this->isValid = $isValid;
         return $this;
     }
-    public function getIsContacted(): bool {
+    public function getIsContacted(): bool
+    {
         return $this->isContacted;
     }
-    public function setIsContacted(bool $isContacted): self {
+    public function setIsContacted(bool $isContacted): self
+    {
         $this->isContacted = $isContacted;
         return $this;
     }

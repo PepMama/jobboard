@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     getCvUrl(fileName) {
-      return `https://localhost:8000/uploads/cv/${fileName}`;
+      return `https://127.0.0.1:8000/uploads/cv/${fileName}`;
     },
     getColorClass(skillName) {
       if (!skillName) return 'badge-gray';

@@ -22,7 +22,7 @@ async function fetchOffer() {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Token non trouvé')
     const id = route.params.id
-    const response = await fetch(`https://localhost:8000/offer/${id}`, {
+    const response = await fetch(`https://127.0.0.1:8000/offer/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!response.ok) throw new Error('Erreur ' + response.status)

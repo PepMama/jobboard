@@ -15,11 +15,23 @@ interface StudentInfo {
   cv?: string
 }
 
+interface JobInfo {
+  id: number
+  title: string
+  city: string
+  contractType: string
+  salary?: number
+  remote: boolean
+  description?: string
+  type: string
+}
+
 interface Student {
   id: number
   isContacted: boolean
   matchId: number
   student: StudentInfo
+  job: JobInfo
   matchedAt: string
 }
 
@@ -42,7 +54,7 @@ async function fetchMatchedStudents() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch('https://localhost:8000/matches/company', {
+    const response = await fetch('https://127.0.0.1:8000/matches/company', {
       headers: { Authorization: `Bearer ${token}` },
     })
 
@@ -116,9 +128,11 @@ function viewProfile(studentName: string) {
                   </div>
                 </div>
 
-                <p v-if="student.student.description" class="text-muted small mb-3">
+                <p v-if="student.student.description">
                   {{ student.student.description?.substring(0, 100) }}{{ student.student.description?.length > 100 ? '...' : '' }}
                 </p>
+
+                <p class="text-muted small mb-3">A postulé à l'offre {{ student.job.title }}</p>
 
                 <div class="mt-auto">
                   <div class="d-flex gap-2 mb-2">

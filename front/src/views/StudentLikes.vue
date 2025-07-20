@@ -80,7 +80,7 @@ async function removeLike(offerId: number) {
   try {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Token non trouvé')
-    const response = await fetch(`https://localhost:8000/student/unlike-offer/${offerId}`, {
+    const response = await fetch(`https://127.0.0.1:8000/student/unlike-offer/${offerId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     })
