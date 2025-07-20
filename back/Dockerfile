@@ -9,6 +9,13 @@ RUN apt-get update \
 # Active le module Apache rewrite
 RUN a2enmod rewrite
 
+# Configure Apache pour permettre les .htaccess
+RUN echo '<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' > /etc/apache2/conf-available/htaccess.conf \
+    && a2enconf htaccess
+
 # Copie le code source dans le conteneur
 COPY . /var/www/html
 
