@@ -2,7 +2,7 @@
   <div class="homepage">
     <header class="header">
       <img :src="altmatch" alt="altmatch" class="altmatch" />
-      <img src="../assets/logo.PNG" alt="Logo" />
+      <img src="../assets/logo.png" alt="Logo" />
       <div class="button-group">
         <router-link to="/login" class="btn-outline">Connexion</router-link>
         <router-link to="/register" class="btn-filled">Inscription</router-link>
