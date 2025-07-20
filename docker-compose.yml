@@ -22,7 +22,7 @@ services:
     container_name: phpmyadmin
     environment:
       PMA_HOST: mariadb
-      PMA_USER: root
+      PMA_USER: pepin
       PMA_PASSWORD: root
     ports:
       - "8080:80"
@@ -44,7 +44,7 @@ services:
       - app-network
 
   symfony-api:
-    image: php:8.3-apache
+    build: ./back
     container_name: job-api
     working_dir: /var/www/html
     volumes:
