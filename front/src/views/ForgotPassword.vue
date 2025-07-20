@@ -15,7 +15,7 @@ const message = ref('')
 
 const submit = async () => {
   try {
-    await fetch('https://127.0.0.1:8000/forgot-password', 
+    await fetch('https://localhost:8000/forgot-password', 
     {
       method: 'POST',
       headers: {
