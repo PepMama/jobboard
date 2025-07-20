@@ -19,7 +19,7 @@ WORKDIR /var/www/html
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 # Installe les dépendances PHP
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # Donne les droits nécessaires au dossier var
 RUN chown -R www-data:www-data var
