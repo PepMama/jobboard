@@ -9,11 +9,11 @@ RUN apt-get update \
 # Active le module Apache rewrite
 RUN a2enmod rewrite
 
-# Copie notre configuration Apache
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
-
 # Copie le code source dans le conteneur
 COPY . /var/www/html
+
+# Copie le contenu de public/ à la racine du DocumentRoot
+RUN cp -r /var/www/html/public/* /var/www/html/
 
 # Définit le répertoire de travail
 WORKDIR /var/www/html
