@@ -22,7 +22,7 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # Donne les droits nécessaires au dossier var
-RUN chown -R www-data:www-data var
+RUN mkdir -p var && chown -R www-data:www-data var
 
 # Expose le port 80 (déjà fait par l'image de base)
 EXPOSE 80 
