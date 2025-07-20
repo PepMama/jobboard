@@ -51,7 +51,8 @@ class LikesController extends AbstractController
             if ($existingCompanyLike) {
                 $existingMatch = $em->getRepository(MatchEntity::class)->findOneBy([
                     'student' => $student,
-                    'company' => $company
+                    'company' => $company,
+                    'job' => $offer
                 ]);
 
                 if (!$existingMatch) {

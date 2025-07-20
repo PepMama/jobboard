@@ -60,6 +60,7 @@ class StudentController extends AbstractController
             }
 
             $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
+            $cvUrl = $student->getCv() ? 'http://localhost:8000' . $student->getCv() : null;
 
             return new JsonResponse([
                 'firstname' => $student->getFirstname(),
@@ -73,7 +74,7 @@ class StudentController extends AbstractController
                 'photo' => $photoUrl,
                 'linkedin' => $student->getLinkedin(),
                 'github' => $student->getGithub(),
-                'cv' => $student->getCv(),
+                'cv' => $cvUrl,
             ]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
