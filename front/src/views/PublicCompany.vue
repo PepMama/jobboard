@@ -29,7 +29,7 @@ async function fetchCompanyProfile() {
   const t = localStorage.getItem('token');
   if (!t) return;
 
-  const endpoint = `https://localhost:8000/company/by-name/${encodeURIComponent(name)}`;
+  const endpoint = `${import.meta.env.VITE_API_URL}/company/by-name/${encodeURIComponent(name)}`;
   try {
     const res = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${t}` },

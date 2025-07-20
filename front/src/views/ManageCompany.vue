@@ -30,7 +30,7 @@ async function fetchCompanyProfile() {
   if (!t) return
 
   try {
-    const prof = await fetch('https://localhost:8000/company/profile', {
+    const prof = await fetch(`${import.meta.env.VITE_API_URL}/company/profile`, {
       headers: { Authorization: `Bearer ${t}` },
     })
 
@@ -71,7 +71,7 @@ async function submitForm() {
   }
 
   console.log('Envoi des données du formulaire:', payload);
-  const res = await fetch('https://localhost:8000/company/profile', {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/company/profile`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
     body: JSON.stringify(payload),

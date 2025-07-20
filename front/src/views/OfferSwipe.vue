@@ -187,7 +187,7 @@ export default {
       if (this.cityFilter) params.append('city', this.cityFilter)
 
       try {
-        const response = await fetch(`https://localhost:8000/student/offers?${params.toString()}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/student/offers?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -230,7 +230,7 @@ export default {
     async likeOffer(offerId) {
       const token = localStorage.getItem('token')
       try {
-        const response = await fetch(`https://localhost:8000/student/like-offer/${offerId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/student/like-offer/${offerId}`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,

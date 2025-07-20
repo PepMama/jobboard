@@ -50,7 +50,7 @@ const fieldOfStudyOptions = [
 async function save() {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch('https://localhost:8000/student/manage-education', {
+  await fetch(`${import.meta.env.VITE_API_URL}/student/manage-education`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify(draft.value),
@@ -62,7 +62,7 @@ async function save() {
 async function del(id: number) {
   const token = localStorage.getItem('token')
   if (!token) return
-  await fetch(`https://localhost:8000/student/delete-education/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_URL}/student/delete-education/${id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   }).then((r) => r.ok && emit('changed'))

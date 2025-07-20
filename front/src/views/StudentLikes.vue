@@ -61,7 +61,7 @@ async function fetchLikedOffers() {
     if (searchCompany.value) params.append('company', searchCompany.value)
     if (searchCity.value) params.append('city', searchCity.value)
     
-    const url = `https://localhost:8000/student/liked-offers${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${import.meta.env.VITE_API_URL}/student/liked-offers${params.toString() ? '?' + params.toString() : ''}`
     
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
@@ -80,7 +80,7 @@ async function removeLike(offerId: number) {
   try {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Token non trouvé')
-    const response = await fetch(`https://localhost:8000/student/unlike-offer/${offerId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/student/unlike-offer/${offerId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     })

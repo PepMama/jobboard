@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     getCvUrl(fileName) {
-      return `https://localhost:8000/uploads/cv/${fileName}`;
+      return `${import.meta.env.VITE_API_URL}/uploads/cv/${fileName}`;
     },
     getColorClass(skillName) {
       if (!skillName) return 'badge-gray';

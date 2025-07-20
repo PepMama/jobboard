@@ -3,3 +3,6 @@
 /back/.env
 
 /.idea
+
+/front/.env
+/front/.env.production

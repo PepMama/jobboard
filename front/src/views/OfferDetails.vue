@@ -22,7 +22,7 @@ async function fetchOffer() {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Token non trouvé')
     const id = route.params.id
-    const response = await fetch(`https://localhost:8000/offer/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/offer/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!response.ok) throw new Error('Erreur ' + response.status)

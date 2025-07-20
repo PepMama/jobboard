@@ -15,7 +15,7 @@ const message = ref('')
 
 const submit = async () => {
   try {
-    await fetch('https://localhost:8000/forgot-password', 
+    await fetch(`${import.meta.env.VITE_API_URL}/forgot-password`, 
     {
       method: 'POST',
       headers: {

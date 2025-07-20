@@ -81,7 +81,7 @@ async function createOffer(offer: typeof formData.value) {
   if (!t) return
 
   try {
-    const response = await fetch('https://localhost:8000/company/manage-offer', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/company/manage-offer`, {
       headers: {
         Authorization: `Bearer ${t}`,
       },

@@ -45,7 +45,7 @@ async function getNumberMatches() {
     return
   }
   try {
-    const res = await fetch('https://localhost:8000/matches/count', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/matches/count`, {
       headers: { Authorization: `Bearer ${t}` },
     })
     if (!res.ok) {

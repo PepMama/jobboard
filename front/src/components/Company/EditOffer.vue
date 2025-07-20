@@ -188,7 +188,7 @@ async function loadOffer() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch(`https://localhost:8000/company/offer/${offerId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/company/offer/${offerId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -229,7 +229,7 @@ async function updateOffer() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch('https://localhost:8000/company/manage-offer', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/company/manage-offer`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -54,7 +54,7 @@ async function fetchMatchedCompanies() {
       throw new Error('Token non trouvé')
     }
 
-    const response = await fetch('https://localhost:8000/matches/student', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/matches/student`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 

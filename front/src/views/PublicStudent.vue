@@ -28,7 +28,7 @@ async function fetchStudentProfile() {
   const t = localStorage.getItem('token');
   if (!t) return;
 
-  const endpoint = `https://localhost:8000/student/by-name/${encodeURIComponent(name)}`;
+  const endpoint = `${import.meta.env.VITE_API_URL}/student/by-name/${encodeURIComponent(name)}`;
   try {
     console.log('Fetching student profile for:', name);
     const res = await fetch(endpoint, {
