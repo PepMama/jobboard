@@ -9,10 +9,8 @@ RUN apt-get update \
 # Active le module Apache rewrite
 RUN a2enmod rewrite
 
+# Copie notre configuration Apache
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
-COPY apache.conf /etc/apache2/apache2.conf
-COPY apache.conf /etc/apache2/conf-available/custom.conf
-RUN a2enconf custom
 
 # Copie le code source dans le conteneur
 COPY . /var/www/html
