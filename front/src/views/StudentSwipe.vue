@@ -83,6 +83,7 @@
           <h2 class="offer-title">{{ student.firstName }} {{ student.lastName }}</h2>
           <h3 class="offer-company">{{ student.title || 'Titre inconnue' }}</h3>
           <h3 class="offer-company">{{ student.city || 'Ville inconnue' }}</h3>
+          <h4 class="offer-company">{{ student.title || 'Titre inconnue' }}</h4>
           <div class="offer-details">
             <p><span class="icon-circle">🎓</span> {{ student.educations[0]?.degree || 'Diplôme inconnu' }}</p>
             <p><span class="icon-circle">📘</span> {{ student.educations[0]?.fieldOfStudy || 'Domaine inconnu' }}</p>
