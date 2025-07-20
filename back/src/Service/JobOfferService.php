@@ -133,10 +133,22 @@ class JobOfferService
             ->where('o.state = :state')
             ->setParameter('state', 'visible');
 
+        // if ($keyword) {
+        //     $qb->andWhere('LOWER(o.title) LIKE :keyword OR LOWER(o.description) LIKE :keyword')
+        //         ->setParameter('keyword', '%' . strtolower($keyword) . '%');
+        // }
+
         if ($keyword) {
-            $qb->andWhere('LOWER(o.title) LIKE :keyword OR LOWER(o.description) LIKE :keyword')
-                ->setParameter('keyword', '%' . strtolower($keyword) . '%');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('LOWER(o.title)', ':keyword'),
+                    $qb->expr()->like('LOWER(o.description)', ':keyword'),
+                    $qb->expr()->like('LOWER(c.name)', ':keyword') 
+                )
+            )
+            ->setParameter('keyword', '%' . strtolower($keyword) . '%');
         }
+
 
         if ($city) {
             $qb->andWhere('LOWER(o.city) LIKE :city')

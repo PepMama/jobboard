@@ -260,7 +260,7 @@ h1 {
 }
 
 .offer-title {
-  margin-top: 2%;
+  margin-top: 4rem;
   font-size: 2rem;
   font-weight: 700;
   color: #2d2d2d;
