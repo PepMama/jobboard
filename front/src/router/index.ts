@@ -28,8 +28,8 @@ async function checkProfile(role: string) {
   const token = localStorage.getItem('token')
   if (!token) return false
   let url = ''
-  if (role === 'student') url = 'https://localhost:8000/student/profile'
-  else if (role === 'company') url = 'https://localhost:8000/company/profile'
+  if (role === 'student') url = `${import.meta.env.VITE_API_URL}/student/profile`
+  else if (role === 'company') url = `${import.meta.env.VITE_API_URL}/company/profile`
   else return true
   try {
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
