@@ -20,6 +20,9 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # 6. Permissions
+# 6a) S'assurer que var/ existe (sinon chown plante)
+RUN mkdir -p var
+# 6b) Donner les droits à www-data sur var/ et vendor/
 RUN chown -R www-data:www-data var vendor
 
 # 7. Exposer et lancer Apache
