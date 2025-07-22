@@ -17,6 +17,7 @@ COPY . .
 
 # 5. Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN composer dump-env prod
 
