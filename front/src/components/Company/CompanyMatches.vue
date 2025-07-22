@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import { Trash2, Eye, Send } from 'lucide-vue-next'
+import { Trash2, Eye, Send, Search } from 'lucide-vue-next'
 
 interface StudentInfo {
   city: string
@@ -41,6 +41,23 @@ const matchedStudents = ref<Student[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 const deleting = ref<number | null>(null)
+
+const searchName = ref('')
+const searchCity = ref('')
+const searchOffer = ref('')
+function clearFilters() {
+  searchName.value = ''
+  searchCity.value = ''
+  searchOffer.value = ''
+}
+const filteredStudents = computed(() => {
+  return matchedStudents.value.filter(student => {
+    const matchName = student.student.name.toLowerCase().includes(searchName.value.toLowerCase())
+    const matchCity = student.student.city.toLowerCase().includes(searchCity.value.toLowerCase())
+    const matchOffer = student.job.title.toLowerCase().includes(searchOffer.value.toLowerCase())
+    return matchName && matchCity && matchOffer
+  })
+})
 
 onMounted(() => {
   fetchMatchedStudents()
@@ -109,6 +126,32 @@ function viewProfile(studentName: string) {
       <PageHeader title="Mes matchs" @toggle-sidebar="showSidebar = true" />
 
       <div class="container-fluid">
+        <div class="card bg-white shadow-sm mb-4">
+          <div class="card-body">
+            <h6 class="card-title mb-3">
+              <Search :size="20" class="me-2" />
+              Rechercher dans mes matchs
+            </h6>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label small text-muted">Nom ou prénom de l'étudiant</label>
+                <input v-model="searchName" type="text" class="form-control form-control-sm" placeholder="Rechercher par nom ou prénom..." />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted">Ville</label>
+                <input v-model="searchCity" type="text" class="form-control form-control-sm" placeholder="Rechercher par ville..." />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted">Nom de l'offre</label>
+                <input v-model="searchOffer" type="text" class="form-control form-control-sm" placeholder="Rechercher par offre..." />
+              </div>
+            </div>
+            <div class="mt-3">
+              <button @click="clearFilters" class="btn btn-outline-secondary btn-sm">Effacer les filtres</button>
+              <span class="ms-3 text-muted small">{{ filteredStudents.length }} match(s) trouvé(s)</span>
+            </div>
+          </div>
+        </div>
         <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Chargement...</span>
@@ -125,7 +168,7 @@ function viewProfile(studentName: string) {
         </div>
 
         <div v-else class="row g-4">
-          <div v-for="student in matchedStudents" :key="student.id" class="col-12 col-md-6 col-lg-4">
+          <div v-for="student in filteredStudents" :key="student.id" class="col-12 col-md-6 col-lg-4">
             <div class="card bg-white shadow-sm h-100">
               <div class="card-body d-flex flex-column">
                 <div class="d-flex align-items-center mb-3">

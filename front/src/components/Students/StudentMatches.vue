@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import { Trash2, Eye, Send } from 'lucide-vue-next'
+import { Trash2, Eye, Send, Search } from 'lucide-vue-next'
 
 interface CompanyInfo {
   id: number
@@ -41,6 +41,35 @@ const matchedCompanies = ref<Company[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 const deleting = ref<number | null>(null)
+
+const searchTitle = ref('')
+const searchCompany = ref('')
+const searchCity = ref('')
+const searchContractType = ref('')
+const contractTypes = [
+  { value: '', label: 'Tous les types' },
+  { value: 'Stage', label: 'Stage' },
+  { value: 'Alternance', label: 'Alternance' },
+  { value: 'CDI', label: 'CDI' },
+  { value: 'CDD', label: 'CDD' }
+]
+
+function clearFilters() {
+  searchTitle.value = ''
+  searchCompany.value = ''
+  searchCity.value = ''
+  searchContractType.value = ''
+}
+
+const filteredCompanies = computed(() => {
+  return matchedCompanies.value.filter(company => {
+    const matchTitle = company.job.title.toLowerCase().includes(searchTitle.value.toLowerCase())
+    const matchCompany = company.company.name.toLowerCase().includes(searchCompany.value.toLowerCase())
+    const matchCity = company.job.city.toLowerCase().includes(searchCity.value.toLowerCase())
+    const matchContract = !searchContractType.value || company.job.contractType === searchContractType.value
+    return matchTitle && matchCompany && matchCity && matchContract
+  })
+})
 
 onMounted(() => {
   fetchMatchedCompanies()
@@ -105,6 +134,38 @@ function viewProfile(companyName: string) {
       <PageHeader title="Mes matchs" @toggle-sidebar="showSidebar = true" />
 
       <div class="container-fluid">
+        <div class="card bg-white shadow-sm mb-4">
+          <div class="card-body">
+            <h6 class="card-title mb-3">
+              <Search :size="20" class="me-2" />
+              Rechercher dans mes matchs
+            </h6>
+            <div class="row g-3">
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Titre de l'offre</label>
+                <input v-model="searchTitle" type="text" class="form-control form-control-sm" placeholder="Rechercher par titre..." />
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Type de contrat</label>
+                <select v-model="searchContractType" class="form-select form-select-sm">
+                  <option v-for="type in contractTypes" :key="type.value" :value="type.value">{{ type.label }}</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Nom de l'entreprise</label>
+                <input v-model="searchCompany" type="text" class="form-control form-control-sm" placeholder="Rechercher par entreprise..." />
+              </div>
+              <div class="col-md-6 col-lg-3">
+                <label class="form-label small text-muted">Ville</label>
+                <input v-model="searchCity" type="text" class="form-control form-control-sm" placeholder="Rechercher par ville..." />
+              </div>
+            </div>
+            <div class="mt-3">
+              <button @click="clearFilters" class="btn btn-outline-secondary btn-sm">Effacer les filtres</button>
+              <span class="ms-3 text-muted small">{{ filteredCompanies.length }} match(s) trouvé(s)</span>
+            </div>
+          </div>
+        </div>
         <div v-if="loading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Chargement...</span>
@@ -121,7 +182,7 @@ function viewProfile(companyName: string) {
         </div>
 
         <div v-else class="row g-4">
-          <div v-for="company in matchedCompanies" :key="company.id" class="col-12 col-md-6 col-lg-4">
+          <div v-for="company in filteredCompanies" :key="company.id" class="col-12 col-md-6 col-lg-4">
             <div class="card bg-white shadow-sm h-100">
               <div class="card-body d-flex flex-column">
                 <div class="d-flex align-items-center mb-3">
