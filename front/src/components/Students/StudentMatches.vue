@@ -40,6 +40,7 @@ const showSidebar = ref(true)
 const matchedCompanies = ref<Company[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
+const deleting = ref<number | null>(null)
 
 onMounted(() => {
   fetchMatchedCompanies()
@@ -72,8 +73,28 @@ async function fetchMatchedCompanies() {
   }
 }
 
+async function deleteMatch(matchId: number) {
+  if (!confirm('Voulez-vous vraiment supprimer ce match ?')) return
+  const token = localStorage.getItem('token')
+  if (!token) return
+  deleting.value = matchId
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/matches/${matchId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) {
+      matchedCompanies.value = matchedCompanies.value.filter(m => m.matchId !== matchId)
+    } else {
+      alert('Erreur lors de la suppression du match')
+    }
+  } finally {
+    deleting.value = null
+  }
+}
+
 function viewProfile(companyName: string) {
-  window.open(`/company/${encodeURIComponent(companyName)}`, '_blank')
+  window.location.href = `/company/${encodeURIComponent(companyName)}`
 }
 </script>
 
@@ -116,6 +137,9 @@ function viewProfile(companyName: string) {
                     <button @click="viewProfile(`${company.company.name}`)" class="btn btn-outline-primary btn-sm"
                       title="Voir le profil">
                       <Eye :size="16" />
+                    </button>
+                    <button @click="deleteMatch(company.matchId)" class="btn btn-outline-danger btn-sm" :disabled="deleting === company.matchId" title="Supprimer le match">
+                      <Trash2 :size="16" />
                     </button>
                   </div>
                 </div>

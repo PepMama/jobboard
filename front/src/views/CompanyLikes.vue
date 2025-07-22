@@ -88,7 +88,7 @@ async function removeLike(studentId: number) {
 }
 
 function viewProfile(studentName: string) {
-  window.open(`/student/${encodeURIComponent(studentName)}`, '_blank')
+  window.location.href = `/student/${encodeURIComponent(studentName)}`
 }
 
 watch([searchName, searchCity], () => {

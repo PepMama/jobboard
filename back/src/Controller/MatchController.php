@@ -156,5 +156,71 @@ class MatchController extends AbstractController
         return new JsonResponse($data);
     }
 
+    #[Route('/{id}', name: 'app_delete_match', methods: ['DELETE'])]
+    public function deleteMatch(
+        int $id,
+        Request $request,
+        TokenService $tokenService,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $user = $tokenService->getUserFromRequest($request);
+        $match = $em->getRepository(MatchEntity::class)->find($id);
+        
+        if (!$match) {
+            return new JsonResponse(['error' => 'Match non trouvé'], 404);
+        }
+
+        // Vérifie que l'utilisateur est bien concerné par le match
+        $isStudent = $match->getStudent() && $match->getStudent()->getUser() && $match->getStudent()->getUser()->getId() === $user->getId();
+        $isCompany = $match->getCompany() && $match->getCompany()->getUser() && $match->getCompany()->getUser()->getId() === $user->getId();
+        if (!$isStudent && !$isCompany) {
+            return new JsonResponse(['error' => 'Accès interdit'], 403);
+        }
+
+        // Supprimer les likes associés côté étudiant
+        $likesStudentRepo = $em->getRepository(\App\Entity\LikesStudent::class);
+        $likesOfferRepo = $em->getRepository(\App\Entity\LikesOffer::class);
+        $likesStudent = $likesStudentRepo->findBy([
+            'student' => $match->getStudent(),
+            'company' => $match->getCompany(),
+            'jobOffer' => $match->getJob()
+        ]);
+        foreach ($likesStudent as $like) {
+            $em->remove($like);
+        }
+
+        // Supprimer les likes associés côté entreprise
+        $likesOffer = $likesOfferRepo->findBy([
+            'student' => $match->getStudent(),
+            'jobOffer' => $match->getJob()
+        ]);
+
+        foreach ($likesOffer as $like) {
+            $em->remove($like);
+        }
+
+        $likesOfferCompany = $likesOfferRepo->findBy([
+            'jobOffer' => $match->getJob(),
+            'student' => $match->getStudent()
+        ]);
+
+        foreach ($likesOfferCompany as $like) {
+            $em->remove($like);
+        }
+
+        $likesStudentCompany = $likesStudentRepo->findBy([
+            'company' => $match->getCompany(),
+            'jobOffer' => $match->getJob()
+        ]);
+
+        foreach ($likesStudentCompany as $like) {
+            $em->remove($like);
+        }
+
+        $em->remove($match);
+        $em->flush();
+
+        return new JsonResponse(['message' => 'Match supprimé']);
+    }
 }
 

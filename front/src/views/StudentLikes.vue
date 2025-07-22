@@ -92,7 +92,7 @@ async function removeLike(offerId: number) {
 }
 
 function viewOffer(offerId: number) {
-  window.open(`/offer/${offerId}`)
+  window.location.href = `/offer/${offerId}`
 }
 
 watch([searchTitle, searchContractType, searchCompany, searchCity], () => {

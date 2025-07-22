@@ -90,7 +90,7 @@
     <div class="login-right">
       <img :src="signUpImg" alt="Illustration d'inscription" class="login-image" />
       <div class="illustration-credit">
-        <a href="https://storyset.com/online" target="_blank" rel="noopener">
+        <a href="https://storyset.com/online" rel="noopener">
           Online illustrations by Storyset
         </a>
       </div>

@@ -38,7 +38,7 @@
     <div class="login-right">
       <img src="../assets/login.svg" alt="Illustration de connexion" class="login-image" />
       <div class="illustration-credit">
-        <a href="https://storyset.com/online" target="_blank" rel="noopener">Online illustrations by Storyset</a>
+        <a href="https://storyset.com/online" rel="noopener">Online illustrations by Storyset</a>
       </div>
     </div>
   </div>

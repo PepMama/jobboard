@@ -2,8 +2,7 @@
 import { ref, onMounted } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import { Trash2, Eye } from 'lucide-vue-next'
-import { Send } from 'lucide-vue-next'
+import { Trash2, Eye, Send } from 'lucide-vue-next'
 
 interface StudentInfo {
   city: string
@@ -41,6 +40,7 @@ const showSidebar = ref(true)
 const matchedStudents = ref<Student[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
+const deleting = ref<number | null>(null)
 
 onMounted(() => {
   fetchMatchedStudents()
@@ -75,8 +75,30 @@ async function fetchMatchedStudents() {
   }
 }
 
+async function deleteMatch(matchId: number) {
+  if (!confirm('Voulez-vous vraiment supprimer ce match ?')) return;
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  deleting.value = matchId;
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/matches/${matchId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.ok) {
+      matchedStudents.value = matchedStudents.value.filter(m => m.matchId !== matchId);
+    } else {
+      alert('Erreur lors de la suppression du match');
+    }
+  } catch (e) {
+    alert('Erreur réseau lors de la suppression du match');
+  } finally {
+    deleting.value = null;
+  }
+}
+
 function viewProfile(studentName: string) {
-  window.open(`/student/${encodeURIComponent(studentName)}`, '_blank')
+  window.location.href = `/student/${encodeURIComponent(studentName)}`
 }
 </script>
 
@@ -126,6 +148,14 @@ function viewProfile(studentName: string) {
                       title="Voir le profil"
                     >
                       <Eye :size="16" />
+                    </button>
+                    <button
+                      @click="deleteMatch(student.matchId)"
+                      class="btn btn-outline-danger btn-sm"
+                      :disabled="deleting === student.matchId"
+                      title="Supprimer le match"
+                    >
+                      <Trash2 :size="16" />
                     </button>
                   </div>
                 </div>
