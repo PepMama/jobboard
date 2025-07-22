@@ -27,8 +27,8 @@ COPY . .
 RUN printf "APP_ENV=prod\nAPP_DEBUG=0\n" > .env
 
 # 4b. Copier & activer la conf CORS
-COPY cors.conf /etc/apache2/conf-available/cors.conf
-RUN a2enconf cors
+# COPY cors.conf /etc/apache2/conf-available/cors.conf
+# RUN a2enconf cors
 
 # 5. Installer Composer et autoriser les plugins en root
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
