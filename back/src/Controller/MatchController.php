@@ -67,7 +67,8 @@ class MatchController extends AbstractController
         );
         $data = array_map(function (MatchEntity $match) {
             $job = $match->getJob();
-            $company = $job->getCompany();
+            $company = 
+            $job->getCompany();
 
             return [
                 'matchId' => $match->getId(),
@@ -88,6 +89,7 @@ class MatchController extends AbstractController
                     'logo' => $company->getLogo(),
                     'linkedin' => $company->getLinkedin(),
                     'website' => $company->getWebsite(),
+                    'email' => $company->getUser() ? $company->getUser()->getEmail() : null,
                 ],
                 'matchedAt' => $match->getMatchedAt()->format('Y-m-d H:i:s'),
                 'isContacted' => $match->getIsContacted(),
@@ -137,6 +139,7 @@ class MatchController extends AbstractController
                     'linkedin' => $student->getLinkedin(),
                     'github' => $student->getGithub(),
                     'cv' => $student->getCv(),
+                    'email' => $student->getUser() ? $student->getUser()->getEmail() : null,
                 ],
                 'job' => [
                     'id' => $job->getId(),

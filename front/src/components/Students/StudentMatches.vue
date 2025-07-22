@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
-import { Trash2, Eye } from 'lucide-vue-next'
+import { Trash2, Eye, Send } from 'lucide-vue-next'
 
 interface CompanyInfo {
   id: number
@@ -13,6 +13,7 @@ interface CompanyInfo {
   description?: string
   linkedin?: string
   website?: string
+  email?: string
 }
 
 interface JobInfo {
@@ -63,8 +64,6 @@ async function fetchMatchedCompanies() {
     }
 
     const data = await response.json()
-
-    console.log(data)
     matchedCompanies.value = data
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Erreur inconnue'
@@ -134,6 +133,14 @@ function viewProfile(companyName: string) {
                     </a>
                     <a v-if="company.company.website" :href="company.company.website" class="btn btn-outline-dark btn-sm">
                         Website
+                    </a>
+                    <a
+                      v-if="company.company.email"
+                      :href="`mailto:${company.company.email}?subject=${encodeURIComponent(company.job.title)}`"
+                      class="btn btn-outline-success btn-sm"
+                      title="Contacter l'entreprise"
+                    >
+                      <Send :size="16" class="me-1" /> Envoyer un mail
                     </a>
                   </div>
                   <small class="text-muted">

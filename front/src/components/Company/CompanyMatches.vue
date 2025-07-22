@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Sidebar from '@/components/Global/NavBar.vue'
 import PageHeader from '@/components/Global/PageHeader.vue'
 import { Trash2, Eye } from 'lucide-vue-next'
+import { Send } from 'lucide-vue-next'
 
 interface StudentInfo {
   city: string
@@ -13,6 +14,7 @@ interface StudentInfo {
   linkedin?: string
   github?: string
   cv?: string
+  email?: string
 }
 
 interface JobInfo {
@@ -144,6 +146,14 @@ function viewProfile(studentName: string) {
                     </a>
                     <a v-if="student.student.cv" :href="student.student.cv" class="btn btn-outline-success btn-sm">
                       CV
+                    </a>
+                    <a
+                      v-if="student.student.email"
+                      :href="`mailto:${student.student.email}?subject=${encodeURIComponent(student.job.title)}`"
+                      class="btn btn-outline-success btn-sm"
+                      title="Contacter l'étudiant"
+                    >
+                      <Send :size="16" class="me-1" /> Envoyer un mail
                     </a>
                   </div>
                   <small class="text-muted">
