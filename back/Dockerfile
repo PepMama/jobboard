@@ -17,7 +17,8 @@ COPY . .
 
 # 5. Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer dump-env prod
 
 # 6. Permissions
 # 6a) S'assurer que var/ existe (sinon chown plante)
