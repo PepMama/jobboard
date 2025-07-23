@@ -1,9 +1,12 @@
 <template>
   <div
-    class="bg-navbar border-end p-3"
-    :class="{ 'd-none d-lg-flex': !visible }"
-    style="min-width: 260px; z-index: 2000"
-  >
+      class="bg-navbar border-end p-3"
+      :class="[
+        { 'd-none d-lg-flex': !visible },
+        { 'sidebar-hidden': !visible && screenWidth < 992 }
+      ]"
+      style="min-width: 260px; z-index: 2000"
+    > 
     <div class="w-100 d-flex flex-column h-100">
       <div class="mb-4 text-center">
         <img :src="logo" alt="Logo AltMatch" class="img-fluid" style="max-width: 120px" />
@@ -44,6 +47,7 @@ import { User, Heart, Briefcase, Plus, LogOut, Zap } from 'lucide-vue-next'
 import logo from '@/assets/altmatch.png'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 defineProps<{ visible: boolean }>()
 defineEmits(['close'])
@@ -91,6 +95,20 @@ const companyMenu = [
 
 const role = authStore.role || localStorage.getItem('role')
 const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
+
+const screenWidth = ref(window.innerWidth)
+
+const updateWidth = () => {
+  screenWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateWidth)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateWidth)
+})
 </script>
 
 <style scoped>
@@ -168,5 +186,27 @@ const menuItems = role === 'ROLE_COMPANY' ? companyMenu : studentMenu
   background: #5a189a;
   color: #fff;
   border-color: #5a189a;
+}
+
+@media (max-width: 991px) {
+  .bg-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    z-index: 2000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+  }
+
+  .sidebar-hidden {
+    transform: translateX(-100%);
+  }
+
+  body {
+    overflow-x: hidden;
+  }
 }
 </style>
