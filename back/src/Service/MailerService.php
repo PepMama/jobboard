@@ -6,10 +6,11 @@ use Symfony\Component\Mime\Email;
 
 class MailerService
 {
-    public function __construct(private MailerInterface $mailer) {}
+    public function __construct(private MailerInterface $mailer, private string $frontUrl) {}
 
     public function sendResetPasswordEmail(string $to, string $token): void
     {
+        $resetUrl = $this->frontUrl . '/resetPassword';
         $email = (new Email())
             ->from('altmatch@gmail.com')
             ->to($to)
@@ -17,7 +18,7 @@ class MailerService
             ->html("
                 <p>Voici votre mot de passe temporaire : <strong>$token</strong></p>
                 <p>Il est valable 10 minutes.</p>
-                <p><a href='http://localhost:5173/resetPassword'>Cliquez ici pour réinitialiser</a></p>
+                <p><a href='$resetUrl'>Cliquez ici pour réinitialiser</a></p>
             ");
 
         $this->mailer->send($email);

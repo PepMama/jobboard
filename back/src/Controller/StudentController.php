@@ -59,8 +59,9 @@ class StudentController extends AbstractController
                 return new JsonResponse(null, 204);
             }
 
-            $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
-            $cvUrl = $student->getCv() ? 'http://localhost:8000' . $student->getCv() : null;
+            $baseUrl = $this->getParameter('app.url');
+            $photoUrl = $student->getPhoto() ? $baseUrl . $student->getPhoto() : null;
+            $cvUrl = $student->getCv() ? $baseUrl . $student->getCv() : null;
 
             return new JsonResponse([
                 'firstname' => $student->getFirstname(),
@@ -204,7 +205,7 @@ class StudentController extends AbstractController
             $companies = [];
             foreach ($likes as $like) {
                 $company = $like->getCompany();
-                $logoUrl = $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+                $logoUrl = $company->getLogo() ? $this->getParameter('app.url') . $company->getLogo() : null;
 
                 $companies[] = [
                     'id' => $company->getId(),
@@ -313,7 +314,7 @@ class StudentController extends AbstractController
             foreach ($likes as $like) {
                 $offer = $like->getJobOffer();
                 $company = $offer->getCompany();
-                $logoUrl = $company && $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+                $logoUrl = $company && $company->getLogo() ? $this->getParameter('app.url') . $company->getLogo() : null;
                 $offers[] = [
                     'id' => $offer->getId(),
                     'title' => $offer->getTitle(),
@@ -398,7 +399,7 @@ class StudentController extends AbstractController
         if (!$student) {
             return new JsonResponse(['error' => 'Étudiant non trouvé'], 404);
         }
-        $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
+        $photoUrl = $student->getPhoto() ? $this->getParameter('app.url') . $student->getPhoto() : null;
 
         return new JsonResponse([
             'id' => $student->getId(),

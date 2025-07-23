@@ -172,7 +172,8 @@ class LikesController extends AbstractController
             foreach ($likes as $like) {
                 $student = $like->getStudent();
                 if ($student) {
-                    $photoUrl = $student->getPhoto() ? 'http://localhost:8000' . $student->getPhoto() : null;
+                    $baseUrl = $this->getParameter('app.url');
+                    $photoUrl = $student->getPhoto() ? $baseUrl . $student->getPhoto() : null;
 
                     $likedStudents[] = [
                         'id' => $student->getId(),

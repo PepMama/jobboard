@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     jwt_key: '%env(JWT_SECRET)%'
+    app.url: '%env(APP_URL)%'
+    front.url: '%env(FRONT_URL)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -23,6 +25,9 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\MailerService:
+        arguments:
+            $frontUrl: '%front.url%'
 
 
     # add more service definitions when explicit configuration is needed

@@ -153,7 +153,8 @@ class JobOfferController extends AbstractController
                 return new JsonResponse(['error' => 'Offre non trouvée'], 404);
             }
             $company = $offer->getCompany();
-            $logoUrl = $company && $company->getLogo() ? 'http://localhost:8000' . $company->getLogo() : null;
+            $baseUrl = $this->getParameter('app.url');
+            $logoUrl = $company && $company->getLogo() ? $baseUrl . $company->getLogo() : null;
             $data = [
                 'id' => $offer->getId(),
                 'title' => $offer->getTitle(),
