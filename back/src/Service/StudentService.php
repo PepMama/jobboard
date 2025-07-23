@@ -43,7 +43,11 @@ class StudentService
         $student->setName($data['name']);
         $student->setFirstname($data['firstname']);
         $student->setPhoneNumber($data['phone_number']);
-        $student->setAge($data['age'] ?? null);
+        $age = $data['age'] ?? null;
+        if (is_string($age) && is_numeric($age)) {
+            $age = (int)$age;
+        }
+        $student->setAge($age);
         $student->setCity($data['city'] ?? null);
         $student->setAddress($data['address'] ?? null);
         $student->setPostalCode($data['postal_code'] ?? null);
