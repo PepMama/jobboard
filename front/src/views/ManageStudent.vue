@@ -160,7 +160,11 @@ async function fetchStudentProfile() {
       address: data.address ?? '',
       city: data.city ?? '',
       postalCode: data.postal_code ?? '',
-      title: data.title ?? ''
+      title: data.title ?? '',
+      description: data.description ?? '',
+      github: data.github ?? '',
+      linkedin: data.linkedin ?? '',
+      cv: data.cv ?? ''
     })
     bio.value = data.description ?? ''
     avatar.value = data.photo ?? avatar.value
@@ -223,10 +227,23 @@ async function handlePersonalInfoSubmit(payload: Record<string, any>) {
   }
 }
 
-function onBioUpdate(newBio: string) {
+async function updateGithub(newGithub: string) {
+  formData.github = newGithub
+  await handlePersonalInfoSubmit({ ...formData })
+  await fetchStudentProfile()
+}
+
+async function updateLinkedin(newLinkedin: string) {
+  formData.linkedin = newLinkedin
+  await handlePersonalInfoSubmit({ ...formData })
+  await fetchStudentProfile()
+}
+
+async function onBioUpdate(newBio: string) {
   bio.value = newBio
   formData.description = newBio
-  handlePersonalInfoSubmit({ ...formData })
+  await handlePersonalInfoSubmit({ ...formData })
+  await fetchStudentProfile()
 }
 
 function onPhotoUpdate(newPhoto: string) {
