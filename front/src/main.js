@@ -39,3 +39,5 @@ function resetTimer() {
 })
 
 resetTimer()
+
+console.log('JS chargé !');
