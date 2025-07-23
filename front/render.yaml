@@ -1,8 +1,14 @@
-staticSites:
-  - name: AltMatchFront
+services:
+  - type: static
+    name: AltMatchFront
+    env: static
+    branch: developpement
+    buildCommand: npm install && npm run build
     staticPublishPath: front/dist
     routes:
       - source: ^/assets/(.*)
         destination: /assets/$1
+        status: 200
       - source: ^/(.*)
         destination: /index.html
+        status: 200
