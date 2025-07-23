@@ -57,6 +57,7 @@ watch(
 const personalFields = {
   firstname: 'Prénom :',
   name: 'Nom :',
+  title: 'Titre (ex : developpeur web) :',
   phone: 'N° de téléphone :',
   age: 'Votre âge :',
   address: 'Adresse :',

@@ -29,6 +29,7 @@
       <div>
         <h4 class="fw-bold mb-3">{{ firstname }} {{ name }}</h4>
         <ul class="list-unstyled text-secondary small mb-3">
+          <li v-if="title"><strong>Titre :</strong> {{ title }}</li>
           <li v-if="age"><strong>Age :</strong> {{ age }} ans</li>
           <li v-if="city">
             <strong>Ville :</strong> {{ city }} <span v-if="postalCode">({{ postalCode }})</span>
@@ -77,6 +78,7 @@ const props = defineProps<{
   postalCode?: string
   bio: string
   email?: string
+  title?: string
 }>()
 
 const emit = defineEmits(['update:bio', 'edit', 'photo-updated'])

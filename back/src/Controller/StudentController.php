@@ -71,6 +71,7 @@ class StudentController extends AbstractController
                 'address' => $student->getAddress(),
                 'city' => $student->getCity(),
                 'postal_code' => $student->getPostalCode(),
+                'title' => $student->getTitle(),
                 'description' => $student->getDescription(),
                 'photo' => $photoUrl,
                 'linkedin' => $student->getLinkedin(),

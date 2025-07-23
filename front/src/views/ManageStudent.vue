@@ -26,6 +26,7 @@
               :address="formData.address"
               :city="formData.city"
               :postalCode="formData.postalCode"
+              :title="formData.title"
               :bio="bio"
               @update:bio="onBioUpdate"
               @edit="showModal = true"
@@ -134,6 +135,8 @@ const formData = reactive({
   address: '',
   city: '',
   postalCode: '',
+  title: '',
+  description: '',
   cv: '',
   github: '',
   linkedin: ''
@@ -156,7 +159,8 @@ async function fetchStudentProfile() {
       age: data.age ?? '',
       address: data.address ?? '',
       city: data.city ?? '',
-      postalCode: data.postal_code ?? ''
+      postalCode: data.postal_code ?? '',
+      title: data.title ?? ''
     })
     bio.value = data.description ?? ''
     avatar.value = data.photo ?? avatar.value
@@ -191,7 +195,8 @@ async function handlePersonalInfoSubmit(payload: Record<string, any>) {
     address: payload.address,
     city: payload.city,
     postal_code: payload.postalCode,
-    description: bio.value,
+    title: payload.title,
+    description: payload.description,
     photo: null,
     linkedin: payload.linkedin,
     github: payload.github,
@@ -220,6 +225,7 @@ async function handlePersonalInfoSubmit(payload: Record<string, any>) {
 
 function onBioUpdate(newBio: string) {
   bio.value = newBio
+  formData.description = newBio
   handlePersonalInfoSubmit({ ...formData })
 }
 

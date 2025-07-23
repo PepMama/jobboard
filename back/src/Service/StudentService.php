@@ -52,12 +52,14 @@ class StudentService
         $student->setAddress($data['address'] ?? null);
         $student->setPostalCode($data['postal_code'] ?? null);
         $student->setPhoto($data['photo'] ?? null);
+        if (isset($data['title'])) {
+            $student->setTitle($data['title']);
+        }
         $student->setDescription($data['description']);
         $student->setLinkedin($data['linkedin'] ?? null);
         $student->setGithub($data['github'] ?? null);
         $student->setCv($data['cv'] ?? null);
         $student->setUpdatedAt(new \DateTime());
-
         $this->em->persist($student);
         $this->em->flush();
 
