@@ -5,24 +5,12 @@
       <form @submit.prevent="onSubmit">
         <div v-for="(label, key) in personalFields" :key="key" class="mb-3">
           <label class="form-label text-dark">{{ label }}</label>
-          <template v-if="key === 'description'">
-            <textarea
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-              @blur="validateField(key)"
-            ></textarea>
-          </template>
-          <template v-else>
-            <input
-              type="text"
-              v-model="form[key]"
-              class="form-control"
-              :disabled="isPublic"
-              @blur="validateField(key)"
-            />
-          </template>
-          <div v-if="errors[key]" class="text-danger small">{{ errors[key] }}</div>
+          <input
+            :type="key === 'age' ? 'number' : 'text'"
+            v-model="form[key]"
+            class="form-control"
+            :disabled="isPublic"
+          />
         </div>
         <button
           class="btn btn-outline-primary"
@@ -37,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -49,61 +37,35 @@ const props = defineProps({
       age: '',
       address: '',
       city: '',
-      postalCode: '',
-      description: ''
+      postalCode: ''
     })
   },
-  isPublic: {
-    type: Boolean,
-    default: false
-  }
+  isPublic: Boolean
 })
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits<{
+  (e: 'submit', payload: Record<string, any>): void
+}>()
 
 const form = reactive({ ...props.modelValue })
-const errors = reactive<Record<string, string | null>>({})
 
-const personalFields: Record<string, string> = {
-  firstname: 'Prénom',
-  name: 'Nom',
-  phone: 'N° de téléphone',
-  age: 'Âge',
-  address: 'Adresse',
-  city: 'Ville',
-  postalCode: 'Code postal',
-  description: 'Description'
-}
+watch(
+  () => props.modelValue,
+  newVal => Object.assign(form, newVal)
+)
 
-const regexes: Record<string, RegExp> = {
-  phone: /^((\+33\s?[1-9](?:\s?\d{2}){4})|(0[1-9](?:\s?\d{2}){4}))$/,
-  age: /^\d{1,2}$/,
-  postalCode: /^(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$/,
-}
-
-function validateField(key: string) {
-  if (props.isPublic) {
-    errors[key] = null
-    return
-  }
-  const value = String((form as any)[key] ?? '')
-  const re = regexes[key]
-  if (!re) {
-    errors[key] = null
-  } else {
-    errors[key] = re.test(value)
-      ? null
-      : `Valeur invalide pour ${personalFields[key]}`
-  }
+const personalFields = {
+  firstname: 'Prénom :',
+  name: 'Nom :',
+  phone: 'N° de téléphone :',
+  age: 'Votre âge :',
+  address: 'Adresse :',
+  city: 'Ville :',
+  postalCode: 'Code postal :'
 }
 
 function onSubmit() {
-  Object.keys(personalFields).forEach(validateField)
-  if (Object.values(errors).some(e => e)) {
-    return
-  }
-  emit('update:modelValue', { ...form })
-  emit('submit')
+  emit('submit', { ...form })
 }
 </script>
 

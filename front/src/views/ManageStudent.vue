@@ -1,134 +1,16 @@
-<script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
-import Sidebar from '@/components/Global/NavBar.vue'
-import PageHeader from '@/components/Global/PageHeader.vue'
-import StudentHeader from '@/components/Students/StudentHeader.vue'
-import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
-import ExperienceCard from '@/components/Students/ExperienceCard.vue'
-import EducationCard from '@/components/Students/EducationCard.vue'
-import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
-import StudentCompetencies from '@/components/Students/StudentCompetencies.vue'
-
-const avatar = ref('https://via.placeholder.com/80')
-
-const formData = reactive({
-  firstname: '',
-  name: '',
-  phone: '',
-  age: '',
-  address: '',
-  city: '',
-  postalCode: '',
-  cv: '',
-  github: '',
-  linkedin: '',
-})
-
-const bio = ref('')
-const experiences = ref<any[]>([])
-const educations = ref<any[]>([])
-const showModal = ref(false)
-const showSidebar = ref(true)
-
-async function fetchStudentProfile() {
-  const t = localStorage.getItem('token')
-  if (!t) return
-
-  const prof = await fetch(`${import.meta.env.VITE_API_URL}/student/profile`, {
-    headers: { Authorization: `Bearer ${t}` },
-  })
-
-  if (prof.ok && prof.status !== 204) {
-    const d = await prof.json()
-    formData.firstname = d.firstname ?? ''
-    formData.name = d.name ?? ''
-    formData.phone = d.phone_number ?? ''
-    formData.age = d.age ?? ''
-    formData.address = d.address ?? ''
-    formData.city = d.city ?? ''
-    formData.postalCode = d.postal_code ?? ''
-    formData.cv = d.cv ?? ''
-    formData.github = d.github ?? ''
-    formData.linkedin = d.linkedin ?? ''
-    bio.value = d.description ?? ''
-    avatar.value = d.photo ?? avatar.value
-  }
-
-  const exp = await fetch(`${import.meta.env.VITE_API_URL}/student/experiences`, {
-    headers: { Authorization: `Bearer ${t}` },
-  })
-  experiences.value = exp.ok ? await exp.json() : []
-
-  const eduRes = await fetch(`${import.meta.env.VITE_API_URL}/student/educations`, {
-    headers: { Authorization: `Bearer ${t}` },
-  })
-  educations.value = eduRes.ok ? await eduRes.json() : []
-}
-
-async function submitForm() {
-  const t = localStorage.getItem('token')
-  if (!t) return
-  const payload = {
-    firstname: formData.firstname,
-    name: formData.name,
-    phone_number: formData.phone,
-    age: formData.age,
-    address: formData.address,
-    city: formData.city,
-    postal_code: formData.postalCode,
-    description: bio.value,
-    photo: null,
-    linkedin: formData.linkedin,
-    github: formData.github,
-    cv: formData.cv,
-  }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/student/manage-profile`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${t}`,
-    },
-    body: JSON.stringify(payload),
-  })
-  if (res.ok) alert('Profil mis à jour')
-}
-
-onMounted(fetchStudentProfile)
-
-function updateCv(newCv: string) {
-  formData.cv = newCv
-}
-
-function updateGithub(newGithub: string) {
-  formData.github = newGithub
-}
-
-function updateLinkedin(newLinkedin: string) {
-  formData.linkedin = newLinkedin
-}
-
-function onBioUpdate(newBio: string) {
-  bio.value = newBio
-  submitForm()
-}
-
-function onPhotoUpdate(newPhoto: string) {
-  avatar.value = newPhoto
-}
-
-function handleModalSubmit() {
-  submitForm()
-  showModal.value = false
-}
-</script>
-
+<!-- src/components/Students/ManageStudent.vue -->
 <template>
   <div class="d-flex w-100 min-vh-100 dashboard-bg">
     <Sidebar :visible="showSidebar" @close="showSidebar = false" />
-    <div class="flex-grow-1 p-4">
-      <PageHeader title="Profile" @toggle-sidebar="showSidebar = true" />
 
-      <div v-if="$route.query.incomplete" class="alert alert-warning text-center fw-bold mb-4" style="font-size:1.2rem;">
+    <div class="flex-grow-1 p-4">
+      <PageHeader title="Mon profil" @toggle-sidebar="showSidebar = true" />
+
+      <div
+        v-if="$route.query.incomplete"
+        class="alert alert-warning text-center fw-bold mb-4"
+        style="font-size:1.2rem;"
+      >
         Veuillez compléter vos informations avant de continuer.
       </div>
 
@@ -152,10 +34,16 @@ function handleModalSubmit() {
 
             <div class="row g-4">
               <div class="col-12 col-lg-6">
-                <EducationCard :educations="educations" @changed="fetchStudentProfile" />
+                <EducationCard
+                  :educations="educations"
+                  @changed="fetchStudentProfile"
+                />
               </div>
               <div class="col-12 col-lg-6">
-                <ExperienceCard :experiences="experiences" @changed="fetchStudentProfile" />
+                <ExperienceCard
+                  :experiences="experiences"
+                  @changed="fetchStudentProfile"
+                />
               </div>
             </div>
 
@@ -167,16 +55,16 @@ function handleModalSubmit() {
               :cv="formData.cv"
               :github="formData.github"
               :linkedin="formData.linkedin"
-              @update:cv="updateCv"
-              @update:github="updateGithub"
-              @update:linkedin="updateLinkedin"
+              @update:cv="formData.cv = $event"
+              @update:github="formData.github = $event"
+              @update:linkedin="formData.linkedin = $event"
             />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Modale -->
+    <!-- Modal de modification des infos perso -->
     <div
       class="modal fade"
       :class="{ show: showModal }"
@@ -188,10 +76,19 @@ function handleModalSubmit() {
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Modifier mes informations</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
+            <button
+              type="button"
+              class="btn-close"
+              @click="showModal = false"
+            />
           </div>
           <div class="modal-body">
-            <PersonalInfoForm v-model="formData" @submit="handleModalSubmit" />
+          <PersonalInfoForm
+            :model-value="formData"
+            :is-public="false"
+            :key="Number(showModal)"
+            @submit="handlePersonalInfoSubmit"
+          />
           </div>
         </div>
       </div>
@@ -207,6 +104,130 @@ function handleModalSubmit() {
   </div>
 </template>
 
+<script setup lang="ts">
+import { reactive, ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+import Sidebar from '@/components/Global/NavBar.vue'
+import PageHeader from '@/components/Global/PageHeader.vue'
+import StudentHeader from '@/components/Students/StudentHeader.vue'
+import PersonalInfoForm from '@/components/Students/PersonalInfoForm.vue'
+import ExperienceCard from '@/components/Students/ExperienceCard.vue'
+import EducationCard from '@/components/Students/EducationCard.vue'
+import UploadCvAndPortfolio from '@/components/Students/UploadCvAndPortfolioCard.vue'
+import StudentCompetencies from '@/components/Students/StudentCompetencies.vue'
+
+const route = useRoute()
+const showSidebar = ref(true)
+const showModal = ref(false)
+
+const avatar = ref('https://via.placeholder.com/80')
+const bio = ref<string>('')
+const experiences = ref<any[]>([])
+const educations = ref<any[]>([])
+
+const formData = reactive({
+  firstname: '',
+  name: '',
+  phone: '',
+  age: '',
+  address: '',
+  city: '',
+  postalCode: '',
+  cv: '',
+  github: '',
+  linkedin: ''
+})
+
+async function fetchStudentProfile() {
+  const token = localStorage.getItem('token')
+  if (!token) return
+
+  const resp = await fetch(
+    `${import.meta.env.VITE_API_URL}/student/profile`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  if (resp.ok && resp.status !== 204) {
+    const data = await resp.json()
+    Object.assign(formData, {
+      firstname: data.firstname ?? '',
+      name: data.name ?? '',
+      phone: data.phone_number ?? '',
+      age: data.age ?? '',
+      address: data.address ?? '',
+      city: data.city ?? '',
+      postalCode: data.postal_code ?? ''
+    })
+    bio.value = data.description ?? ''
+    avatar.value = data.photo ?? avatar.value
+  }
+
+  // expériences
+  const exp = await fetch(
+    `${import.meta.env.VITE_API_URL}/student/experiences`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  experiences.value = exp.ok ? await exp.json() : []
+
+  // éducation
+  const eduRes = await fetch(
+    `${import.meta.env.VITE_API_URL}/student/educations`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  educations.value = eduRes.ok ? await eduRes.json() : []
+}
+
+onMounted(fetchStudentProfile)
+
+async function handlePersonalInfoSubmit(payload: Record<string, any>) {
+  const token = localStorage.getItem('token')
+  if (!token) return
+
+  const body = {
+    firstname: payload.firstname,
+    name: payload.name,
+    phone_number: payload.phone,
+    age: payload.age !== '' ? Number(payload.age) : null,
+    address: payload.address,
+    city: payload.city,
+    postal_code: payload.postalCode,
+    description: bio.value,
+    photo: null,
+    linkedin: payload.linkedin,
+    github: payload.github,
+    cv: payload.cv
+  }
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/student/manage-profile`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(body)
+    }
+  )
+  if (res.ok) {
+    alert('Profil mis à jour')
+    await fetchStudentProfile()
+  } else {
+    console.error('Erreur update:', await res.text())
+    alert('Échec mise à jour')
+  }
+}
+
+function onBioUpdate(newBio: string) {
+  bio.value = newBio
+  handlePersonalInfoSubmit({ ...formData })
+}
+
+function onPhotoUpdate(newPhoto: string) {
+  avatar.value = newPhoto
+}
+</script>
+
 <style scoped>
 .dashboard-bg {
   background: #f7faff;
@@ -216,13 +237,23 @@ function handleModalSubmit() {
   box-shadow: 0 2px 16px 0 #e3e8f7 !important;
   border: none !important;
 }
-@media (max-width: 991px) {
-  .container-fluid .row > div {
-    margin-bottom: 1.5rem;
-  }
+.btn-outline-primary {
+  color: #5651ab;
+  border-color: #5651ab;
+  transition: 0.3s;
+}
+.btn-outline-primary:hover {
+  background: #5651ab;
+  color: #fff;
+  border-color: #5651ab;
 }
 .flex-grow-1 {
   overflow-y: auto;
   max-height: 100vh;
+}
+@media (max-width: 991px) {
+  .container-fluid .row > div {
+    margin-bottom: 1.5rem;
+  }
 }
 </style>
