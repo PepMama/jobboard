@@ -1,8 +1,8 @@
-staticSite:
-  routes:
-    - source: "/assets/*"
-      destination: "/assets/:splat"
-      status: 200
-    - source: "/*"
-      destination: "/index.html"
-      status: 200
+staticSites:
+  - name: AltMatchFront
+    staticPublishPath: front/dist
+    routes:
+      - source: ^/assets/(.*)
+        destination: /assets/$1
+      - source: ^/(.*)
+        destination: /index.html
