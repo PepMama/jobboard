@@ -12,7 +12,7 @@
   font-variation-settings: 'wdth' 100;
 }
 
-#app, #html {
+#app, html {
   margin: 0;
   font-family: 'Arial', sans-serif;
   padding: 0;
