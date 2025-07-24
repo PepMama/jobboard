@@ -64,12 +64,12 @@ const router = createRouter({
       component: LoginForm,
     },
     {
-      path: '/resetPassword',
+      path: '/reset-password',
       name: 'resetPassword',
       component: ResetPasswordForm,
     },
     {
-      path: '/forgotPassword',
+      path: '/forgot-password',
       name: 'forgotPassword',
       component: ForgotPassword,
     },

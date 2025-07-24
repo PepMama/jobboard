@@ -1,12 +1,50 @@
 <template>
   <div class="auth-container">
     <h3>Réinitialiser le mot de passe</h3>
-    <input v-model="token" placeholder="Mot de passe temporaire" class="form-control mb-2" />
-    <input type="password" v-model="password" placeholder="Nouveau mot de passe" class="form-control mb-2" />
-    <input type="password" v-model="confirmPassword" placeholder="Confirmez le mot de passe" class="form-control mb-2" />
+    
+    <div class="alert alert-info mb-3">
+      <i class="bi bi-info-circle me-2"></i>
+      Saisissez le mot de passe temporaire reçu par email et votre nouveau mot de passe.
+    </div>
+    
+    <input 
+      v-model="token" 
+      placeholder="Mot de passe temporaire (reçu par email)" 
+      class="form-control mb-2" 
+    />
+    <input 
+      type="password" 
+      v-model="password" 
+      placeholder="Nouveau mot de passe" 
+      class="form-control mb-2" 
+    />
+    <input 
+      type="password" 
+      v-model="confirmPassword" 
+      placeholder="Confirmez le nouveau mot de passe" 
+      class="form-control mb-2" 
+    />
+    
+    <small class="text-muted mb-3 d-block">
+      Le mot de passe doit contenir au moins 6 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
+    </small>
+    
     <p v-if="passwordMismatch" class="text-danger">Les mots de passe ne sont pas identiques.</p>
-    <button class="btn btn-success" @click="submit">Valider</button>
-    <p v-if="message" class="mt-3">{{ message }}</p>
+    
+    <button class="btn btn-success" @click="submit" :disabled="passwordMismatch">
+      Valider
+    </button>
+    
+    <p v-if="message" class="mt-3" :class="message.includes('mis à jour') ? 'text-success' : 'text-danger'">
+      {{ message }}
+    </p>
+    
+    <!-- Lien de retour -->
+    <div class="mt-3">
+      <router-link to="/forgot-password" class="text-muted">
+        ← Retour à la demande de réinitialisation
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -20,16 +58,18 @@ const confirmPassword = ref('')
 const message = ref('')
 const router = useRouter()
 
-const passwordMismatch = computed(() => password.value !== confirmPassword.value)
+const passwordMismatch = computed(() => 
+  password.value !== confirmPassword.value && confirmPassword.value !== ''
+)
 
 const validatePassword = (pwd) => {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{6,}$/
   return regex.test(pwd)
 }
 
- const submit = async () => {
+const submit = async () => {
   if (passwordMismatch.value || !validatePassword(password.value)) {
-    message.value = 'Mot de passe invalide ou non conforme.'
+    message.value = 'Mot de passe invalide ou non conforme aux exigences.'
     return
   }
 
@@ -51,12 +91,13 @@ const validatePassword = (pwd) => {
       throw new Error('Réponse non valide')
     }
 
-    message.value = 'Mot de passe mis à jour !'
-    setTimeout(() => router.push('/login'), 1500)
+    message.value = '✅ Mot de passe mis à jour avec succès !'
+    setTimeout(() => router.push('/login'), 2000)
+    
   } catch (err) {
-    message.value = 'Erreur : mot de passe temporaire invalide ou expiré.'
+    message.value = '❌ Erreur : mot de passe temporaire invalide ou expiré.'
   }
 }
-
 </script>
+
 <style scoped src="@/CSS/resertPassword.css"></style>
